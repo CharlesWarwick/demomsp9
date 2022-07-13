@@ -1,0 +1,21 @@
+name: Release action
+# Call the reusable workflow release-solution-with-inputs.yml
+# Release your solution to prod when you create a new release.
+
+on:
+  release:
+      types: [created]        
+
+jobs:
+  Release-solution-ALMLab:
+    uses: ./.github/workflows/release-solution-to-prod-with-inputs.yml
+    with:
+      #You can specify the solution name here
+      solution_name: FeedsManager
+      #Update your values here
+      BUILD_ENVIRONMENT_URL: 'https://org92d2516b.crm6.dynamics.com'
+      PRODUCTION_ENVIRONMENT_URL: 'https://orgdef6a7be.crm6.dynamics.com'
+      CLIENT_ID: '8dfeb9fb-529d-44ba-a2ee-464ad1bd2332'
+      TENANT_ID: '342f0676-bb50-446a-bd9d-5d86f49e3696'    
+    secrets:
+      envSecret: ${{ secrets.PowerPlatformSPN }}
