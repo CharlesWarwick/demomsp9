@@ -1,0 +1,90 @@
+{
+  "entityId": "236-A",
+  "name": "Lancom: DeskDirector Admin Console 101",
+  "tags": [
+    "demo",
+    "lancom"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "2.0 How to login to DeskDirector Admin Console",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7564819)\nIf you cannot access the Admin Console, please contact the Product Support Team from your Lancom Button.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "2.1 Adding a new form",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7586980)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "2.1.0 Forms: Question types",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7587023)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "2.1.1 Forms: Conditional questions",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7587010)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "2.1.2 Forms: Setting up a Title Automation",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7587013)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "2.2 Request Types",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7586987)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "2.3 How to impersonate a Contact in DD Admin Console",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7473995)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "3.1 Contact Permissions",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7596910)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "4.1 Adding a document to Learning Center",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7307887)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "5.1 Menu System",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7606539)",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.7526164Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
