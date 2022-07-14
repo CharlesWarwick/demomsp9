@@ -1,0 +1,337 @@
+{
+  "form": {
+    "entityId": 27136,
+    "name": "[HEALTHSAFETY] Risks/Good Job",
+    "description": "Record a risk/new job",
+    "titleFormat": {
+      "format": "Risk from  {1}",
+      "arguments": [
+        "contact_name"
+      ]
+    },
+    "tags": [
+      "hse"
+    ],
+    "fields": [
+      {
+        "type": "single_choice",
+        "name": "Would you like a refresher",
+        "description": "If its been a  while , or this is your first entry, you might want to spend a couple of minutes refreshing\nWe  have some bullet points and a [3 minute video](https://vimeo.com/640821592/22c01e4484)",
+        "identifier": "q205z8",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "kew21c"
+          },
+          {
+            "name": "No",
+            "identifier": "pqgfzc"
+          }
+        ]
+      },
+      {
+        "type": "statement",
+        "name": "Refresher on Risks/Good Job",
+        "description": "## HouseKeeping\n\n1. Are general work areas tidy, free from rubbish & obstructions\n2. Identifying and Preventing Slip and Falls\n3. Are all fire extinguishers easily accessible, clearly marked\n\n## Equipment\n1. Know the location of the first aid kit and how to use the contents.\n2. Report unsafe working conditions or equipment to your supervisor\n3. Make sure emergency telephone numbers are clearly posted or readily available.\n\n## Behavioural and Processes\n1. Don’t text and walk\n2. Staff checking all Visitors are correctly follow Health & Safety rules\n3. Use caution when exiting building, watch out for moving vehicles\n\n![3 minute video](https://vimeo.com/640821592)",
+        "identifier": "1huw38",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "q205z8",
+          "operator": "in",
+          "identifiers": [
+            "kew21c"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Work Area/Address",
+        "description": "This is where we can tell more or drop an [info video](https://vimeo.com/640821592/22c01e4484)",
+        "identifier": "1ouhz7",
+        "required": false,
+        "choices": [
+          {
+            "name": "Office",
+            "identifier": "e2930d"
+          },
+          {
+            "name": "Client Site",
+            "identifier": "tapb6n"
+          },
+          {
+            "name": "Other",
+            "identifier": "f0cyj2"
+          }
+        ]
+      },
+      {
+        "type": "address",
+        "name": "What is the client address",
+        "identifier": "p34jwk",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "1ouhz7",
+          "operator": "in",
+          "identifiers": [
+            "tapb6n"
+          ]
+        },
+        "meta": {
+          "country": "nz",
+          "language": "en"
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Client Name",
+        "description": "what is the name of the client",
+        "identifier": "p6prav",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "1ouhz7",
+          "operator": "in",
+          "identifiers": [
+            "tapb6n"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Other location",
+        "description": "You chose other location.\nPlease provide more details here ...",
+        "identifier": "p9kkkc",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "1ouhz7",
+          "operator": "in",
+          "identifiers": [
+            "f0cyj2"
+          ]
+        }
+      },
+      {
+        "type": "multiple_choice",
+        "name": "Observations",
+        "description": "Let us know the nature of the observation\nYou can tick multiple option",
+        "identifier": "020r0x",
+        "required": false,
+        "choices": [
+          {
+            "name": "Breach of safety rules",
+            "identifier": "s3v4bx"
+          },
+          {
+            "name": "Unsafe act",
+            "identifier": "zmoafu"
+          },
+          {
+            "name": "Severity",
+            "identifier": "8httkn"
+          },
+          {
+            "name": "Manager",
+            "identifier": "4wjcsf"
+          }
+        ]
+      },
+      {
+        "type": "long_text",
+        "name": "Observation",
+        "description": "What was the obervation",
+        "identifier": "by3fvb",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "Has there been a corrective action taken",
+        "identifier": "6o1wjo",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "jfy6io"
+          },
+          {
+            "name": "No",
+            "identifier": "ym9cnl"
+          }
+        ],
+        "meta": {
+          "render": "dropdown"
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "What was the corrective action taken",
+        "description": "if actions were taken, please type in the details\nYou must put something in here\nYou can add more details at a later time",
+        "identifier": "c4hal6",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "6o1wjo",
+          "operator": "in",
+          "identifiers": [
+            "jfy6io"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Severity",
+        "identifier": "b3hwln",
+        "required": false,
+        "choices": [
+          {
+            "name": "Insignificant",
+            "identifier": "5m8vye"
+          },
+          {
+            "name": "Minor",
+            "identifier": "wk0jhh"
+          },
+          {
+            "name": "Moderate",
+            "identifier": "e2kwy8"
+          },
+          {
+            "name": "Major",
+            "identifier": "b274bx"
+          },
+          {
+            "name": "Catastrophic",
+            "identifier": "jfijm5"
+          }
+        ],
+        "meta": {
+          "render": "dropdown"
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Risk",
+        "description": "In `your own opinion` what is the likelihood of an incident occurring",
+        "identifier": "7g7ne1",
+        "required": false,
+        "choices": [
+          {
+            "name": "Rare",
+            "identifier": "cegmvk"
+          },
+          {
+            "name": "Unlikely",
+            "identifier": "1s7i67"
+          },
+          {
+            "name": "Possible",
+            "identifier": "rwfz9i"
+          },
+          {
+            "name": "Likely",
+            "identifier": "g7cbvc"
+          },
+          {
+            "name": "Almost certain",
+            "identifier": "zm02vu"
+          }
+        ]
+      },
+      {
+        "type": "single_choice",
+        "name": "Manager",
+        "description": "Who is the responsible manager",
+        "identifier": "d5tbfd",
+        "required": false,
+        "choices": [
+          {
+            "name": "Clinton",
+            "identifier": "qo8azw"
+          },
+          {
+            "name": "Waruna",
+            "identifier": "hdb3n7"
+          },
+          {
+            "name": "Don't know",
+            "identifier": "h2om6f"
+          }
+        ],
+        "meta": {
+          "render": "dropdown"
+        }
+      },
+      {
+        "type": "file",
+        "name": "Upload any photos or files",
+        "description": "Upload any files, uploads, photos that are relevant and can help us",
+        "identifier": "qs5we5",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [
+      {
+        "name": "Risk Assessment",
+        "identifier": "xf8u7u",
+        "fields": [
+          {
+            "type": "long_text",
+            "name": "Significant Hazards/Risks",
+            "identifier": "ug9ke4",
+            "required": false
+          },
+          {
+            "type": "long_text",
+            "name": "Hazard Controls",
+            "identifier": "4cwy7m",
+            "required": false
+          },
+          {
+            "type": "short_text",
+            "name": "Control Hierarchy",
+            "identifier": "ulr9ae",
+            "required": false
+          },
+          {
+            "type": "short_text",
+            "name": "Pre Rating",
+            "identifier": "4gsxuq",
+            "required": false
+          },
+          {
+            "type": "short_text",
+            "name": "Approved By",
+            "identifier": "hmz3jz",
+            "required": false
+          },
+          {
+            "type": "short_text",
+            "name": "Post Rating",
+            "identifier": "4e61ru",
+            "required": false
+          },
+          {
+            "type": "date",
+            "name": "Review Date",
+            "identifier": "953933",
+            "required": false,
+            "meta": {
+              "render": "date"
+            }
+          },
+          {
+            "type": "long_text",
+            "name": "Comments",
+            "identifier": "wpn3vw",
+            "required": false
+          }
+        ]
+      }
+    ],
+    "etag": "01000000-0000-1DE6-0000-000000003CEC"
+  }
+}
