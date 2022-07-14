@@ -1,0 +1,85 @@
+{
+  "general": {
+    "entityId": 38,
+    "enabled": true,
+    "parentName": "[ITIL-Style] Software and Application",
+    "name": "Request a CLOUD application",
+    "tags": null,
+    "parentOptions": [
+      "[ITIL-Style] Communication (Email and calendars, Phone Systems)",
+      "[ITIL-Style] Networks and Servers",
+      "[ITIL-Style] Printing and Scanning",
+      "[ITIL-Style] Security",
+      "[ITIL-Style] Software and Application",
+      "[ITIL-Style] User Accounts",
+      "[ITIL-Style] Workstation (OS, Hardware and Peripherals)",
+      "0: The Most Common Tickets",
+      "1. Self Service Area",
+      "1. Showcase",
+      "1: Computer",
+      "2. User Account",
+      "3. Email",
+      "4. Software and Apps",
+      "Account/Access",
+      "Competition",
+      "Hardware",
+      "Implementation",
+      "Microsoft Office 365",
+      "Risks",
+      "Sales/Procurement",
+      "Software",
+      "Staff Onboarding and offboarding",
+      "Webinar"
+    ],
+    "titleTemplate": null,
+    "bodyTemplate": null,
+    "formUrl": null,
+    "formRedirect": null,
+    "ddForm": null,
+    "taskTemplates": []
+  },
+  "ticket": {
+    "connectWise": {
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "type": null,
+      "subType": null,
+      "subTypeItem": null,
+      "source": {
+        "entityId": 2,
+        "name": "Portal"
+      }
+    }
+  },
+  "filter": {
+    "entityId": 38,
+    "name": "Request a CLOUD application",
+    "rootFlag": true,
+    "inverseFlagTargets": [
+      {
+        "entityId": 16,
+        "name": "Diddly Inc",
+        "type": "company",
+        "parent": null,
+        "inverseFlagTargets": null
+      },
+      {
+        "entityId": 27,
+        "name": "Krusty Corp",
+        "type": "company",
+        "parent": null,
+        "inverseFlagTargets": null
+      }
+    ]
+  }
+}
