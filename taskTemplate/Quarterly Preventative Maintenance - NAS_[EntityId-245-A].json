@@ -1,0 +1,26 @@
+{
+  "entityId": "245-A",
+  "name": "Quarterly Preventative Maintenance - NAS",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Check NAS for Firmware Updates",
+      "description": {
+        "content": "Here are some additional instructions or notes",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.0166177Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
