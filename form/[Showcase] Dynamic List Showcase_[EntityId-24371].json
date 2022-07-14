@@ -1,0 +1,148 @@
+{
+  "form": {
+    "entityId": 24371,
+    "name": "[Showcase] Dynamic List Showcase",
+    "description": null,
+    "titleFormat": {
+      "format": "{1} - List Show Case",
+      "arguments": [
+        "company_name"
+      ]
+    },
+    "tags": [
+      "showcase"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "Video",
+        "description": "![video](https://player.vimeo.com/video/598758601?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;h=47ad1a6f59)",
+        "identifier": "zdq0z2",
+        "required": false
+      },
+      {
+        "type": "statement",
+        "name": "Excel with GrapeCity",
+        "description": "![video](https://af0f-202-89-155-211.ngrok.io/api/GetExcelSheet/Avita - Service Catalog.xlsx)",
+        "identifier": "rkjgps",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "Regular List",
+        "identifier": "oyk9p2",
+        "required": false,
+        "choices": [
+          {
+            "name": "Blues",
+            "identifier": "76ro9x",
+            "selected": true
+          },
+          {
+            "name": "Green",
+            "identifier": "turwhw",
+            "selected": false
+          },
+          {
+            "name": "Other",
+            "identifier": "28p562",
+            "selected": false
+          }
+        ]
+      },
+      {
+        "type": "short_text",
+        "name": "Other Color",
+        "description": "You picked 'Other' for single-choice color",
+        "identifier": "xkwmr4",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "oyk9p2",
+          "operator": "in",
+          "identifiers": [
+            "28p562"
+          ]
+        }
+      },
+      {
+        "type": "multiple_choice",
+        "name": "Multi Color List",
+        "identifier": "wo28mx",
+        "required": false,
+        "choices": [
+          {
+            "name": "Blue",
+            "identifier": "apq334",
+            "selected": true
+          },
+          {
+            "name": "Green",
+            "identifier": "hm4tyk"
+          },
+          {
+            "name": "Red",
+            "identifier": "qo2vs7"
+          },
+          {
+            "name": "Other",
+            "identifier": "zabllf"
+          }
+        ]
+      },
+      {
+        "type": "short_text",
+        "name": "Other Multi Color",
+        "description": "You picked 'Other' for multi-choice color",
+        "identifier": "wt7qee",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "wo28mx",
+          "operator": "contains_any",
+          "identifiers": [
+            "zabllf"
+          ]
+        }
+      },
+      {
+        "type": "api_multi_select",
+        "name": "This is a long list of names",
+        "identifier": "3xzgsd",
+        "required": false,
+        "api": {
+          "method": "GET",
+          "url": "https://prod-64.westus.logic.azure.com:443/workflows/5efdb8605aad4c2da62502bdfcfa54da/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=EcgsiYQAonVZk6OT9HEhzcN2ExhVgMOtgx_vCLVPKVY",
+          "queryParams": null
+        }
+      },
+      {
+        "type": "api_single_select",
+        "name": "Master List",
+        "description": "This returns all the tables in your Master List spreadsheet",
+        "identifier": "scztw7",
+        "required": false,
+        "api": {
+          "method": "GET",
+          "url": "https://prod-154.westus.logic.azure.com:443/workflows/b9d5db69a43749c7b1e04fb3342ce2fc/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B-QeMW9UaXYld97wz6tggzbxbzTDyQmrKO9b8dmB8Ko&lookupTableName=MasterList",
+          "queryParams": null
+        }
+      },
+      {
+        "type": "api_single_select",
+        "name": "Read in selected table",
+        "description": "Get Excel Table List",
+        "identifier": "tao7hz",
+        "required": false,
+        "api": {
+          "method": "GET",
+          "url": "https://prod-154.westus.logic.azure.com:443/workflows/b9d5db69a43749c7b1e04fb3342ce2fc/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B-QeMW9UaXYld97wz6tggzbxbzTDyQmrKO9b8dmB8Ko&lookupTableName=OfficeLicense&ueyv3f",
+          "queryParams": null
+        }
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CE3"
+  }
+}
