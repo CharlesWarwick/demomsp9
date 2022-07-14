@@ -1,0 +1,27 @@
+{
+  "entityId": "203-A",
+  "name": "Biannual Preventative Maintenance - Network Security",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Review admin access location",
+      "description": null
+    },
+    {
+      "instruction": "Ensure firewall management interface access is locked down to Lancom's external IPs only",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.877643Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
