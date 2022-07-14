@@ -1,0 +1,118 @@
+{
+  "entityId": "221-A",
+  "name": "Lancom User Onboarding",
+  "tags": [
+    "demo",
+    "lancom",
+    "newusersetup"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Hardware Ordering is Underway",
+      "description": null
+    },
+    {
+      "instruction": "Setup Active Directory Account",
+      "description": {
+        "content": "[IT Glue Guide Available Here](https://lancom.itglue.com/5537/docs/1970384)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Assign Azure Licenses and setup 365 mailbox",
+      "description": {
+        "content": "[IT Glue Guide Available Here](https://lancom.itglue.com/5537/docs/1970384)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Change Direct Report Settings in AD",
+      "description": {
+        "content": "Add thier Direct report in AD\nIF Manager change teammembers direct report to New User",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Enable Litigation Hold on the mailbox",
+      "description": {
+        "content": "[Supporting Documentation](https://docs.microsoft.com/en-us/exchange/policy-and-compliance/holds/litigation-holds?view=exchserver-2019)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Setup Labtech Account",
+      "description": null
+    },
+    {
+      "instruction": "Setup Screenconnect Account",
+      "description": null
+    },
+    {
+      "instruction": "Setup 3CX account",
+      "description": {
+        "content": "[3CX Account Setup Guide](https://lancom.itglue.com/5537/docs/5124330)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Setup IT Glue",
+      "description": null
+    },
+    {
+      "instruction": "Setup CSP Portal access",
+      "description": {
+        "content": "https://help.cspportal.cloud/article/jyqfvil6hm-managing-user-access",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "ConnectWise Account Created",
+      "description": {
+        "content": "* Default Board Settings\n* Setup calendar Sync if required\n* Add to TimeSanity Weekly Review Ticket Template\n* Set Time Sheet Start Date to the actual start date of engineer (this prevents unsubmitted timesheets created before the staff starts)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Microsoft Teams - Add to required chats and team channels",
+      "description": {
+        "content": "Chat groups:\n\n* Q & A\n* Helpdesk vx.x\n* T2\n* Checkin/out\n* Banters \n* Pod chat groups (Mighty Blues, Red Clan, Green Machine)\n* Client-related chat groups (Mondiale Squad, MMC Squad, Infotools)\n\nChannels:\n\n* Lancom - General\n* Engineering\n* Helpdesk\n* PagerDuty (T2s above)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Setup Exclaimer Signature",
+      "description": {
+        "content": "[Setup Guide](https://lancom.itglue.com/5537/docs/6144356#version=published&documentMode=view)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Setup Brightgauge",
+      "description": {
+        "content": "setup a Brightgauge viewer account\nAdd to \"Assigned Tickets - Pod\" or \"Assigned Tickets - Offshore\" gauges in Brightgauge\nAdd to Brightgauge  - Certification Goals\nAdd to filter in Helpdesk Team Hours https://lancom.brightgauge.co/dashboards/7c0e476f-0089-490b-b61e-37829ebd11d7/",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Add to HSE ticket in Connectwise",
+      "description": null
+    },
+    {
+      "instruction": "Offshore user added to Offshore Distribution Group",
+      "description": {
+        "content": "If offshore, add to offshore@lancom.co.nz distribution list",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.3476472Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
