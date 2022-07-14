@@ -1,0 +1,61 @@
+{
+  "entityId": "129-A",
+  "name": "Management",
+  "items": [
+    {
+      "entityId": 103,
+      "parentName": "1. Showcase",
+      "name": "Dynamic Lists Showcase",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 79,
+      "parentName": "Sales/Procurement",
+      "name": "Purchase Request",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "unset",
+      "filterRootFlag": true,
+      "filterHasException": true,
+      "board": {
+        "entityId": 37,
+        "name": "Procurement"
+      },
+      "status": {
+        "entityId": 529,
+        "name": "Approval Required"
+      },
+      "priority": null,
+      "langs": []
+    }
+  ],
+  "meta": {
+    "updatedAt": "2021-06-08T21:22:23.7443423Z",
+    "updatedBy": {
+      "entityId": "m~187",
+      "name": "mrwhite"
+    },
+    "companyCount": 0,
+    "contactCount": 0,
+    "teamCount": 1
+  }
+}
