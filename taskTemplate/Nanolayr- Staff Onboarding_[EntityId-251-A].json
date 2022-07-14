@@ -1,0 +1,121 @@
+{
+  "entityId": "251-A",
+  "name": "Nanolayr: Staff Onboarding",
+  "tags": [
+    "demo",
+    "newusersetup",
+    "nanolayr"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Create a new user account on the domain controller - RFSERVER.",
+      "description": {
+        "content": "The naming convention for the AD account is: firstname.lastname",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Does the user require VPN",
+      "description": {
+        "content": "Important: In case the new employee needs access to SSLVPN you need to seek approval from Earl Henton before proceeding\nyou can then assign them to the SSLVPN security group and tick \"Allow access\" under the AD object Dial-in tab.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Login to Revolution Fibres O365 and create a new O365 account.",
+      "description": {
+        "content": "The naming convention is: firstname.lastname@nanolayr.com \nProvision the following license from the CSP portal and assign the new account these licenses:\n\nOffice 365 Business Premium / M365 Business Standard\nATP license",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Assign the necessary email groups",
+      "description": {
+        "content": "please ask the requestor to specify a user with the same/similar permissions as the new starter and compare their groups.\nMake sure user is added to all@rev group\nMust assign:\nNanoLayr Team\nHealth & Safety\nWellness\nWhen requesting the new user, they will also specify what other groups, e.g. Production, SMT, Engineer, etc., should be added to.\n\nNote - Add user to \"Health and Safety\" Channel on Teams - its required for each new user.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Verify that the printer is mapped",
+      "description": {
+        "content": "Printer is mapped with the GPO tied to the \"Printer - Ricoh MP C2004ex\" security group",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Add User to the relevant Signature",
+      "description": {
+        "content": "LOGIN to Exclaimer Portal:\nOpen 'Revolution Fibres' Signature management by pressing 'Launch'. \nAdd User to the relevant Signature by adding from 'Select Senders'",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Setup Outlook calendar settings to Week number view",
+      "description": {
+        "content": "Check the attachment to enable week number view on the Outlook calendar.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Ensure outlook is set as the default mail application and pinned to the task bar",
+      "description": null
+    },
+    {
+      "instruction": "Ensure the Outlook client has the Teams add-in setup",
+      "description": {
+        "content": "(automatically gets installed with teams check it's not disabled)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Set the user up with Room calendars",
+      "description": {
+        "content": "Top right 3 dots and click add -> from Room list and add all the calendars for the user.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Set the startup page of the default web browser to Nanolayr's sharepoint home page",
+      "description": {
+        "content": "https://revolutionfibres.sharepoint.com/SitePages/Home.aspx",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Ensure user is signed into teams and it is pinned on the task bar",
+      "description": null
+    },
+    {
+      "instruction": "Contact the requestor on the day to go through all checks prior to the users arrival.",
+      "description": null
+    },
+    {
+      "instruction": "Update the contact in the ticket with the details of the new user",
+      "description": {
+        "content": "We have completed setting up the account for ____, please find the details below:\n\nComputer login\nusername: (AD Username, i.e. firstname.lastname)\npassword: (send the link from https://1ty.me/) Note: The password link expires once it is opened.\n\nOffice 365 Account\nemail address: (firstname.lastname@revolutionfibres.com)\npassword: (send the link from https://1ty.me/) Note: The password link expires once it is opened\n\nWe will contact the user once they start, to assist with enabling 2FA on their Office 365 account",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Re-schedule this ticket to the next day after the new employee starts and set up 2FA for them.",
+      "description": null
+    },
+    {
+      "instruction": "Complete MFA activation",
+      "description": {
+        "content": "Link to the MFA Setup Guide using the new employee's mobile number:\n[MFA Setup Guide](https://lancom.itglue.com/5537/docs/5360023)\n\n2FA method is via a text on their mobile number\nOnce 2FA is setup, change it to Enforced in O365 admin portal for this new employee.",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.2546204Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
