@@ -1,0 +1,31 @@
+{
+  "entityId": "249-A",
+  "name": "Server Work Checklist",
+  "tags": [
+    "demo",
+    "server"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Understand the overall scope of work required for this ticket",
+      "description": null
+    },
+    {
+      "instruction": "Communicate request for guidance from senior as required",
+      "description": {
+        "content": "a. If you have done this work before and familiar with the steps, no further action, proceed with the work\nb. If you have not done this work before and not confident in working this ticket through to resolution, create your resolution plan notes in the ticket and have it reviewed by senior engineer before proceeding",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.1706183Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
