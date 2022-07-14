@@ -1,0 +1,79 @@
+{
+  "form": {
+    "entityId": 26639,
+    "name": "[HR] DD Forms Showcase - Onboarding: New desktop",
+    "description": null,
+    "titleFormat": null,
+    "tags": [
+      "hr"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "Buy a new Desktop",
+        "identifier": "jw5768",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "Do you want extra screens? How many screens?",
+        "description": "You may wish to have multiple screens at your desktop",
+        "identifier": "yjgyy1",
+        "required": false,
+        "choices": [
+          {
+            "name": "1 x screen",
+            "identifier": "x5h2jp"
+          },
+          {
+            "name": "2 x screen",
+            "identifier": "0vc8ru"
+          },
+          {
+            "name": "3 x screen",
+            "identifier": "iyv6sw"
+          },
+          {
+            "name": "No thanks",
+            "identifier": "007e7t"
+          }
+        ]
+      },
+      {
+        "type": "single_choice",
+        "name": "Do you want a screen mount frame?",
+        "description": "This is a steel frame that clamps to your desk and takes the screens off the surface of your desk",
+        "identifier": "mfqyyo",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "4qhry5"
+          },
+          {
+            "name": "No",
+            "identifier": "vlfmw9"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "yjgyy1",
+          "operator": "not_in",
+          "identifiers": [
+            "007e7t"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Any other information about the desktop",
+        "description": "Are there any requirements or questions regarding the desktop",
+        "identifier": "tx4fa2",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CC0"
+  }
+}
