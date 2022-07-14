@@ -1,0 +1,91 @@
+{
+  "entityId": "258-A",
+  "name": "Deed and Viper: Staff Onboarding - General User",
+  "tags": [
+    "demo",
+    "newusersetup",
+    "dandv"
+  ],
+  "filter": {
+    "companies": [
+      {
+        "entityId": 27,
+        "name": "Deed and Viper"
+      }
+    ]
+  },
+  "items": [
+    {
+      "instruction": "Create an Active Directory Account",
+      "description": {
+        "content": "[IT glue available here](https://lancom.itglue.com/529117/docs/6383399#version=published&documentMode=view)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Create a mailbox in local exchange",
+      "description": {
+        "content": "To create a mailbox, login to [Exchange admin center](https://webmail.mondiale.co.nz/ecp/?ExchClientVer=15)   and create a user mailbox.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Migrate mailbox to O365",
+      "description": {
+        "content": "Please ensure that the user does not have a license assigned on O365 until the migration is complete.\nOnce the mailbox is created on local Exchange, head to O365 Exchange Admin center using [these credentials](https://lancom.itglue.com/529117)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Find the account in office 365 and assign the appropriate license",
+      "description": {
+        "content": "Generally, Exchange Online (Plan 1) for NZ users and M365 Business Standard for AU users.\nLogin to the account and test inbound and outbound emails.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "!!!IMPORTANT!!! Enable MFA for the user account in Office 365.",
+      "description": {
+        "content": "YOU ARE NOT FINISHED UNTIL THE MFA is completed with the user",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "CAFs Setup",
+      "description": {
+        "content": "Login to MONDIT2 with a domain administrator account, and [follow this document](https://lancom.itglue.com/529117/docs/760450#version=published&documentMode=view)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Citrix Setup",
+      "description": {
+        "content": "Add the user to the \"Citrix Delivery Group Access\" if they need access to Citrix.\nLog In to [this account](https://remote.mondiale.co.nz/) using Office 365 account of the user. Set up Outlook and test inbound and outbound emails. \n\nRun sign.exe from [mondiale.co.nz](http://mondiale.co.nz/)\\Shares\\emailsigs\\ and check the user has email signature when writing new emails.\n\nOpen CAFS and make sure you can log in and open modules.\n\nOpen Doc Manager and make sure that loads.\n\nCheck printers and drives are mapped as required. \n\nPrinting for Citrix Users: Printers are mapped by Citrix Print Policies. The groups that map these are under the Mondiale Citrix Servers OU. Add the relevant one if the user will be using Citrix.\n\nIf you need to change policies you can do this through Citrix Print Policies in GPO. You need to use MONDDC6 to see these policies under User Configuration/Citrix Policies",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Phone Setup",
+      "description": {
+        "content": "Mondiale does not use VOIP phones. Where the phones are patched in the server room will determine the extension it gets. The middle section in the patch panel lists the extensions. The sections to the left and right are the usual patch extensions that link back to ports around the building.\nFor more info [IT glue document available here](https://lancom.itglue.com/529117)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "PC Setup",
+      "description": {
+        "content": "NOTE: User setup is not done till you have logged in to the actual PC they will use and set up outlook/signature, CAFS and doc manager shortcuts are on desktop and working and Zeacom is set up for their phone.",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:18:06.9618791Z",
+  "lastModifiedBy": {
+    "entityId": "m~20007",
+    "name": "jurgen@ddportal.com"
+  }
+}
