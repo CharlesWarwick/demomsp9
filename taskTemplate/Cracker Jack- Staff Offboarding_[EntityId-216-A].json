@@ -1,0 +1,82 @@
+{
+  "entityId": "216-A",
+  "name": "Cracker Jack: Staff Offboarding",
+  "tags": [
+    "demo",
+    "crackerjack",
+    "offboarding"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Reset users password",
+      "description": null
+    },
+    {
+      "instruction": "Move AD account to O365",
+      "description": {
+        "content": "Sync > Ex-Staff [DO NOT DISABLE THE ACCOUNT]",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Convert exiting users mailbox to ‘shared’ in Office 365 and add mailbox to specified user above",
+      "description": null
+    },
+    {
+      "instruction": "Remove Office 365 license from the user",
+      "description": null
+    },
+    {
+      "instruction": "Ensure mailbox has been removed from all distribution groups",
+      "description": null
+    },
+    {
+      "instruction": "Setup auto response (ensure you include the logo) on exiting users email account with forwarding contact details",
+      "description": null
+    },
+    {
+      "instruction": "Remove user from all distribution groups",
+      "description": null
+    },
+    {
+      "instruction": "Move users home folder to ex staff folder",
+      "description": {
+        "content": "\\\\tcsfp01\\d$\\EXStaffHomeFolder",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Change Network Access Permission to Deny Access",
+      "description": {
+        "content": "(This disables vpn access)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Inactivate contact in Connectwise and set type to ‘GONE no longer with Company’",
+      "description": null
+    },
+    {
+      "instruction": "Schedule yourself in 4 weeks to remove the auto response",
+      "description": null
+    },
+    {
+      "instruction": "Remove alias from mailbox so that it bounces",
+      "description": null
+    },
+    {
+      "instruction": "Ticket can be closed once alias is removed and mail bounces",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.8146402Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
