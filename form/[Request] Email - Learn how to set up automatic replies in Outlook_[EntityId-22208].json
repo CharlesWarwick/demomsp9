@@ -1,0 +1,171 @@
+{
+  "form": {
+    "entityId": 22208,
+    "name": "[Request] Email - Learn how to set up automatic replies in Outlook",
+    "description": "Self Service type form.",
+    "titleFormat": {
+      "format": "Automatic out-of-office replies for  {1}",
+      "arguments": [
+        "contact_name"
+      ]
+    },
+    "tags": [],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "There are two ways to send automatic out-of-office replies.",
+        "description": ">The way you use depends on the type of email account you have. \nThere are two versions of Outlook for this function\n\n### Click **File** from the Outlook menu ...\n>then select the image below that matches your version of Outlook.\n![alt text](https://cdn2.hubspot.net/hubfs/429075/2020%20IMAGES%20Client%20Demos/SW%20auto%20reply%20001.png)",
+        "identifier": "fp6m50",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "Can you see the Automatic Replies button?",
+        "description": "Please refer to the image above to work it out.",
+        "identifier": "e6fqi1",
+        "required": true,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "sck4h8"
+          },
+          {
+            "name": "No",
+            "identifier": "55q4st"
+          }
+        ]
+      },
+      {
+        "type": "statement",
+        "name": "1. Select File > Automatic Replies.",
+        "description": "![alt text](https://support.content.office.net/en-us/media/02a4b8d8-e36c-45aa-a8cd-abec50e5b59b.png)\nNote: For **Outlook 2007** choose **Tools > Out of Office Assistant**.",
+        "identifier": "finvyb",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "e6fqi1",
+          "operator": "in",
+          "identifiers": [
+            "sck4h8"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "In the Automatic Replies box, select Send automatic replies.",
+        "description": "Optionally, set a date range for your automatic replies. This will turn off automatic replies at the date and time you enter for the end time. Otherwise, you'll need to turn off automatic replies manually.\n\n>> **Note**: If you don't see **Automatic Replies**, use Rules and Alerts to set up your out-of-office message.",
+        "identifier": "dcox2l",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "e6fqi1",
+          "operator": "in",
+          "identifiers": [
+            "sck4h8"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "Optionally, set a date range for your automatic replies. This will turn off automatic replies at the date and time you enter for the end time. Otherwise, you'll need to turn off automatic replies manually.  Note: If you don't see Automatic Replies, use Rules and Alerts to set up your out-of-office message.",
+        "description": "![alt text](https://support.content.office.net/en-us/media/bd33b1a8-38c6-4c08-a81c-325748a2588c.png)\n\n>> **Note**: Sending automatic replies to **anyone outside my organization** will send your automatic reply to every email, including newsletters, advertisements, and potentially, junk email. If you want to send automatic replies to those outside your organization, we recommend choosing **My contacts only**.",
+        "identifier": "wn71og",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "e6fqi1",
+          "operator": "in",
+          "identifiers": [
+            "sck4h8"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "Turn off automatic out-of-office replies",
+        "description": "When Outlook is setup to send automatic replies, you'll see a message under the ribbon with this information. Select **Turn off** to disable automatic out-of-office replies. If you want to modify the dates for your automatic reply or the message sent, use the steps above to modify your settings.\n\n>> **Note**: For **Outlook 2007**, to turn off out-of-office replies, select **Tools > Out of Office Assistant** and uncheck the **Send Out of Office auto-replies** checkbox.\n\n![alt text](https://support.content.office.net/en-us/media/17a63eb0-fc5a-4153-a0c9-b83b4d9b79c6.png)",
+        "identifier": "7ugcoj",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "e6fqi1",
+          "operator": "in",
+          "identifiers": [
+            "sck4h8"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "Use rules to create an out of office message",
+        "description": "Click on the button below to get redirected to the 'Use rules to create an out of office message' Microsoft Support page.\n\n[![button](https://cdn2.hubspot.net/hubfs/429075/2020%20IMAGES%20General/click-here-button.png)](https://support.microsoft.com/en-us/office/use-rules-to-create-an-out-of-office-message-9f124e4a-749e-4288-a266-2d009686b403)",
+        "identifier": "rupha6",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "e6fqi1",
+          "operator": "in",
+          "identifiers": [
+            "55q4st"
+          ]
+        }
+      }
+    ],
+    "readonly": false,
+    "sections": [
+      {
+        "name": "Still Need Help?",
+        "identifier": "40lx0y",
+        "fields": [
+          {
+            "type": "single_choice",
+            "name": "I went through the documentation and I still require help.",
+            "identifier": "h0gvtz",
+            "required": true,
+            "choices": [
+              {
+                "name": "Yes",
+                "identifier": "l82tk4"
+              },
+              {
+                "name": "No",
+                "identifier": "bp2jdi"
+              }
+            ]
+          },
+          {
+            "type": "statement",
+            "name": "All done!",
+            "description": "No need to log a ticket with us - great work 😁👍",
+            "identifier": "m63iyd",
+            "required": false,
+            "condition": {
+              "parentId": "40lx0y",
+              "parentFieldId": "h0gvtz",
+              "operator": "in",
+              "identifiers": [
+                "bp2jdi"
+              ]
+            }
+          },
+          {
+            "type": "long_text",
+            "name": "Please provide more information that will help us resolve your support request.",
+            "description": "Tell us of any error messages or any other difficulties that you are encountering.\n\n> **To take a quick screenshot:**\n> 1. use WIN+Shift+S\n> 2. click on 'Click to paste images from clipboard'\n> 3. Ctrl+V",
+            "identifier": "23vhnt",
+            "required": true,
+            "condition": {
+              "parentId": "40lx0y",
+              "parentFieldId": "h0gvtz",
+              "operator": "in",
+              "identifiers": [
+                "l82tk4"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "etag": "01000000-0000-1DE6-0000-000000003D1F"
+  }
+}
