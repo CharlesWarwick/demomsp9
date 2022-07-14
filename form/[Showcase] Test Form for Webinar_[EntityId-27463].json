@@ -1,0 +1,33 @@
+{
+  "form": {
+    "entityId": 27463,
+    "name": "[Showcase] Test Form for Webinar",
+    "description": "Showing of dynamic list",
+    "titleFormat": null,
+    "tags": [
+      "webinar"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "This is a test form",
+        "identifier": "1ed54y",
+        "required": false
+      },
+      {
+        "type": "api_single_select",
+        "name": "This will get dynamic data",
+        "identifier": "546sc2",
+        "required": false,
+        "api": {
+          "method": "POST",
+          "url": "https://prod-38.westus.logic.azure.com:443/workflows/af577a3eb2b24598b349d5f5f695de36/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=0lvIT1q_c4-AUkFJG2jgX57CCD2WMpUj5_ctPQWpYDM",
+          "queryParams": null
+        }
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003D0B"
+  }
+}
