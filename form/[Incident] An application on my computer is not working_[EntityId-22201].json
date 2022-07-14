@@ -1,0 +1,110 @@
+{
+  "form": {
+    "entityId": 22201,
+    "name": "[Incident] An application on my computer is not working",
+    "description": null,
+    "titleFormat": {
+      "format": "Issue with application  {2} - Issue affecting {3}",
+      "arguments": [
+        "service_catalogue",
+        "jdi60v",
+        "z6stng"
+      ]
+    },
+    "tags": [
+      "webinar"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "Similar tickets",
+        "description": "**This will find similar ticket, you can see if any other have this problem**",
+        "identifier": "kj5yfx",
+        "required": false,
+        "content": {
+          "method": "POST",
+          "url": "https://prod-35.westus.logic.azure.com:443/workflows/4df83077f89f47bdaabea2aa44d10b21/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=WWODX8rRYnyF32GciZP4rEpeSTvaJa4Sn-gR7_StYjs",
+          "queryParams": null
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Name of Application",
+        "identifier": "jdi60v",
+        "required": true
+      },
+      {
+        "type": "long_text",
+        "name": "Current Behavior",
+        "identifier": "bthb29",
+        "required": true
+      },
+      {
+        "type": "long_text",
+        "name": "Expected Behavior",
+        "identifier": "tifb0m",
+        "required": true
+      },
+      {
+        "type": "single_choice",
+        "name": "Are you able to reproduce this issue?",
+        "identifier": "on65oi",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "pvekox"
+          },
+          {
+            "name": "No",
+            "identifier": "onx9ks"
+          }
+        ]
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide detailed steps to reproduce this issue",
+        "identifier": "3yxhn5",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "on65oi",
+          "operator": "in",
+          "identifiers": [
+            "pvekox"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Has another user reported a similar issue?",
+        "identifier": "z6stng",
+        "required": true,
+        "choices": [
+          {
+            "name": "Just me",
+            "identifier": "40b6mc"
+          },
+          {
+            "name": "All users",
+            "identifier": "0egp53"
+          },
+          {
+            "name": "Unsure",
+            "identifier": "3mf2p8"
+          }
+        ]
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide any additional information that will help",
+        "description": "Supporting screenshots can be attached using the Paperclip icon.",
+        "identifier": "ochkqz",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CD2"
+  }
+}
