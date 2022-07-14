@@ -1,0 +1,54 @@
+{
+  "entityId": "212-A",
+  "name": "DeskDirector - Server Access/Change Requirements",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "1. A ticket created no later than one working day before it is worked",
+      "description": {
+        "content": "a) This ticket has Jason, Warwick and Edcel as ticket contact/cc’s\n\t\t\nb) Ticket can be created either by DeskDirector or Lancom\n\t\t\nc) NO LANCOM TICKETS. Anything done on DD servers must be for DeskDirector",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "2. Schedule the change/access",
+      "description": {
+        "content": "a) The change/access should be scheduled no later than one working day before it is worked,\n\t\t\nb) If the change/access for AU it should be started at 8:30am NZT\n\t\t\nc) If the change/access for US or UK it should be scheduled for 8:30am NZT Monday\n\t\t\nd) If the change/access is outside these boundaries\n\t- A reason should be given\n\t- Approval from DD should be sought",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "3. An time entry, the day before, stating the following",
+      "description": {
+        "content": "a) What is the purpose of the change/access\nb) When the change/access will occur\nc) What, if any, risks are associated with the change/access\nd) What testing will be done to ensure the change/access was successful\ne) What testing will be done to ensure the change/access left the server in a running state \nf) What documentation",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "4. Add Time entries  and create documentation changes in real-time",
+      "description": {
+        "content": "a) Write out the ticket and the tests before moving on to other work\n\t\t\nb) Update ITGlue and/or other technical documentation before moving on to other work\ni.e. do not write out the time enter later in the day \n\t\t\nc) Confirm that tests 3(d) & 3(e) were successful\n\t\t\nd) Screen shot dialogues of the change where possible and place them in the ticket",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "5. ASK for Approval ONLY IF A BUSINESS DECISION NEEDS TO BE MADE",
+      "description": {
+        "content": "a) You **DO NOT** need approval from DeskDirector if there is no change, risk to DeskDirector or their customers and if you are only looking to seek information.\n\nb) You **DO NOT** need approval if this is an incident response or P1/P2 emergency tickets raised by monitoring or a failure.\n\nc) You **DO** need to follow the steps above and notify them of the access required but you do not need gain approval as long as you have followed the appropriate steps above.\n\nIf you are unclear of this step speak with your Pod Leader or Manager to gain clarity.",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.79464Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
