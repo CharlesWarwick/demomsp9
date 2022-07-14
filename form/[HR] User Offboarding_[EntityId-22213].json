@@ -1,0 +1,74 @@
+{
+  "form": {
+    "entityId": 22213,
+    "name": "[HR] User Offboarding",
+    "description": "User Account type form.",
+    "titleFormat": null,
+    "tags": [
+      "hr"
+    ],
+    "fields": [
+      {
+        "type": "short_text",
+        "name": "First name of the person leaving the organization",
+        "identifier": "ivckv1",
+        "required": true
+      },
+      {
+        "type": "short_text",
+        "name": "Last name of the person leaving the organization",
+        "identifier": "hymyir",
+        "required": true
+      },
+      {
+        "type": "date",
+        "name": "Last day of work",
+        "identifier": "axkzl1",
+        "required": true,
+        "meta": {
+          "render": "date"
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Any equipment that needs backup and resetting?",
+        "identifier": "y6cjju",
+        "required": true,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "rn4mzb"
+          },
+          {
+            "name": "No",
+            "identifier": "z8a368"
+          }
+        ]
+      },
+      {
+        "type": "short_text",
+        "name": "Please list the equipment below",
+        "description": "Include equipment ID where possible.",
+        "identifier": "5yphyy",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "y6cjju",
+          "operator": "in",
+          "identifiers": [
+            "rn4mzb"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Any additional comments and notes?",
+        "identifier": "5ivy3o",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CF0"
+  }
+}
