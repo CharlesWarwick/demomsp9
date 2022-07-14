@@ -1,0 +1,18 @@
+{
+  "entityId": "238-A",
+  "name": "NZHH Biannual Check List",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.8636166Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
