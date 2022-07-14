@@ -1,0 +1,1210 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_azureblob_2": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azureblob"
+        }
+      },
+      "shared_sharepointonline": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      },
+      "shared_excelonlinebusiness": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_excelonlinebusiness"
+        }
+      },
+      "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Http",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "BlobId": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "JPGNvVu1GADh3JInE2_Q-7LvA"
+        }
+      },
+      "actions": {
+        "Get_blob_content": {
+          "runAfter": {
+            "BlobId": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "GetFileContent"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_2']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(outputs('BlobId')))}/content",
+            "queries": {
+              "inferContentType": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Cleanup": {
+          "actions": {
+            "BlobContainer": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@replace( body('Get_Blob_Metadata')?['Path'], body('Get_Blob_Metadata')?['Name'], '')"
+            },
+            "CompletedContainer": {
+              "runAfter": {
+                "BlobContainer": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@concat(  outputs('BlobContainer'), 'Completed/')"
+            },
+            "CompletedPath": {
+              "runAfter": {
+                "CompletedContainer": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@concat(outputs('CompletedContainer'), utcNow(),'_TGX_', body('Get_Blob_Metadata')?['Name'] )"
+            },
+            "Copy_blob_to_Completed": {
+              "runAfter": {
+                "CompletedPath": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "CopyFile"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_azureblob_2']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/datasets/default/copyFile",
+                "queries": {
+                  "source": "@body('Get_Blob_Metadata')?['Path']",
+                  "destination": "@{outputs('CompletedPath')}",
+                  "overwrite": true,
+                  "queryParametersSingleEncoded": true
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Delete_blob": {
+              "runAfter": {
+                "Copy_blob_to_Completed": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "DeleteFile"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_azureblob_2']['connectionId']"
+                  }
+                },
+                "method": "delete",
+                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(outputs('BlobId')))}",
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Terminate": {
+              "runAfter": {
+                "Delete_blob": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Succeeded"
+              }
+            }
+          },
+          "runAfter": {
+            "Legacy": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Get_Blob_Metadata": {
+          "runAfter": {
+            "Get_blob_content": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "GetFileMetadata"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_2']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(outputs('BlobId')))}",
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Setup": {
+          "actions": {
+            "smartTicketActions": {
+              "runAfter": {
+                "Work_out_Action__Name_from_the_Folder_Name": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@coalesce(outputs('TicketGraph')?['smartTicketActions'],json('[]'))",
+                "schema": {
+                  "type": "array"
+                }
+              },
+              "description": "to check out isLive & other ticket Action meta data"
+            },
+            "Filter_for_this_Ticket_Action_Rule": {
+              "runAfter": {
+                "smartTicketActions": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('smartTicketActions')",
+                "where": "@equals(item()['Name'], outputs('TicketAction'))"
+              }
+            },
+            "TicketActionRule": {
+              "runAfter": {
+                "Filter_for_this_Ticket_Action_Rule": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@first( body('Filter_for_this_Ticket_Action_Rule'))",
+              "description": "to check out isLive & other ticket Action meta data"
+            },
+            "Look_for_testing_tag": {
+              "runAfter": {
+                "TicketActionRule": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@coalesce( outputs('TicketGraph')?['tags']?['Ticket'] , json('[]'))",
+                "where": "@contains(toLower(item()), 'test')"
+              },
+              "description": "Do any tags include the word test ?"
+            },
+            "FormQnA": {
+              "runAfter": {
+                "Look_for_testing_tag": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce( outputs('TicketGraph')?['formQnA2'] , json('[]'))"
+            },
+            "members": {
+              "runAfter": {
+                "FormQnA": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(  outputs('TicketGraph')?['assignedMembers'], json('[]'))",
+              "description": "Find the assigned members in the ticket "
+            },
+            "Work_out_Action__Name_from_the_Folder_Name": {
+              "actions": {
+                "GetFolder": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@replace( body('Get_Blob_Metadata')?['Path'], concat('/', body('Get_Blob_Metadata')?['Name']), '')"
+                },
+                "SplitPath": {
+                  "runAfter": {
+                    "GetFolder": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@split(outputs('GetFolder'), '/')"
+                },
+                "TicketAction": {
+                  "runAfter": {
+                    "SplitPath": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@last(outputs('SplitPath'))"
+                }
+              },
+              "runAfter": {},
+              "type": "Scope"
+            },
+            "SharePointSite": {
+              "runAfter": {
+                "members": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@concat('https://ddportal.sharepoint.com/sites/', outputs('TicketGraph')?['msp'])",
+              "description": "The SharePOint site associated with the MSP's provate O365 group"
+            },
+            "Get_all_lists_and_libraries": {
+              "runAfter": {
+                "SharePointSite": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "GetAllTables"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_sharepointonline']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/datasets/@{encodeURIComponent(encodeURIComponent(outputs('SharePointSite')))}/alltables",
+                "authentication": "@parameters('$authentication')"
+              },
+              "description": "Get all lists and libraries from MSP's site"
+            },
+            "Filter__for_ClientLibrary_document_library": {
+              "runAfter": {
+                "Get_all_lists_and_libraries": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('Get_all_lists_and_libraries')?['value']",
+                "where": "@equals(item()?['DisplayName'], 'ClientLibrary')"
+              },
+              "description": "Find the ClientLibrary document library for this MSP"
+            },
+            "FilterQuestion": {
+              "runAfter": {
+                "Filter__for_ClientLibrary_document_library": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('FormQnA')",
+                "where": "@contains(toLower(item()['question']), 'filters')"
+              },
+              "description": "This is for synthetic tickets where the filter is set in the Form "
+            },
+            "FilterQuestionAnswer": {
+              "runAfter": {
+                "FilterQuestion": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(first(body('FilterQuestion'))?['answer'],'')",
+              "description": "This is for synthetic tickets where the filter is set in the Form "
+            },
+            "MemberID": {
+              "runAfter": {
+                "FilterQuestionAnswer": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": 187
+            }
+          },
+          "runAfter": {
+            "TicketEvent": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Meta": {
+          "runAfter": {
+            "Config": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@body('Get_Blob_Metadata')"
+        },
+        "TicketGraph": {
+          "runAfter": {
+            "Meta": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@json(base64ToString(body('Get_blob_content')['$content']))"
+        },
+        "TicketEvent": {
+          "runAfter": {
+            "Check_for_new": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@toUpper( coalesce( outputs('NewEvent'), outputs('ClosedEvent') , outputs('UpDateEvent'),'NOEVENT'))"
+        },
+        "Config": {
+          "runAfter": {
+            "Get_Blob_Metadata": [
+              "Succeeded"
+            ]
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "msp": " demomsp9",
+              "host": "demomsp9.deskdirector.com"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msp": {
+                  "type": "string"
+                },
+                "host": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "Config contains all the CONSTANTs for this Flow"
+        },
+        "RuntimeConfig": {
+          "runAfter": {
+            "Get_member_access_token": [
+              "Succeeded"
+            ]
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "ticketEvent": "@{outputs('TicketEvent')}",
+              "companyId": "@{outputs('TicketGraph')?['ticket']?['company']?['entityid']}",
+              "filters": "@coalesce(outputs('TicketGraph')?['filters'], json('[]'))"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ticketEvent": {
+                  "type": "string"
+                },
+                "companyId": {
+                  "type": "string"
+                },
+                "filters": {
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "description": "RunTime Config is a collection of important/useful runtime data and meta data "
+        },
+        "Is_the_event_new_or_close": {
+          "actions": {},
+          "runAfter": {
+            "RuntimeConfig": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "No_Action_Needed": {
+                "runAfter": {},
+                "type": "Terminate",
+                "inputs": {
+                  "runStatus": "Succeeded"
+                }
+              }
+            }
+          },
+          "expression": {
+            "or": [
+              {
+                "equals": [
+                  "@body('RuntimeConfig')?['ticketEvent']",
+                  "NEW"
+                ]
+              },
+              {
+                "equals": [
+                  "@body('RuntimeConfig')?['ticketEvent']",
+                  "CLOSE"
+                ]
+              },
+              {
+                "and": [
+                  {
+                    "equals": [
+                      "",
+                      ""
+                    ]
+                  }
+                ]
+              },
+              {
+                "equals": [
+                  1,
+                  1
+                ]
+              }
+            ]
+          },
+          "type": "If"
+        },
+        "Tech_Briefing": {
+          "actions": {
+            "TechTable": {
+              "runAfter": {},
+              "metadata": {
+                "01YHOR3YBNM7AK6HGTXFGL6W53F7NIVBHA": "/_System/TicketBriefing.xlsx",
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "GetItems"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_excelonlinebusiness']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/drives/@{encodeURIComponent('b!b-06vePJvkek-DqvaVRvVUEdGKAUZvNLm82dAVyY03mqSZVJDWfnQq5eEt_fhlqk')}/files/@{encodeURIComponent('01YHOR3YBNM7AK6HGTXFGL6W53F7NIVBHA')}/tables/@{encodeURIComponent('{3139EE7C-72AA-4550-A89F-0D7166CCE0CE}')}/items",
+                "queries": {
+                  "source": "groups/86a92042-976b-44ce-9c03-5aee6939920a"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "TechBriefings": {
+              "runAfter": {
+                "TechTable": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@body('TechTable')?['value']",
+                "select": {
+                  "CompanyID": "@item()['CompanyID']",
+                  "CompanyName": "@item()['CompanyName']",
+                  "Tags": "@item()['Tags']",
+                  "PreAmble": "@item()['Preamble']",
+                  "Wrapup": "@item()['Wrapup']"
+                }
+              }
+            },
+            "TechBriefingsFiltered": {
+              "runAfter": {
+                "TechBriefings": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('TechBriefings')",
+                "where": "@equals(item()['CompanyID'], body('RuntimeConfig')?['companyId'])"
+              }
+            },
+            "TechBriefingCount": {
+              "runAfter": {
+                "TechBriefingsFiltered": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@length( body('TechBriefingsFiltered'))"
+            },
+            "Skip_if_Tech_Briefing_is_not_found": {
+              "actions": {
+                "TechBriefingSelected": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@first( body('TechBriefingsFiltered'))"
+                },
+                "Switch_on_event": {
+                  "runAfter": {
+                    "TechBriefingSelected": [
+                      "Succeeded"
+                    ]
+                  },
+                  "cases": {
+                    "Event_is_NEW": {
+                      "case": "NEW",
+                      "actions": {
+                        "TechPreamble": {
+                          "runAfter": {},
+                          "type": "Compose",
+                          "inputs": "@outputs('TechBriefingSelected')['PreAmble']"
+                        },
+                        "Create_Tech_Briefing_on_new": {
+                          "runAfter": {
+                            "TechPreamble": [
+                              "Succeeded"
+                            ]
+                          },
+                          "type": "Http",
+                          "inputs": {
+                            "method": "PUT",
+                            "uri": "@{concat('https://' ,body('Config')?['host'],  '/api/v2/member/tickets/' , outputs('TicketGraph')['ticketId'])}",
+                            "headers": {
+                              "Content-Type": "application/json",
+                              "Accept": "application/json"
+                            },
+                            "queries": {
+                              "access_token": "@body('Get_member_access_token')?['userKey']"
+                            },
+                            "body": {
+                              "note": {
+                                "isInternal": true,
+                                "isResolution": false,
+                                "note": "@{coalesce( outputs('TechPreamble'))}"
+                              }
+                            }
+                          },
+                          "description": "This is always an internal note "
+                        }
+                      }
+                    },
+                    "Event_is_close": {
+                      "case": "CLOSE",
+                      "actions": {
+                        "TechWrapup": {
+                          "runAfter": {},
+                          "type": "Compose",
+                          "inputs": "@outputs('TechBriefingSelected')['Wrapup']"
+                        },
+                        "Create_Tech_Briefing_on_close": {
+                          "runAfter": {
+                            "TechWrapup": [
+                              "Succeeded"
+                            ]
+                          },
+                          "type": "Http",
+                          "inputs": {
+                            "method": "PUT",
+                            "uri": "@{concat('https://' ,body('Config')?['host'],  '/api/v2/member/tickets/' , outputs('TicketGraph')['ticketId'])}",
+                            "headers": {
+                              "Content-Type": "application/json",
+                              "Accept": "application/json"
+                            },
+                            "queries": {
+                              "access_token": "@body('Get_member_access_token')?['userKey']"
+                            },
+                            "body": {
+                              "note": {
+                                "isInternal": true,
+                                "isResolution": false,
+                                "note": "@{coalesce( outputs('TechWrapup') )}"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "default": {
+                    "actions": {}
+                  },
+                  "expression": "@body('RuntimeConfig')?['ticketEvent']",
+                  "type": "Switch"
+                }
+              },
+              "runAfter": {
+                "TechBriefingCount": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "equals": [
+                  "@outputs('TechBriefingCount')",
+                  1
+                ]
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "TICKET_ACTION_GOES_HERE": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Legacy": {
+          "actions": {
+            "Check_-_isLive_=_true_and_not_a_test_": {
+              "actions": {},
+              "runAfter": {},
+              "else": {
+                "actions": {
+                  "Test_Mission": {
+                    "runAfter": {},
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Succeeded"
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "or": [
+                  {
+                    "equals": [
+                      "@length( body('Look_for_testing_tag'))",
+                      0
+                    ]
+                  },
+                  {
+                    "equals": [
+                      "@coalesce(outputs('TicketActionRule')?['isLive'], false)",
+                      "@true"
+                    ]
+                  },
+                  {
+                    "or": [
+                      {
+                        "equals": [
+                          1,
+                          1
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "type": "If",
+              "description": "Only proceed If the word 'test' DOES NOT appears in any ticket tag AND  isLive = TRUE"
+            },
+            "Branch_if_using_Legacy_Doc_Library": {
+              "actions": {},
+              "runAfter": {
+                "Check_-_isLive_=_true_and_not_a_test_": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Doc_Library_TFB": {
+                    "actions": {
+                      "Get_files_in_Client_Library": {
+                        "runAfter": {},
+                        "metadata": {
+                          "flowSystemMetadata": {
+                            "swaggerOperationId": "GetFileItems"
+                          }
+                        },
+                        "type": "ApiConnection",
+                        "inputs": {
+                          "host": {
+                            "connection": {
+                              "name": "@parameters('$connections')['shared_sharepointonline']['connectionId']"
+                            }
+                          },
+                          "method": "get",
+                          "path": "/datasets/@{encodeURIComponent(encodeURIComponent(outputs('SharePointSite')))}/tables/@{encodeURIComponent(encodeURIComponent(first(body('Filter__for_ClientLibrary_document_library'))?['Name']))}/getfileitems",
+                          "authentication": "@parameters('$authentication')"
+                        },
+                        "description": "Get a list of the files in the Document Library called 'CleintLibrary'"
+                      },
+                      "Filter_for_this_companies_TFB": {
+                        "runAfter": {
+                          "Get_files_in_Client_Library": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "Query",
+                        "inputs": {
+                          "from": "@body('Get_files_in_Client_Library')?['value']",
+                          "where": "@startsWith(item()['{Name}'], 'TFB')"
+                        }
+                      },
+                      "Continue_if_theres_a_document": {
+                        "actions": {},
+                        "runAfter": {
+                          "Filter_for_this_companies_TFB": [
+                            "Succeeded"
+                          ]
+                        },
+                        "expression": {
+                          "greater": [
+                            "@length( body('Filter_for_this_companies_TFB'))",
+                            0
+                          ]
+                        },
+                        "type": "If"
+                      },
+                      "TFB_File": {
+                        "runAfter": {
+                          "Continue_if_theres_a_document": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "Compose",
+                        "inputs": "@first(body('Filter_for_this_companies_TFB'))"
+                      },
+                      "TFB_FullPath_2": {
+                        "runAfter": {
+                          "TFB_File": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "Compose",
+                        "inputs": "@outputs('TFB_File')['{Name}']"
+                      },
+                      "TFB_FullPath": {
+                        "runAfter": {
+                          "TFB_FullPath_2": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "Compose",
+                        "inputs": "@concat(outputs('TFB_File')['{FullPath}'], '')"
+                      },
+                      "Get_file_content_using_path": {
+                        "runAfter": {
+                          "TFB_FullPath": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "flowSystemMetadata": {
+                            "swaggerOperationId": "GetFileContentByPath"
+                          }
+                        },
+                        "type": "ApiConnection",
+                        "inputs": {
+                          "host": {
+                            "connection": {
+                              "name": "@parameters('$connections')['shared_sharepointonline']['connectionId']"
+                            }
+                          },
+                          "method": "get",
+                          "path": "/datasets/@{encodeURIComponent(encodeURIComponent(outputs('SharePointSite')))}/GetFileContentByPath",
+                          "queries": {
+                            "path": "@{outputs('TFB_FullPath')}",
+                            "queryParametersSingleEncoded": true,
+                            "inferContentType": true
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      },
+                      "TFBFileContent": {
+                        "runAfter": {
+                          "Get_file_content_using_path": [
+                            "Succeeded"
+                          ]
+                        },
+                        "type": "Compose",
+                        "inputs": "@concat( base64ToString(body('Get_file_content_using_path')['$content']),'')"
+                      }
+                    },
+                    "runAfter": {},
+                    "type": "Scope"
+                  },
+                  "Terminate_2": {
+                    "runAfter": {
+                      "Doc_Library_TFB": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Succeeded"
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "equals": [
+                  1,
+                  1
+                ]
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Customer_Briefing_": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Get_member_access_token": {
+          "runAfter": {
+            "Setup": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "MemberJwtById"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/api/MemberJwtById",
+            "queries": {
+              "id": "@{outputs('MemberID')}"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "description": "TODO - Get Master member info from ticket action instrcutions"
+        },
+        "Customer_Briefing_": {
+          "actions": {
+            "CustomerTable": {
+              "runAfter": {},
+              "metadata": {
+                "01YHOR3YBNM7AK6HGTXFGL6W53F7NIVBHA": "/_System/TicketBriefing.xlsx",
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "GetItems"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_excelonlinebusiness']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/drives/@{encodeURIComponent('b!b-06vePJvkek-DqvaVRvVUEdGKAUZvNLm82dAVyY03mqSZVJDWfnQq5eEt_fhlqk')}/files/@{encodeURIComponent('01YHOR3YBNM7AK6HGTXFGL6W53F7NIVBHA')}/tables/@{encodeURIComponent('{ECB118FF-54BA-4A75-BB40-1D123AC79F08}')}/items",
+                "queries": {
+                  "source": "groups/86a92042-976b-44ce-9c03-5aee6939920a"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "CustomerBriefingCount": {
+              "runAfter": {
+                "CustomerBriefingsFiltered": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@length(body('CustomerBriefingsFiltered'))"
+            },
+            "CustomerBriefings": {
+              "runAfter": {
+                "CustomerTable": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@body('CustomerTable')?['value']",
+                "select": {
+                  "CompanyID": "@item()['CompanyID']",
+                  "CompanyName": "@item()['CompanyName']",
+                  "Tags": "@item()['Tags']",
+                  "PreAmble": "@item()['Preamble']",
+                  "Wrapup": "@item()['Wrapup']"
+                }
+              }
+            },
+            "CustomerBriefingsFiltered": {
+              "runAfter": {
+                "CustomerBriefings": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('CustomerBriefings')",
+                "where": "@equals(item()['CompanyID'], body('RuntimeConfig')?['companyId'])"
+              }
+            },
+            "Skip_if_Customer_Briefing_is_not_found": {
+              "actions": {
+                "CustomerBriefingSelected": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@first(body('CustomerBriefingsFiltered'))"
+                },
+                "Switch_on_event_(customer)": {
+                  "runAfter": {
+                    "CustomerBriefingSelected": [
+                      "Succeeded"
+                    ]
+                  },
+                  "cases": {
+                    "Event_is_NEW": {
+                      "case": "NEW",
+                      "actions": {
+                        "CustomerPreamble": {
+                          "runAfter": {},
+                          "type": "Compose",
+                          "inputs": "@outputs('CustomerBriefingSelected')['PreAmble']"
+                        },
+                        "Create_Customer_briefing_on_new": {
+                          "runAfter": {
+                            "CustomerPreamble": [
+                              "Succeeded"
+                            ]
+                          },
+                          "type": "Http",
+                          "inputs": {
+                            "method": "PUT",
+                            "uri": "@{concat('https://', body('Config')?['host'], '/api/v2/member/tickets/', outputs('TicketGraph')['ticketId'])}",
+                            "headers": {
+                              "Content-Type": "application/json",
+                              "Accept": "application/json"
+                            },
+                            "queries": {
+                              "access_token": "@body('Get_member_access_token')?['userKey']"
+                            },
+                            "body": {
+                              "note": {
+                                "isResolution": false,
+                                "note": "@{coalesce(outputs('CustomerPreamble'))}"
+                              }
+                            }
+                          },
+                          "description": "This is always an internal note "
+                        }
+                      }
+                    },
+                    "Event_is_close": {
+                      "case": "CLOSE",
+                      "actions": {
+                        "CustomerWrapup": {
+                          "runAfter": {},
+                          "type": "Compose",
+                          "inputs": "@outputs('CustomerBriefingSelected')['Wrapup']"
+                        },
+                        "Create_Customer_Briefing_on_close_": {
+                          "runAfter": {
+                            "CustomerWrapup": [
+                              "Succeeded"
+                            ]
+                          },
+                          "type": "Http",
+                          "inputs": {
+                            "method": "PUT",
+                            "uri": "@{concat('https://', body('Config')?['host'], '/api/v2/member/tickets/', outputs('TicketGraph')['ticketId'])}",
+                            "headers": {
+                              "Content-Type": "application/json",
+                              "Accept": "application/json"
+                            },
+                            "queries": {
+                              "access_token": "@body('Get_member_access_token')?['userKey']"
+                            },
+                            "body": {
+                              "note": {
+                                "isResolution": false,
+                                "note": "@{coalesce(outputs('CustomerWrapup'))}"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "default": {
+                    "actions": {}
+                  },
+                  "expression": "@body('RuntimeConfig')?['ticketEvent']",
+                  "type": "Switch"
+                }
+              },
+              "runAfter": {
+                "CustomerBriefingCount": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "equals": [
+                  "@outputs('CustomerBriefingCount')",
+                  1
+                ]
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Delay": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "FilterString": {
+          "runAfter": {
+            "TicketGraph": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@toLower( join(coalesce(outputs('TicketGraph')?['filters'], json('[]')),','))"
+        },
+        "Check_for_new": {
+          "actions": {
+            "NewEvent": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "NEW"
+            }
+          },
+          "runAfter": {
+            "FilterString": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Condition": {
+                "actions": {
+                  "ClosedEvent": {
+                    "runAfter": {},
+                    "type": "Compose",
+                    "inputs": "CLOSE"
+                  }
+                },
+                "runAfter": {},
+                "else": {
+                  "actions": {
+                    "UpDateEvent": {
+                      "runAfter": {},
+                      "type": "Compose",
+                      "inputs": "UPDATE"
+                    }
+                  }
+                },
+                "expression": {
+                  "contains": [
+                    "@outputs('FilterString')",
+                    "ticket.closed"
+                  ]
+                },
+                "type": "If"
+              }
+            }
+          },
+          "expression": {
+            "contains": [
+              "@outputs('FilterString')",
+              "ticket.new"
+            ]
+          },
+          "type": "If"
+        },
+        "BlobId": {
+          "runAfter": {},
+          "type": "Compose",
+          "inputs": "@triggerBody()?['BlobId']"
+        },
+        "TICKET_ACTION_GOES_HERE": {
+          "actions": {},
+          "runAfter": {
+            "Is_the_event_new_or_close": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope",
+          "description": "TFB used as an example - put your own work here "
+        },
+        "Delay": {
+          "runAfter": {
+            "Tech_Briefing": [
+              "Succeeded"
+            ]
+          },
+          "type": "Wait",
+          "inputs": {
+            "interval": {
+              "count": 1,
+              "unit": "Minute"
+            }
+          }
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

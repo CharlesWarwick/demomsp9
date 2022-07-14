@@ -1,0 +1,598 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_azureblob_2": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azureblob"
+        }
+      },
+      "shared_sharepointonline": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      },
+      "shared_teams": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_teams"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_blob_is_added_or_modified_(properties_only)": {
+          "recurrence": {
+            "frequency": "Minute",
+            "interval": 3
+          },
+          "splitOn": "@triggerBody()",
+          "metadata": {
+            "JTJmdGlja2V0Z3JhcGglMmZkZW1vbXNwMTUlMmZ0ZWFtc2NsaWVudHJlc3BvbmRlZCUyZg==": "/ticketgraph/demomsp15/teamsclientresponded/",
+            "flowSystemMetadata": {
+              "swaggerOperationId": "OnUpdatedFiles"
+            },
+            "JTJmdGlja2V0Z3JhcGglMmZkZXNrZGlyZWN0b3JzdXBwb3J0JTJmZGR0aWNrZXRhZ2VudHRlc3QlMmY=": "/ticketgraph/deskdirectorsupport/ddticketagenttest/",
+            "JTJmdGlja2V0Z3JhcGglMmZkZXNrZGlyZWN0b3JzdXBwb3J0JTJmdGlja2V0Zmlyc3RicmllZmluZyUyZg==": "/ticketgraph/deskdirectorsupport/ticketfirstbriefing/",
+            "JTJmdGlja2V0Z3JhcGglMmZkZW1vbXNwMTUlMmZmaXJzdGJyaWVmaW5nJTJm": "/ticketgraph/demomsp15/firstbriefing/",
+            "JTJmdGlja2V0Z3JhcGglMmZkZW1vbXNwOSUyZnRpY2tldGZpcnN0YnJpZWZpbmclMmY=": "/ticketgraph/demomsp9/ticketfirstbriefing/"
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_2']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/datasets/default/triggers/batch/onupdatedfile",
+            "queries": {
+              "folderId": "JTJmdGlja2V0Z3JhcGglMmZkZW1vbXNwOSUyZnRpY2tldGZpcnN0YnJpZWZpbmclMmY=",
+              "maxFileCount": 1
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Get_blob_content": {
+          "runAfter": {},
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "GetFileContent"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_2']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(triggerBody()?['Id']))}/content",
+            "queries": {
+              "inferContentType": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Cleanup": {
+          "actions": {
+            "BlobContainer": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@replace( body('Get_Blob_Metadata')?['Path'], body('Get_Blob_Metadata')?['Name'], '')"
+            },
+            "CompletedContainer": {
+              "runAfter": {
+                "BlobContainer": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@concat(  outputs('BlobContainer'), 'Completed/')"
+            },
+            "CompletedPath": {
+              "runAfter": {
+                "CompletedContainer": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@concat(outputs('CompletedContainer'), utcNow(),'_TGX_', body('Get_Blob_Metadata')?['Name'] )"
+            },
+            "Copy_blob_to_Completed": {
+              "runAfter": {
+                "CompletedPath": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "CopyFile"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_azureblob_2']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/datasets/default/copyFile",
+                "queries": {
+                  "source": "@body('Get_Blob_Metadata')?['Path']",
+                  "destination": "@{outputs('CompletedPath')}",
+                  "overwrite": true,
+                  "queryParametersSingleEncoded": true
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Delete_blob": {
+              "runAfter": {
+                "Copy_blob_to_Completed": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "DeleteFile"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_azureblob_2']['connectionId']"
+                  }
+                },
+                "method": "delete",
+                "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(triggerBody()?['Id']))}",
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Terminate": {
+              "runAfter": {
+                "Delete_blob": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Succeeded"
+              }
+            }
+          },
+          "runAfter": {
+            "TICKET_ACTION_GOES_HERE": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Get_Blob_Metadata": {
+          "runAfter": {
+            "Get_blob_content": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "GetFileMetadata"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_2']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(triggerBody()?['Id']))}",
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Check_-_isLive_=_true_and_not_a_test_": {
+          "actions": {},
+          "runAfter": {
+            "Terminate_2": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Test_Mission": {
+                "runAfter": {},
+                "type": "Terminate",
+                "inputs": {
+                  "runStatus": "Succeeded"
+                }
+              }
+            }
+          },
+          "expression": {
+            "and": [
+              {
+                "equals": [
+                  "@length( body('Look_for_testing_tag'))",
+                  0
+                ]
+              },
+              {
+                "equals": [
+                  "@coalesce(outputs('TicketActionRule')?['isLive'], false)",
+                  "@true"
+                ]
+              }
+            ]
+          },
+          "type": "If",
+          "description": "Only proceed If the word 'test' DOES NOT appears in any ticket tag AND  isLive = TRUE"
+        },
+        "Setup": {
+          "actions": {
+            "smartTicketActions": {
+              "runAfter": {
+                "Work_out_Action__Name_from_the_Folder_Name": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": "@coalesce(outputs('TicketGraph')?['smartTicketActions'],json('[]'))",
+                "schema": {
+                  "type": "array"
+                }
+              },
+              "description": "to check out isLive & other ticket Action meta data"
+            },
+            "Filter_for_this_Ticket_Action_Rule": {
+              "runAfter": {
+                "smartTicketActions": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('smartTicketActions')",
+                "where": "@equals(item()['Name'], outputs('TicketAction'))"
+              }
+            },
+            "TicketActionRule": {
+              "runAfter": {
+                "Filter_for_this_Ticket_Action_Rule": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@first( body('Filter_for_this_Ticket_Action_Rule'))",
+              "description": "to check out isLive & other ticket Action meta data"
+            },
+            "Look_for_testing_tag": {
+              "runAfter": {
+                "TicketActionRule": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@coalesce( outputs('TicketGraph')?['tags']?['Ticket'] , json('[]'))",
+                "where": "@contains(toLower(item()), 'test')"
+              },
+              "description": "Do any tags include the word test ?"
+            },
+            "FormQnA": {
+              "runAfter": {
+                "Look_for_testing_tag": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce( outputs('TicketGraph')?['formQnA2'] , json('[]'))"
+            },
+            "members": {
+              "runAfter": {
+                "FormQnA": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(  outputs('TicketGraph')?['assignedMembers'], json('[]'))",
+              "description": "Find the assigned members in the ticket "
+            },
+            "Work_out_Action__Name_from_the_Folder_Name": {
+              "actions": {
+                "GetFolder": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@replace( body('Get_Blob_Metadata')?['Path'], concat('/', body('Get_Blob_Metadata')?['Name']), '')"
+                },
+                "SplitPath": {
+                  "runAfter": {
+                    "GetFolder": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@split(outputs('GetFolder'), '/')"
+                },
+                "TicketAction": {
+                  "runAfter": {
+                    "SplitPath": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@last(outputs('SplitPath'))"
+                }
+              },
+              "runAfter": {},
+              "type": "Scope"
+            },
+            "SharePointSite": {
+              "runAfter": {
+                "members": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@concat('https://ddportal.sharepoint.com/sites/', outputs('TicketGraph')?['msp'])",
+              "description": "The SharePOint site associated with the MSP's provate O365 group"
+            },
+            "Get_all_lists_and_libraries": {
+              "runAfter": {
+                "SharePointSite": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "GetAllTables"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_sharepointonline']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/datasets/@{encodeURIComponent(encodeURIComponent(outputs('SharePointSite')))}/alltables",
+                "authentication": "@parameters('$authentication')"
+              },
+              "description": "Get all lists and libraries from MSP's site"
+            },
+            "Filter__for_ClientLibrary_document_library": {
+              "runAfter": {
+                "Get_all_lists_and_libraries": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('Get_all_lists_and_libraries')?['value']",
+                "where": "@equals(item()?['DisplayName'], 'ClientLibrary')"
+              },
+              "description": "Find the ClientLibrary document library for this MSP"
+            },
+            "FilterQuestion": {
+              "runAfter": {
+                "Filter__for_ClientLibrary_document_library": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('FormQnA')",
+                "where": "@contains(toLower(item()['question']), 'filters')"
+              },
+              "description": "This is for synthetic tickets where the filter is set in the Form "
+            },
+            "FilterQuestionAnswer": {
+              "runAfter": {
+                "FilterQuestion": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(first(body('FilterQuestion'))?['answer'],'')",
+              "description": "This is for synthetic tickets where the filter is set in the Form "
+            }
+          },
+          "runAfter": {
+            "TicketGraph": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Meta": {
+          "runAfter": {
+            "Get_Blob_Metadata": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@body('Get_Blob_Metadata')"
+        },
+        "TicketGraph": {
+          "runAfter": {
+            "Meta": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@json(base64ToString(body('Get_blob_content')['$content']))"
+        },
+        "TICKET_ACTION_GOES_HERE": {
+          "actions": {
+            "Check_if_member_replied": {
+              "actions": {
+                "Timeline": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@outputs('TicketGraph')?['ticket']?['timeline']"
+                },
+                "Post_your_own_adaptive_card_as_the_Flow_bot_to_a_channel": {
+                  "runAfter": {
+                    "Convert_to_string": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "flowSystemMetadata": {
+                      "swaggerOperationId": "PostChannelAdaptiveCard"
+                    }
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['shared_teams']['connectionId']"
+                      }
+                    },
+                    "method": "post",
+                    "body": {
+                      "recipient": {
+                        "channelId": "19:5d41bc77160f476886f2ea80da01b103@thread.tacv2"
+                      },
+                      "messageBody": "{\n    \"type\": \"AdaptiveCard\",\n    \"speak\": \"Contact has added a note\",\n    \"body\": [\n        {\n            \"type\": \"TextBlock\",\n            \"size\": \"Large\",\n            \"weight\": \"Bolder\",\n            \"wrap\": true,\n            \"color\": \"Accent\",\n            \"text\":  \"@{outputs('TicketGraph')?['contact']?['profile']?['name']} has replied to #@{outputs('TicketGraph')?['ticketId']} - @{outputs('TicketGraph')?['ticket']?['name']}\"\n        },\n        {\n            \"type\": \"TextBlock\",\n            \"text\": \"@{outputs('Convert_to_string')}\",\n            \"wrap\": true,\n            \"separator\": true\n        }\n    ],\n    \"actions\": [\n        {\n            \"type\": \"Action.OpenUrl\",\n            \"title\": \"Check in DD Tech\",\n            \"url\": \"https://support.deskdirector.com/tech/tickets/@{outputs('TicketGraph')?['ticketId']}/details\"\n        }\n    ],\n    \"$schema\": \"http://adaptivecards.io/schemas/adaptive-card.json\",\n    \"version\": \"1.2\"\n}"
+                    },
+                    "path": "/flowbot/actions/adaptivecard/recipienttypes/channel",
+                    "queries": {
+                      "groupId": "ace3f6d8-d61d-4ad8-96f1-a191f3603f9c"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Note": {
+                  "runAfter": {
+                    "Filter_for_contact_notes": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@last(body('Filter_for_contact_notes'))"
+                },
+                "Filter_for_contact_notes": {
+                  "runAfter": {
+                    "Timeline": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Query",
+                  "inputs": {
+                    "from": "@outputs('Timeline')",
+                    "where": "@and(and(equals(item()?['type'], 'note'),equals(item()?['isInternal'],false)),equals(item()?['user']?['isMember'],false))"
+                  }
+                },
+                "Trim_note_if_length_over_300": {
+                  "runAfter": {
+                    "Note": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@if(greater(length(outputs('Note')?['note']),300),substring(outputs('Note')?['note'],0,300),outputs('Note')?['note'])"
+                },
+                "Convert_to_uri_component": {
+                  "runAfter": {
+                    "Trim_note_if_length_over_300": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@uriComponent(outputs('Trim_note_if_length_over_300'))"
+                },
+                "Replace_new_line_char": {
+                  "runAfter": {
+                    "Convert_to_uri_component": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@replace(outputs('Convert_to_uri_component'),'%0D%0A','\\n')"
+                },
+                "Convert_to_string": {
+                  "runAfter": {
+                    "Remove_back_slash": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@uriComponentToString(outputs('Remove_back_slash'))"
+                },
+                "Remove_back_slash": {
+                  "runAfter": {
+                    "Replace_new_line_char": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@replace(outputs('Replace_new_line_char'),'%5C','')"
+                }
+              },
+              "runAfter": {
+                "Filters": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "contains": [
+                  "@outputs('Filters')",
+                  "x.ticket.contact.replied"
+                ]
+              },
+              "type": "If"
+            },
+            "Filters": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@outputs('TicketGraph')?['filters']"
+            }
+          },
+          "runAfter": {
+            "Check_-_isLive_=_true_and_not_a_test_": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Terminate_2": {
+          "runAfter": {
+            "Setup": [
+              "Succeeded"
+            ]
+          },
+          "type": "Terminate",
+          "inputs": {
+            "runStatus": "Succeeded"
+          }
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

@@ -1,0 +1,1065 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector"
+        }
+      },
+      "shared_commondataserviceforapps": {
+        "impersonation": {},
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_commondataserviceforapps"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "recurrence": {
+            "frequency": "Day",
+            "interval": 1,
+            "schedule": {
+              "hours": [
+                "1"
+              ]
+            }
+          },
+          "type": "Recurrence"
+        }
+      },
+      "actions": {
+        "Find_companies": {
+          "runAfter": {
+            "Configuration": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+              "connectionName": "shared_deskdirector",
+              "operationId": "FindCompanies"
+            },
+            "parameters": {
+              "req/tags": [
+                "digest"
+              ]
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "description": "Finding all companies that contain the tag \"digest\""
+        },
+        "Loop_for_each_company": {
+          "foreach": "@outputs('Find_companies')?['body/results']",
+          "actions": {
+            "Last_1_days_of_open_tickets": {
+              "actions": {
+                "Find_company_open_tickets": {
+                  "runAfter": {},
+                  "type": "Http",
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "https://@{body('Config')?['DdDomain']}/api/v3/tech/tickets/find",
+                    "body": {
+                      "skip": 0,
+                      "take": 50,
+                      "filterDefinition": {
+                        "state": "open",
+                        "companies": [
+                          {
+                            "entityId": "@items('Loop_for_each_company')?['id']"
+                          }
+                        ],
+                        "dateEntered": {
+                          "start": "@{outputs('CurrentTime')}",
+                          "end": "@{formatDateTime(addDays(outputs('CurrentTime'), 1), 'yyyy-MM-dd')}"
+                        }
+                      },
+                      "order": [
+                        {
+                          "order": [
+                            "-last_updated"
+                          ]
+                        }
+                      ]
+                    },
+                    "authentication": {
+                      "type": "Raw",
+                      "value": "DdApi @{body('Config')?['DdApiKey']}"
+                    }
+                  }
+                },
+                "Map_Find_company_open_tickets": {
+                  "runAfter": {
+                    "Find_company_open_tickets": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@ body('Find_company_open_tickets')?['tickets']",
+                    "select": [
+                      {
+                        "Value": "@{coalesce(item()?['company']?['name'], 'Unknown')}"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['name'], 'Unknown')}",
+                        "Type": "Link",
+                        "Location": "https://@{body('Config')?['DdDomain']}/portal/deeplink?name=ticket&ticket_id=@{coalesce(item()?['entityId'], 0)}"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['board']?['name'], 'Unknown')}",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['status']?['name'], 'Unknown')}",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@formatDateTime(item()?['dateEntered'], 'yyyy-MM-dd')",
+                        "TextAlign": "Center"
+                      }
+                    ]
+                  }
+                },
+                "Generate_open_ticket_table": {
+                  "runAfter": {
+                    "Map_Find_company_open_tickets": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Http",
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "https://ddhelper.azurewebsites.net/api/Html/DynamicTableGenerator",
+                    "body": {
+                      "Title": "Open Tickets (Last Day)",
+                      "Headers": [
+                        "Company",
+                        "Summary",
+                        "Board",
+                        "Status",
+                        "Date"
+                      ],
+                      "Rows": "@body('Map_Find_company_open_tickets')"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Last_1_days_of_closed_tickets": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope",
+              "description": "Finding open tickets using /api/v3/tech/tickets/find based on the companyId and the dateEntered filter"
+            },
+            "Last_3_days_of_updated_tickets": {
+              "actions": {
+                "Find_company_last_3_days_of_updated_tickets": {
+                  "runAfter": {},
+                  "type": "Http",
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "https://@{body('Config')?['DdDomain']}/api/v3/tech/tickets/find",
+                    "body": {
+                      "skip": 0,
+                      "take": 50,
+                      "filterDefinition": {
+                        "state": "open",
+                        "companies": [
+                          {
+                            "entityId": "@items('Loop_for_each_company')?['id']"
+                          }
+                        ],
+                        "lastUpdated": {
+                          "start": "@{formatDateTime(addDays(outputs('CurrentTime'), -3), 'yyyy-MM-dd')}",
+                          "end": "@{formatDateTime(addDays(outputs('CurrentTime'), -1), 'yyyy-MM-dd')}"
+                        }
+                      },
+                      "order": [
+                        {
+                          "order": [
+                            "-last_updated"
+                          ]
+                        }
+                      ]
+                    },
+                    "authentication": {
+                      "type": "Raw",
+                      "value": "DdApi @{body('Config')?['DdApiKey']}"
+                    }
+                  }
+                },
+                "Map_Find_company_last_3_days_of_updated_tickets": {
+                  "runAfter": {
+                    "Find_company_last_3_days_of_updated_tickets": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@ body('Find_company_last_3_days_of_updated_tickets')?['tickets']",
+                    "select": [
+                      {
+                        "Value": "@{coalesce(item()?['company']?['name'], 'Unknown')}"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['name'], 'Unknown')}",
+                        "Type": "Link",
+                        "Location": "https://@{body('Config')?['DdDomain']}/portal/deeplink?name=ticket&ticket_id=@{coalesce(item()?['entityId'], 0)}"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['board']?['name'], 'Unknown')}",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['status']?['name'], 'Unknown')}",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@formatDateTime(item()?['dateEntered'], 'yyyy-MM-dd')",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@formatDateTime(item()?['lastUpdated'], 'yyyy-MM-dd')",
+                        "TextAlign": "Center"
+                      }
+                    ]
+                  }
+                },
+                "Generate_recently_updated_ticket_table": {
+                  "runAfter": {
+                    "Map_Find_company_last_3_days_of_updated_tickets": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Http",
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "https://ddhelper.azurewebsites.net/api/Html/DynamicTableGenerator",
+                    "body": {
+                      "Title": "Updated Tickets (Last 3 Days)",
+                      "Headers": [
+                        "Company",
+                        "Summary",
+                        "Board",
+                        "Status",
+                        "Date Entered",
+                        "Last Updated"
+                      ],
+                      "Rows": "@body('Map_Find_company_last_3_days_of_updated_tickets')"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Last_1_days_of_open_tickets": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope",
+              "description": "Finding updated tickets using /api/v3/tech/tickets/find based on the companyId and the lastUpdated filter"
+            },
+            "Last_3_days_of_idle_tickets": {
+              "actions": {
+                "Find_company_last_3_days_of_idle_tickets": {
+                  "runAfter": {},
+                  "type": "Http",
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "https://@{body('Config')?['DdDomain']}/api/v3/tech/tickets/find",
+                    "body": {
+                      "skip": 0,
+                      "take": 50,
+                      "filterDefinition": {
+                        "state": "open",
+                        "companies": [
+                          {
+                            "entityId": "@items('Loop_for_each_company')?['id']"
+                          }
+                        ],
+                        "lastUpdated": {
+                          "start": "@{formatDateTime(addDays(outputs('CurrentTime'), -3), 'yyyy-MM-dd')}",
+                          "end": "@{outputs('CurrentTime')}"
+                        }
+                      },
+                      "order": [
+                        {
+                          "order": [
+                            "age"
+                          ]
+                        }
+                      ]
+                    },
+                    "authentication": {
+                      "type": "Raw",
+                      "value": "DdApi @{body('Config')?['DdApiKey']}"
+                    }
+                  }
+                },
+                "Map_Find_company_last_3_days_of_idle_tickets": {
+                  "runAfter": {
+                    "Find_company_last_3_days_of_idle_tickets": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@ body('Find_company_last_3_days_of_idle_tickets')?['tickets']",
+                    "select": [
+                      {
+                        "Value": "@{coalesce(item()?['company']?['name'], 'Unknown')}"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['name'], 'Unknown')}",
+                        "Type": "Link",
+                        "Location": "https://@{body('Config')?['DdDomain']}/portal/deeplink?name=ticket&ticket_id=@{coalesce(item()?['entityId'], 0)}"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['board']?['name'], 'Unknown')}",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['status']?['name'], 'Unknown')}",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@formatDateTime(item()?['dateEntered'], 'yyyy-MM-dd')",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@formatDateTime(item()?['lastUpdated'], 'yyyy-MM-dd')",
+                        "TextAlign": "Center"
+                      }
+                    ]
+                  }
+                },
+                "Generate_recently_idle_ticket_table": {
+                  "runAfter": {
+                    "Map_Find_company_last_3_days_of_idle_tickets": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Http",
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "https://ddhelper.azurewebsites.net/api/Html/DynamicTableGenerator",
+                    "body": {
+                      "Title": "Updated Tickets (Last 3 Days)",
+                      "Headers": [
+                        "Company",
+                        "Summary",
+                        "Board",
+                        "Status",
+                        "Date Entered",
+                        "Last Updated"
+                      ],
+                      "Rows": "@body('Map_Find_company_last_3_days_of_idle_tickets')"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Last_3_days_of_updated_tickets": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope",
+              "description": "Finding updated tickets using /api/v3/tech/tickets/find based on the companyId and the lastUpdated filter and sort by their age asc"
+            },
+            "CompanyName": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@items('Loop_for_each_company')?['identifier']"
+            },
+            "Last_1_days_of_closed_tickets": {
+              "actions": {
+                "Find_company_closed_tickets": {
+                  "runAfter": {},
+                  "type": "Http",
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "https://@{body('Config')?['DdDomain']}/api/v3/tech/tickets/find",
+                    "body": {
+                      "skip": 0,
+                      "take": 50,
+                      "filterDefinition": {
+                        "state": "closed",
+                        "companies": [
+                          {
+                            "entityId": "@items('Loop_for_each_company')?['id']"
+                          }
+                        ],
+                        "dateClosed": {
+                          "start": "@{outputs('CurrentTime')}",
+                          "end": "@{formatDateTime(addDays(outputs('CurrentTime'), 1), 'yyyy-MM-dd')}"
+                        }
+                      },
+                      "order": [
+                        {
+                          "order": [
+                            "-last_updated"
+                          ]
+                        }
+                      ]
+                    },
+                    "authentication": {
+                      "type": "Raw",
+                      "value": "DdApi @{body('Config')?['DdApiKey']}"
+                    }
+                  }
+                },
+                "Map_Find_company_closed_tickets": {
+                  "runAfter": {
+                    "Find_company_closed_tickets": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@ body('Find_company_closed_tickets')?['tickets']",
+                    "select": [
+                      {
+                        "Value": "@{coalesce(item()?['company']?['name'], 'Unknown')}"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['name'], 'Unknown')}",
+                        "Type": "Link",
+                        "Location": "https://@{body('Config')?['DdDomain']}/portal/deeplink?name=ticket&ticket_id=@{coalesce(item()?['entityId'], 0)}"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['board']?['name'], 'Unknown')}",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@{coalesce(item()?['status']?['name'], 'Unknown')}",
+                        "TextAlign": "Center"
+                      },
+                      {
+                        "Value": "@{formatDateTime(item()?['dateClosed'], 'yyyy-MM-dd')}",
+                        "TextAlign": "Center"
+                      }
+                    ]
+                  }
+                },
+                "Generate_closed_ticket_table": {
+                  "runAfter": {
+                    "Map_Find_company_closed_tickets": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Http",
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "https://ddhelper.azurewebsites.net/api/Html/DynamicTableGenerator",
+                    "body": {
+                      "Title": "Closed Tickets (Last Day)",
+                      "Headers": [
+                        "Company",
+                        "Summary",
+                        "Board",
+                        "Status",
+                        "Date"
+                      ],
+                      "Rows": "@body('Map_Find_company_closed_tickets')"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "CompanyName": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope",
+              "description": "Finding closed tickets using /api/v3/tech/tickets/find based on the companyId and the dateClosed filter"
+            },
+            "Find_OneNote_parameters": {
+              "actions": {
+                "Get_OneNote_Ids": {
+                  "runAfter": {},
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                      "connectionName": "shared_commondataserviceforapps",
+                      "operationId": "ListRecords"
+                    },
+                    "parameters": {
+                      "entityName": "annotations",
+                      "$select": "documentbody",
+                      "$filter": "subject eq '@{body('Config')?['DdDomain']}/@{items('Loop_for_each_company')?['id']}'"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Parse_Final_OneNote_Ids": {
+                  "runAfter": {
+                    "OneNote_Id_exsists": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "GroupId": "@{body('Config')?['OneNoteGroupId']}",
+                      "NotebookId": "@{coalesce(body('Parse_Get_OneNote_Ids')?['NotebookId'], outputs('OneNote_NotebookId'))}",
+                      "SectionId": "@{coalesce(body('Parse_Get_OneNote_Ids')?['SectionId'], outputs('OneNote_SectionId'))}",
+                      "PageId": "@{coalesce(body('Parse_Get_OneNote_Ids')?['PageId'], body('Parse_Response_Create_OneNote_Page')?['Result']?['Id'])}"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "GroupId": {
+                          "type": "string"
+                        },
+                        "NotebookId": {
+                          "type": "string"
+                        },
+                        "SectionId": {
+                          "type": "string"
+                        },
+                        "PageId": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "OneNote_Id_exsists": {
+                  "actions": {
+                    "Parse_Get_OneNote_Ids": {
+                      "runAfter": {},
+                      "type": "ParseJson",
+                      "inputs": {
+                        "content": "@first(outputs('Get_OneNote_Ids')?['body/value'])?['documentbody']",
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "odata.metadata": {
+                              "type": "string"
+                            },
+                            "odata.etag": {
+                              "type": "string"
+                            },
+                            "PartitionKey": {
+                              "type": "string"
+                            },
+                            "RowKey": {
+                              "type": "string"
+                            },
+                            "Timestamp": {
+                              "type": "string"
+                            },
+                            "CompanyName": {
+                              "type": "string"
+                            },
+                            "CompanyId": {
+                              "type": "integer"
+                            },
+                            "GroupId": {
+                              "type": "string"
+                            },
+                            "NotebookId": {
+                              "type": "string"
+                            },
+                            "SectionId": {
+                              "type": "string"
+                            },
+                            "PageId": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Get_OneNote_Ids": [
+                      "Succeeded"
+                    ]
+                  },
+                  "else": {
+                    "actions": {
+                      "Create_OneNote_Page": {
+                        "actions": {
+                          "Find_Company_Notebook": {
+                            "runAfter": {},
+                            "type": "Http",
+                            "inputs": {
+                              "method": "GET",
+                              "uri": "https://onenotefunctions.azurewebsites.net/api/GetNotebooks/@{body('Config')?['OneNoteGroupId']}?code=@{body('Config')?['FunctionAccessCode']}"
+                            }
+                          },
+                          "Parse_Find_Company_Notebook": {
+                            "runAfter": {
+                              "Find_Company_Notebook": [
+                                "Succeeded"
+                              ]
+                            },
+                            "type": "ParseJson",
+                            "inputs": {
+                              "content": "@body('Find_Company_Notebook')",
+                              "schema": {
+                                "type": "object",
+                                "properties": {
+                                  "Status": {
+                                    "type": "string"
+                                  },
+                                  "Results": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "Id": {
+                                          "type": "string"
+                                        },
+                                        "DisplayName": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": [
+                                        "Id",
+                                        "DisplayName"
+                                      ]
+                                    }
+                                  },
+                                  "TotalResult": {
+                                    "type": "integer"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "Filter_for_Company_Notebook": {
+                            "runAfter": {
+                              "Parse_Find_Company_Notebook": [
+                                "Succeeded"
+                              ]
+                            },
+                            "type": "Query",
+                            "inputs": {
+                              "from": "@body('Parse_Find_Company_Notebook')?['Results']",
+                              "where": "@equals(item()?['DisplayName'], concat(toLower(outputs('CompanyName')), 'Management'))"
+                            }
+                          },
+                          "Check_if_Company_Notebook_exists": {
+                            "actions": {
+                              "OneNote_NotebookId": {
+                                "runAfter": {},
+                                "type": "Compose",
+                                "inputs": "@first(body('Filter_for_Company_Notebook'))?['Id']"
+                              },
+                              "Find_OneNote_Reporting_Section": {
+                                "actions": {
+                                  "Find_Digest_OneNote_Section": {
+                                    "runAfter": {},
+                                    "type": "Http",
+                                    "inputs": {
+                                      "method": "GET",
+                                      "uri": "https://onenotefunctions.azurewebsites.net/api/GetSections/@{body('Config')?['OneNoteGroupId']}/@{outputs('OneNote_NotebookId')}?code=@{body('Config')?['FunctionAccessCode']}"
+                                    }
+                                  },
+                                  "Parse_Find_Digest_OneNote_Section": {
+                                    "runAfter": {
+                                      "Find_Digest_OneNote_Section": [
+                                        "Succeeded"
+                                      ]
+                                    },
+                                    "type": "ParseJson",
+                                    "inputs": {
+                                      "content": "@body('Find_Digest_OneNote_Section')",
+                                      "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                          "Status": {
+                                            "type": "string"
+                                          },
+                                          "Results": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "object",
+                                              "properties": {
+                                                "Id": {
+                                                  "type": "string"
+                                                },
+                                                "DisplayName": {
+                                                  "type": "string"
+                                                }
+                                              },
+                                              "required": [
+                                                "Id",
+                                                "DisplayName"
+                                              ]
+                                            }
+                                          },
+                                          "TotalResult": {
+                                            "type": "integer"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "Filter_for_Reporting_Section": {
+                                    "runAfter": {
+                                      "Parse_Find_Digest_OneNote_Section": [
+                                        "Succeeded"
+                                      ]
+                                    },
+                                    "type": "Query",
+                                    "inputs": {
+                                      "from": "@body('Parse_Find_Digest_OneNote_Section')?['Results']",
+                                      "where": "@equals(item()?['DisplayName'], 'Reporting')"
+                                    }
+                                  },
+                                  "If_reporting_section_exists": {
+                                    "actions": {
+                                      "OneNote_SectionId": {
+                                        "runAfter": {},
+                                        "type": "Compose",
+                                        "inputs": "@first(body('Filter_for_Reporting_Section'))?['Id']"
+                                      }
+                                    },
+                                    "runAfter": {
+                                      "Filter_for_Reporting_Section": [
+                                        "Succeeded"
+                                      ]
+                                    },
+                                    "expression": {
+                                      "greaterOrEquals": [
+                                        "@length(body('Filter_for_Reporting_Section'))",
+                                        1
+                                      ]
+                                    },
+                                    "type": "If"
+                                  }
+                                },
+                                "runAfter": {
+                                  "OneNote_NotebookId": [
+                                    "Succeeded"
+                                  ]
+                                },
+                                "type": "Scope"
+                              },
+                              "Create_OneNote_Digest_Page": {
+                                "actions": {
+                                  "POST_to_Create_OneNote_Page": {
+                                    "runAfter": {},
+                                    "type": "Http",
+                                    "inputs": {
+                                      "method": "POST",
+                                      "uri": "https://onenotefunctions.azurewebsites.net/api/CreatePage?code=@{body('Config')?['FunctionAccessCode']}",
+                                      "headers": {
+                                        "x-dd-domain": "@body('Config')?['DdDomain']",
+                                        "x-dd-api-key": "@body('Config')?['DdApiKey']"
+                                      },
+                                      "body": {
+                                        "Group": "@{body('Config')?['OneNoteGroupId']}",
+                                        "Notebook": "@{outputs('OneNote_NotebookId')}",
+                                        "Section": "@{outputs('OneNote_SectionId')}",
+                                        "Title": "Daily Digest",
+                                        "Content": "<div>Automated Content Generated from Flow</div>"
+                                      }
+                                    }
+                                  },
+                                  "Parse_Response_Create_OneNote_Page": {
+                                    "runAfter": {
+                                      "POST_to_Create_OneNote_Page": [
+                                        "Succeeded"
+                                      ]
+                                    },
+                                    "type": "ParseJson",
+                                    "inputs": {
+                                      "content": "@body('POST_to_Create_OneNote_Page')",
+                                      "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                          "Status": {
+                                            "type": "string"
+                                          },
+                                          "Result": {
+                                            "type": "object",
+                                            "properties": {
+                                              "Id": {
+                                                "type": "string"
+                                              },
+                                              "Title": {
+                                                "type": "string"
+                                              },
+                                              "Self": {
+                                                "type": "string"
+                                              },
+                                              "WebUrl": {
+                                                "type": "string"
+                                              },
+                                              "ContentUrl": {
+                                                "type": "string"
+                                              }
+                                            }
+                                          },
+                                          "ContainerId": {
+                                            "type": "array",
+                                            "items": {
+                                              "type": "string"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "Insert_OneNote_Entity": {
+                                    "runAfter": {
+                                      "Parse_Response_Create_OneNote_Page": [
+                                        "Succeeded"
+                                      ]
+                                    },
+                                    "type": "OpenApiConnection",
+                                    "inputs": {
+                                      "host": {
+                                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_commondataserviceforapps",
+                                        "connectionName": "shared_commondataserviceforapps",
+                                        "operationId": "CreateRecord"
+                                      },
+                                      "parameters": {
+                                        "entityName": "annotations",
+                                        "item/subject": "@{body('Config')?['DdDomain']}/@{items('Loop_for_each_company')?['id']}",
+                                        "item/notetext": "dd-one-note-digest/@{body('Config')?['DdDomain']}/@{items('Loop_for_each_company')?['identifier']}",
+                                        "item/documentbody": "{\n  \"PartitionKey\": \"@{body('Config')?['DdDomain']}\",\n  \"RowKey\": \"@{outputs('CompanyName')}\",\n  \"CompanyName\": \"@{outputs('CompanyName')}\",\n  \"CompanyId\": @{items('Loop_for_each_company')?['id']},\n  \"GroupId\": \"@{body('Config')?['OneNoteGroupId']}\",\n  \"NotebookId\": \"@{outputs('OneNote_NotebookId')}\",\n  \"SectionId\": \"@{outputs('OneNote_SectionId')}\",\n  \"PageId\": \"@{body('Parse_Response_Create_OneNote_Page')?['Result']?['Id']}\"\n}"
+                                      },
+                                      "authentication": "@parameters('$authentication')"
+                                    }
+                                  }
+                                },
+                                "runAfter": {
+                                  "Find_OneNote_Reporting_Section": [
+                                    "Succeeded"
+                                  ]
+                                },
+                                "type": "Scope"
+                              }
+                            },
+                            "runAfter": {
+                              "Filter_for_Company_Notebook": [
+                                "Succeeded"
+                              ]
+                            },
+                            "expression": {
+                              "greaterOrEquals": [
+                                "@length(body('Filter_for_Company_Notebook'))",
+                                1
+                              ]
+                            },
+                            "type": "If"
+                          }
+                        },
+                        "runAfter": {},
+                        "type": "Scope"
+                      }
+                    }
+                  },
+                  "expression": {
+                    "greaterOrEquals": [
+                      "@length(outputs('Get_OneNote_Ids')?['body/value'])",
+                      1
+                    ]
+                  },
+                  "type": "If"
+                }
+              },
+              "runAfter": {
+                "Last_3_days_of_idle_tickets": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope",
+              "description": "Find OneNote parameters from Azure Table or Create the page if it does not exist"
+            },
+            "Update_OneNote_Page": {
+              "actions": {
+                "Debugger": {
+                  "runAfter": {},
+                  "type": "Http",
+                  "inputs": {
+                    "method": "GET",
+                    "uri": "https://onenotefunctions.azurewebsites.net/api/Debug/@{body('Parse_Final_OneNote_Ids')?['GroupId']}",
+                    "queries": {
+                      "notebookId": "@body('Parse_Final_OneNote_Ids')?['NotebookId']",
+                      "sectionId": "@body('Parse_Final_OneNote_Ids')?['SectionId']",
+                      "pageId": "@body('Parse_Final_OneNote_Ids')?['PageId']",
+                      "code": "@body('Config')?['FunctionAccessCode']"
+                    }
+                  }
+                },
+                "Go_Live_Switch": {
+                  "actions": {
+                    "PATCH_to_OneNote_page": {
+                      "runAfter": {},
+                      "type": "Http",
+                      "inputs": {
+                        "method": "PATCH",
+                        "uri": "https://onenotefunctions.azurewebsites.net/api/UpdatePage",
+                        "headers": {
+                          "x-dd-domain": "@body('Config')?['DdDomain']",
+                          "x-dd-api-key": "@body('Config')?['DdApiKey']"
+                        },
+                        "queries": {
+                          "code": "@body('Config')?['FunctionAccessCode']"
+                        },
+                        "body": {
+                          "Group": "@{body('Parse_Final_OneNote_Ids')?['GroupId']}",
+                          "Section": "@{body('Parse_Final_OneNote_Ids')?['SectionId']}",
+                          "Page": "@{body('Parse_Final_OneNote_Ids')?['PageId']}",
+                          "Commands": [
+                            {
+                              "Target": "primary",
+                              "Content": "<p>Here is your daily digest from Flow Services</p></p>Last Updated: @{outputs('CurrentTime')}</p>"
+                            },
+                            {
+                              "Target": "OpenTickets",
+                              "Content": "@{body('Generate_open_ticket_table')}"
+                            },
+                            {
+                              "Target": "ClosedTickets",
+                              "Content": "@{body('Generate_closed_ticket_table')}"
+                            },
+                            {
+                              "Target": "UpdatedTickets",
+                              "Content": "@{body('Generate_recently_updated_ticket_table')}"
+                            },
+                            {
+                              "Target": "IdleTickets",
+                              "Content": "@{body('Generate_recently_idle_ticket_table')}"
+                            }
+                          ]
+                        }
+                      }
+                    },
+                    "Publish_Notebook": {
+                      "runAfter": {
+                        "PATCH_to_OneNote_page": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "Http",
+                      "inputs": {
+                        "method": "POST",
+                        "uri": "https://@{body('Config')?['DdDomain']}/api/v2/admin/notebooks/@{body('Parse_Final_OneNote_Ids')?['NotebookId']}/publish",
+                        "authentication": {
+                          "type": "Raw",
+                          "value": "DdApi @{body('Config')?['DdApiKey']}"
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Debugger": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": {
+                    "equals": [
+                      1,
+                      1
+                    ]
+                  },
+                  "type": "If",
+                  "description": "Set 1 = 1 to Go Live and Update Page"
+                }
+              },
+              "runAfter": {
+                "Find_OneNote_parameters": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope",
+              "description": "Update OneNote Page using PATCH function with all the tables"
+            },
+            "Run_has_failed": {
+              "runAfter": {
+                "Update_OneNote_Page": [
+                  "Failed",
+                  "Skipped",
+                  "TimedOut"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "Flow has failed!"
+            }
+          },
+          "runAfter": {
+            "Find_companies": [
+              "Succeeded"
+            ]
+          },
+          "type": "Foreach",
+          "description": "Loop through all the companies that contain the tag \"digest\""
+        },
+        "Configuration": {
+          "actions": {
+            "Config": {
+              "runAfter": {},
+              "type": "ParseJson",
+              "inputs": {
+                "content": {
+                  "DdDomain": "demomsp9.deskdirector.com",
+                  "DdApiKey": "testmST6h3ixvYXnCDmRNVerJJ4aWVRywPhDoc7NE1FeeCEmk2reyOyEQZn70s5dT3lGPwETX6Bv4HQR7E7Ne2CPjBPNtHx2K2ya",
+                  "OneNoteGroupId": "86a92042-976b-44ce-9c03-5aee6939920a",
+                  "FunctionAccessCode": "KMc14x5Oskvb8ICDoLpctaBLM6OiTodWUs/w6P8w4yY9obna5Ekgnw=="
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "DdDomain": {
+                      "type": "string"
+                    },
+                    "DdApiKey": {
+                      "type": "string"
+                    },
+                    "OneNoteGroupId": {
+                      "type": "string"
+                    },
+                    "FunctionAccessCode": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            },
+            "CurrentTime": {
+              "runAfter": {
+                "Config": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@formatDateTime(addDays(utcNow(), -1), 'yyyy-MM-dd')"
+            }
+          },
+          "runAfter": {},
+          "type": "Scope",
+          "description": "Flow Configuration"
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

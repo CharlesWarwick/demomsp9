@@ -1,0 +1,229 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Http",
+          "inputs": {
+            "method": "GET"
+          }
+        }
+      },
+      "actions": {
+        "Response": {
+          "runAfter": {
+            "Accept_chat_invitation": [
+              "Succeeded"
+            ]
+          },
+          "type": "Response",
+          "kind": "Http",
+          "inputs": {
+            "statusCode": 200
+          }
+        },
+        "Accept_chat_invitation": {
+          "actions": {
+            "Get_member_access_token": {
+              "runAfter": {},
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                  "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                  "operationId": "MemberJwtById"
+                },
+                "parameters": {
+                  "id": "@triggerOutputs()?['queries/eid']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Call_a_DeskDirector_API": {
+              "runAfter": {
+                "HTTP": [
+                  "Succeeded"
+                ]
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                  "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                  "operationId": "DdApiWrapper"
+                },
+                "parameters": {
+                  "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+                  "x-flow-group": "Tech Chat",
+                  "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/join|Api2TechChat_Join",
+                  "x-flow-raw-body": false,
+                  "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['queries/csi']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "HTTP_-_Get_chatbot_member_access_token": {
+              "runAfter": {
+                "Get_member_access_token": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "GET",
+                "uri": "@{concat( body('Config')?['hostname'], '/api/v2/user/member/', body('Config')?['MemberEntityId'], '/userkey?expiresIn=3600&api_key=', body('Config')?['Apikey'])}",
+                "headers": {
+                  "content-type": "application/json",
+                  "Accept": "application/json",
+                  "Authorization": "@{concat('DdApi ', body('Config')?['Apikey'])}"
+                }
+              }
+            },
+            "HTTP": {
+              "runAfter": {
+                "HTTP_-_Get_chatbot_member_access_token": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "@{concat( body('Config')?['hostName'], '/api/v2/tech/chat/sessions/','{chatSessionId}','/join')}",
+                "headers": {
+                  "content-type": "application/json",
+                  "Accept": "application/json",
+                  "Authorization": "DdAccessToken @{outputs('Get_member_access_token')?['body/userKey']}"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Construct_ticket_URL": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope",
+          "description": "be quick"
+        },
+        "Parse_query_strings": {
+          "actions": {
+            "MemberEntityId": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@triggerOutputs()?['queries/eid']"
+            },
+            "ChatSessionId": {
+              "runAfter": {
+                "MemberEntityId": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@triggerOutputs()?['queries/csid']"
+            },
+            "Subdomain": {
+              "runAfter": {
+                "TicketId": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@triggerOutputs()?['queries/subdomain']"
+            },
+            "TicketId": {
+              "runAfter": {
+                "ChatSessionId": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@triggerOutputs()?['queries/tid']"
+            }
+          },
+          "runAfter": {
+            "Config": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Construct_ticket_URL": {
+          "actions": {
+            "TicketURL": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@concat('https://', outputs('Subdomain'), '.deskdirector.com/tech/tickets/', outputs('TicketId'), '/details')"
+            }
+          },
+          "runAfter": {
+            "Parse_query_strings": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Config": {
+          "runAfter": {},
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "api_Key": "testmST6h3ixvYXnCDmRNVerJJ4aWVRywPhDoc7NE1FeeCEmk2reyOyEQZn70s5dT3lGPwETX6Bv4HQR7E7Ne2CPjBPNtHx2K2ya",
+              "MemberEntityId": "@{triggerOutputs()?['queries/eid']}",
+              "ChatSessionId": "@{triggerOutputs()?['queries/csid']}",
+              "TicketId": "@{triggerOutputs()?['queries/tid']}",
+              "Subdomain": "@{coalesce(triggerOutputs()?['queries/subdomain'],'demomsp9')}",
+              "hostName": "@{concat('https://' , coalesce(triggerOutputs()?['queries/subdomain'],'demomsp9'), '.deskdirector.com')}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "api_Key": {
+                  "type": "string"
+                },
+                "MemberEntityId": {
+                  "type": "string"
+                },
+                "ChatSessionId": {
+                  "type": "string"
+                },
+                "TicketId": {
+                  "type": "string"
+                },
+                "Subdomain": {
+                  "type": "string"
+                },
+                "hostName": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

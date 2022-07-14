@@ -1,0 +1,232 @@
+{
+  "properties": {
+    "connectionReferences": {},
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "32450b94-fbbb-4afe-8e81-f52221d9712f"
+          },
+          "type": "Request",
+          "kind": "Http",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "access_token": {
+                  "type": "string"
+                },
+                "access_token_expiration": {
+                  "type": "integer"
+                },
+                "msp": {
+                  "type": "string"
+                }
+              }
+            },
+            "method": "POST"
+          }
+        }
+      },
+      "actions": {
+        "Response": {
+          "runAfter": {
+            "ResponseList": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "e682eb47-e266-47c1-89c5-96117d9594de"
+          },
+          "type": "Compose",
+          "inputs": {
+            "value": [
+              {
+                "type": "markdown",
+                "text": "### Content you would like to **render**.",
+                "color": "accent"
+              },
+              {
+                "type": "list",
+                "value": [
+                  {
+                    "title": "Title of the list item",
+                    "description": "Optional description",
+                    "url": "https://www.google.com"
+                  },
+                  {
+                    "title": "Second item without link",
+                    "description": "Optional description"
+                  }
+                ]
+              },
+              {
+                "type": "stats",
+                "value": [
+                  {
+                    "title": "Num of Pagoda open tickets",
+                    "value": "34",
+                    "color": "accent",
+                    "secondary": {
+                      "value": "from 100",
+                      "color": "attention"
+                    }
+                  }
+                ]
+              }
+            ],
+            "request": {
+              "ticketId": 3032
+            }
+          }
+        },
+        "Response_2": {
+          "runAfter": {
+            "Response": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "77659ca5-dafc-4e18-a645-0d94aa48de74"
+          },
+          "type": "Response",
+          "kind": "Http",
+          "inputs": {
+            "statusCode": 200,
+            "headers": {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*"
+            },
+            "body": "@outputs('ResponseList')"
+          }
+        },
+        "TriggerOutputs": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "657a0b23-1a16-4962-a286-718427bf3df4"
+          },
+          "type": "Compose",
+          "inputs": "@triggerOutputs()"
+        },
+        "Config": {
+          "runAfter": {
+            "TriggerOutputs": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "f8108f1e-3cbb-4fbd-923c-1c6493388a9d"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "host": "@{triggerOutputs()?['headers/origin']}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "host": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "HTTP_-_Get_tickets": {
+          "runAfter": {
+            "Config": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "2b276e8d-4217-4915-afca-a3e3d2c5d60d"
+          },
+          "type": "Http",
+          "inputs": {
+            "method": "POST",
+            "uri": "@{concat( body('Config')?['host'],'/api/v2/contact/tickets/find' )}",
+            "headers": {
+              "Authorization": "@{concat('DdAccessToken ', triggerBody()['access_token'])}"
+            },
+            "body": {
+              "take": 3,
+              "filterDefinition": {
+                "state": "open"
+              },
+              "order": {
+                "order": [
+                  "-last_updated"
+                ]
+              }
+            }
+          }
+        },
+        "ResponseArray": {
+          "runAfter": {
+            "HTTP_-_Get_tickets": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "401596f3-0784-44f7-a26a-1fd31b3eb630"
+          },
+          "type": "Select",
+          "inputs": {
+            "from": "@coalesce(body('HTTP_-_Get_tickets')?['tickets'] , json('[]'))",
+            "select": {
+              "title": "@item()['name']",
+              "description": "@item()['name']",
+              "url": "@concat(body('Config')?['host'], '/portal/deeplink?name=ticket&ticket_id=', item()['entityId'] )"
+            }
+          },
+          "description": "https://demomsp9.deskdirector.com/portal/deeplink?name=ticket&ticket_id=3231"
+        },
+        "ResponseList": {
+          "runAfter": {
+            "ResponseArray": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "b4ed7fc3-2488-4946-994c-e9033a0072e7"
+          },
+          "type": "Compose",
+          "inputs": {
+            "value": [
+              {
+                "type": "markdown",
+                "text": "### These new employees are **'In Progress.'**.",
+                "color": "attention"
+              },
+              {
+                "type": "markdown",
+                "text": "### As at - @{formatDateTime( addHours(utcNow(),12), 'ddd, dd MMM yyyy')} ",
+                "color": "good"
+              },
+              {
+                "type": "list",
+                "value": "@body('ResponseArray')"
+              }
+            ],
+            "request": {
+              "ticketId": null,
+              "access_token": "@{triggerBody()['access_token']}",
+              "access_token_expiration": "@triggerBody()['access_token_expiration']",
+              "msp": "demomsp9"
+            }
+          }
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

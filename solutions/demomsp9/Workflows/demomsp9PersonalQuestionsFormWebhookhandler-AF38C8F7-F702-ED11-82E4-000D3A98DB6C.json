@@ -1,0 +1,304 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_excelonlinebusiness": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_excelonlinebusiness"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Http",
+          "inputs": {}
+        }
+      },
+      "actions": {
+        "Sections": {
+          "runAfter": {
+            "CreatedBy": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@outputs('TriggerBody')?['form/sections']"
+        },
+        "Filter_for_Base_Section": {
+          "runAfter": {
+            "Sections": [
+              "Succeeded"
+            ]
+          },
+          "type": "Query",
+          "inputs": {
+            "from": "@outputs('Sections')",
+            "where": "@equals(item()['name'], 'BASE')"
+          }
+        },
+        "BaseSection": {
+          "runAfter": {
+            "Filter_for_Base_Section": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@first( body('Filter_for_Base_Section'))"
+        },
+        "Fields": {
+          "runAfter": {
+            "BaseSection": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@outputs('BaseSection')?['fields']"
+        },
+        "Create_HTML_table": {
+          "runAfter": {
+            "EncodeQnA": [
+              "Succeeded"
+            ]
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@body('Map_to_QnA')",
+            "format": "HTML"
+          }
+        },
+        "Map_to_QnA": {
+          "runAfter": {
+            "Filter_Fields_for_Questions": [
+              "Succeeded"
+            ]
+          },
+          "type": "Select",
+          "inputs": {
+            "from": "@body('Filter_Fields_for_Questions')",
+            "select": {
+              "Question": "@item()['name']",
+              "Answer": "@item()['value']"
+            }
+          }
+        },
+        "TriggerBody": {
+          "runAfter": {},
+          "type": "Compose",
+          "inputs": "@first(triggerBody())"
+        },
+        "Ticket": {
+          "runAfter": {
+            "TriggerBody": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@outputs('TriggerBody')?['ticket']"
+        },
+        "CreatedBy": {
+          "runAfter": {
+            "Ticket": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@outputs('TriggerBody')?['createdBy']"
+        },
+        "Apply_to_each_Question": {
+          "foreach": "@body('Map_to_QnA')",
+          "actions": {
+            "CurrentQuestion": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@items('Apply_to_each_Question')"
+            },
+            "Add_a_row_into_a_table_for_current_question": {
+              "runAfter": {
+                "CurrentQuestion": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57": "/_System/FormDynamicList.xlsx",
+                "tableId": "{CD161A1D-BF72-4BD3-86E0-8BA988A7C5BE}"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                  "connectionName": "shared_excelonlinebusiness",
+                  "operationId": "AddRowV2"
+                },
+                "parameters": {
+                  "source": "sites/ddportal.sharepoint.com,bd3aed6f-c9e3-47be-a4f8-3aaf69546f55,a0181d41-6614-4bf3-9bcd-9d015c98d379",
+                  "drive": "b!b-06vePJvkek-DqvaVRvVUEdGKAUZvNLm82dAVyY03mqSZVJDWfnQq5eEt_fhlqk",
+                  "file": "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57",
+                  "table": "{CD161A1D-BF72-4BD3-86E0-8BA988A7C5BE}",
+                  "item/Name": "@concat(outputs('CurrentQuestion')['Question'],'/',outputs('CurrentQuestion')['Answer'])",
+                  "item/Identifier": "@outputs('CreatedBy')?['entityId']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Terminate": [
+              "Succeeded"
+            ]
+          },
+          "type": "Foreach"
+        },
+        "EncodeQnA": {
+          "runAfter": {
+            "Map_to_QnA": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@concat(base64(body('Map_to_QnA')))"
+        },
+        "Terminate": {
+          "runAfter": {
+            "Add_or_update_depending_on_if_the_row_exists": [
+              "Succeeded"
+            ]
+          },
+          "type": "Terminate",
+          "inputs": {
+            "runStatus": "Succeeded"
+          }
+        },
+        "Get_a_row": {
+          "runAfter": {
+            "Create_HTML_table": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57": "/_System/FormDynamicList.xlsx",
+            "tableId": "{CD161A1D-BF72-4BD3-86E0-8BA988A7C5BE}"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+              "connectionName": "shared_excelonlinebusiness",
+              "operationId": "GetItem"
+            },
+            "parameters": {
+              "source": "groups/86a92042-976b-44ce-9c03-5aee6939920a",
+              "drive": "b!b-06vePJvkek-DqvaVRvVUEdGKAUZvNLm82dAVyY03mqSZVJDWfnQq5eEt_fhlqk",
+              "file": "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57",
+              "table": "{CD161A1D-BF72-4BD3-86E0-8BA988A7C5BE}",
+              "idColumn": "Identifier",
+              "id": "@outputs('CreatedBy')?['entityId']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Add_or_update_depending_on_if_the_row_exists": {
+          "actions": {
+            "Add_a_row_into_a_tableed": {
+              "runAfter": {},
+              "metadata": {
+                "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57": "/_System/FormDynamicList.xlsx",
+                "tableId": "{CD161A1D-BF72-4BD3-86E0-8BA988A7C5BE}"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                  "connectionName": "shared_excelonlinebusiness",
+                  "operationId": "AddRowV2"
+                },
+                "parameters": {
+                  "source": "groups/86a92042-976b-44ce-9c03-5aee6939920a",
+                  "drive": "b!b-06vePJvkek-DqvaVRvVUEdGKAUZvNLm82dAVyY03mqSZVJDWfnQq5eEt_fhlqk",
+                  "file": "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57",
+                  "table": "{CD161A1D-BF72-4BD3-86E0-8BA988A7C5BE}",
+                  "item/Name": "@outputs('EncodeQnA')",
+                  "item/Identifier": "@outputs('CreatedBy')?['entityId']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Get_a_row": [
+              "Succeeded",
+              "Skipped",
+              "Failed"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Update_a_row": {
+                "runAfter": {},
+                "metadata": {
+                  "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57": "/_System/FormDynamicList.xlsx",
+                  "tableId": "{CD161A1D-BF72-4BD3-86E0-8BA988A7C5BE}"
+                },
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                    "connectionName": "shared_excelonlinebusiness",
+                    "operationId": "PatchItem"
+                  },
+                  "parameters": {
+                    "source": "groups/86a92042-976b-44ce-9c03-5aee6939920a",
+                    "drive": "b!b-06vePJvkek-DqvaVRvVUEdGKAUZvNLm82dAVyY03mqSZVJDWfnQq5eEt_fhlqk",
+                    "file": "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57",
+                    "table": "{CD161A1D-BF72-4BD3-86E0-8BA988A7C5BE}",
+                    "idColumn": "Identifier",
+                    "id": "@outputs('CreatedBy')?['entityId']",
+                    "item/Name": "@outputs('EncodeQnA')",
+                    "item/Identifier": "@outputs('CreatedBy')?['entityId']"
+                  },
+                  "authentication": "@parameters('$authentication')"
+                }
+              }
+            }
+          },
+          "expression": {
+            "equals": [
+              "@empty( outputs('Get_a_row')?['body']?['ItemInternalId'])",
+              "@true"
+            ]
+          },
+          "type": "If"
+        },
+        "Filter_Fields_for_Questions": {
+          "runAfter": {
+            "Fields": [
+              "Succeeded"
+            ]
+          },
+          "type": "Query",
+          "inputs": {
+            "from": "@outputs('Fields')",
+            "where": "@contains(concat('short_text', 'long_text'), item()['type'])"
+          },
+          "description": "We don't want statement fields etc"
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

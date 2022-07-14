@@ -1,0 +1,260 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_workflow_is_triggered": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+              "connectionName": "shared_deskdirector_1",
+              "operationId": "SubscribeToWorkflow"
+            },
+            "parameters": {
+              "type": "tickets",
+              "workflowId": "161-A",
+              "req/parameters/description": "Close if Idle for 3 days"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Config": {
+          "runAfter": {
+            "CloseState_for_each_board": [
+              "Succeeded"
+            ]
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "DaysIdle": 3,
+              "ticksPerDay": 86400,
+              "ticksPerDay0": 864000000000
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "DaysIdle": {
+                  "type": "integer"
+                },
+                "ticksPerDay": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "Init_var_exitLoop": {
+          "runAfter": {},
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "exitLoop",
+                "type": "boolean",
+                "value": "@false"
+              }
+            ]
+          }
+        },
+        "Do_until_Idle_3_days": {
+          "actions": {
+            "Compose": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "e"
+            },
+            "Current_time": {
+              "runAfter": {
+                "Compose": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Expression",
+              "kind": "CurrentTime",
+              "inputs": {}
+            },
+            "Get_a_ticket": {
+              "runAfter": {
+                "Current_time": [
+                  "Succeeded"
+                ]
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+                  "connectionName": "shared_deskdirector_1",
+                  "operationId": "GetTicket"
+                },
+                "parameters": {
+                  "ticketId": "@triggerOutputs()?['body/ticket/id']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "TimeMath": {
+              "runAfter": {
+                "Get_a_ticket": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": {
+                  "currentUTC": "@{body('Current_time')}",
+                  "currentTicksUTC": "@ticks(body('Current_time'))",
+                  "lastUpdateUTC": "@{outputs('Get_a_ticket')?['body/modifiedOn']}",
+                  "lastUpdateTicksUTC": "@ticks(outputs('Get_a_ticket')?['body/modifiedOn'])",
+                  "ticksDifference": "@sub(ticks(body('Current_time')) , ticks(outputs('Get_a_ticket')?['body/modifiedOn'])  )",
+                  "ticks3Days": "@mul(3 , body('Config')?['ticksPerDay'])"
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "currentUTC": {
+                      "type": "string"
+                    },
+                    "currentTicksUTC": {
+                      "type": "integer"
+                    },
+                    "lastUpdateUTC": {
+                      "type": "string"
+                    },
+                    "lastUpdateTicksUTC": {
+                      "type": "integer"
+                    },
+                    "ticksDifference": {
+                      "type": "integer"
+                    },
+                    "ticks3Days": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            },
+            "Has_it_been_3_days_idle": {
+              "actions": {
+                "Set_var_exitLoop_to_false": {
+                  "runAfter": {},
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "exitLoop",
+                    "value": "@true"
+                  }
+                },
+                "Update_a_ticket": {
+                  "runAfter": {
+                    "Set_var_exitLoop_to_false": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+                      "connectionName": "shared_deskdirector_1",
+                      "operationId": "UpdateTicket"
+                    },
+                    "parameters": {
+                      "ticketId": "@outputs('Get_a_ticket')?['body/id']",
+                      "req/boardId": "@outputs('Get_a_ticket')?['body/board/id']",
+                      "req/statusId": 10,
+                      "req/noteContent": "Automation - Closing because 3 days idle",
+                      "req/noteIsInternal": true
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {
+                "TimeMath": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Delay": {
+                    "runAfter": {},
+                    "type": "Wait",
+                    "inputs": {
+                      "interval": {
+                        "count": 20,
+                        "unit": "Second"
+                      }
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "greater": [
+                  "@body('TimeMath')?['ticksDifference']",
+                  "@body('TimeMath')?['ticks3Days']"
+                ]
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Config": [
+              "Succeeded"
+            ]
+          },
+          "expression": "@equals(variables('exitLoop'), true)",
+          "limit": {
+            "count": 3,
+            "timeout": "PT1H"
+          },
+          "type": "Until"
+        },
+        "CloseState_for_each_board": {
+          "runAfter": {
+            "Init_var_exitLoop": [
+              "Succeeded"
+            ]
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": [
+              1,
+              2,
+              3
+            ],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}
