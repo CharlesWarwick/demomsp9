@@ -1,0 +1,27 @@
+{
+  "entityId": "257-A",
+  "name": "Quarterly Preventative Maintenance - On-Prem Network",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Check ILO/DRAC - Disk/RAID health",
+      "description": null
+    },
+    {
+      "instruction": "Check firewall firmware and apply updates",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.5875901Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
