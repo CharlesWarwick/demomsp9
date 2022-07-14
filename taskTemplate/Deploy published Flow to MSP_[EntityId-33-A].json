@@ -1,0 +1,16 @@
+{
+  "entityId": "33-A",
+  "name": "Deploy published Flow to MSP",
+  "tags": [],
+  "filter": null,
+  "items": [],
+  "creator": {
+    "entityId": "m~187",
+    "name": "mrwhite"
+  },
+  "lastModifiedAt": "2021-08-25T09:49:58.5610951Z",
+  "lastModifiedBy": {
+    "entityId": "m~187",
+    "name": "mrwhite"
+  }
+}
