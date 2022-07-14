@@ -1,0 +1,66 @@
+{
+  "general": {
+    "entityId": 118,
+    "enabled": true,
+    "parentName": "1. Showcase",
+    "name": "Dynamic Content Showcase",
+    "tags": [],
+    "parentOptions": [
+      "[ITIL-Style] Communication (Email and calendars, Phone Systems)",
+      "[ITIL-Style] Networks and Servers",
+      "[ITIL-Style] Printing and Scanning",
+      "[ITIL-Style] Security",
+      "[ITIL-Style] Software and Application",
+      "[ITIL-Style] User Accounts",
+      "[ITIL-Style] Workstation (OS, Hardware and Peripherals)",
+      "0: The Most Common Tickets",
+      "1. Self Service Area",
+      "1. Showcase",
+      "1: Computer",
+      "2. User Account",
+      "3. Email",
+      "4. Software and Apps",
+      "Account/Access",
+      "Competition",
+      "Hardware",
+      "Implementation",
+      "Microsoft Office 365",
+      "Risks",
+      "Sales/Procurement",
+      "Software",
+      "Staff Onboarding and offboarding",
+      "Webinar"
+    ],
+    "titleTemplate": null,
+    "bodyTemplate": null,
+    "formUrl": null,
+    "formRedirect": null,
+    "ddForm": {
+      "entityId": 28938,
+      "name": "Dynamic Content Showcase"
+    },
+    "taskTemplates": []
+  },
+  "ticket": {},
+  "filter": {
+    "entityId": 118,
+    "name": "Dynamic Content Showcase",
+    "rootFlag": false,
+    "inverseFlagTargets": [
+      {
+        "entityId": 16,
+        "name": "Bowling Green Consultants",
+        "type": "company",
+        "parent": null,
+        "inverseFlagTargets": null
+      },
+      {
+        "entityId": 27,
+        "name": "Deed and Viper",
+        "type": "company",
+        "parent": null,
+        "inverseFlagTargets": null
+      }
+    ]
+  }
+}
