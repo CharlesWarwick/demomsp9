@@ -1,0 +1,28 @@
+{
+  "form": {
+    "entityId": 31637,
+    "name": "[Bookings] Microsoft Bookings app",
+    "description": "This form uses Microsoft Bookings",
+    "titleFormat": {
+      "format": "Sample template with argument {1}",
+      "arguments": [
+        "service_catalogue"
+      ]
+    },
+    "tags": [
+      "bookings"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "Click on the link to create a booking using Microsoft Bookings",
+        "description": "[Reserve your MS bookings appointment](https://outlook.office365.com/owa/calendar/StevePinksCalendar@ddportal.com/bookings/s/Tx429cUSZkiLX9OlmhN0Rw2) with Steve by clicking [here](https://outlook.office365.com/owa/calendar/StevePinksCalendar@ddportal.com/bookings/s/Tx429cUSZkiLX9OlmhN0Rw2)",
+        "identifier": "dd8zfp",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CF1"
+  }
+}
