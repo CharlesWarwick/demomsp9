@@ -1,0 +1,55 @@
+{
+  "general": {
+    "entityId": 113,
+    "enabled": true,
+    "parentName": "Software",
+    "name": "Request a new install",
+    "tags": [
+      "software",
+      "sc-general",
+      "flow-automation"
+    ],
+    "parentOptions": [
+      "[ITIL-Style] Communication (Email and calendars, Phone Systems)",
+      "[ITIL-Style] Networks and Servers",
+      "[ITIL-Style] Printing and Scanning",
+      "[ITIL-Style] Security",
+      "[ITIL-Style] Software and Application",
+      "[ITIL-Style] User Accounts",
+      "[ITIL-Style] Workstation (OS, Hardware and Peripherals)",
+      "0: The Most Common Tickets",
+      "1. Self Service Area",
+      "1. Showcase",
+      "1: Computer",
+      "2. User Account",
+      "3. Email",
+      "4. Software and Apps",
+      "Account/Access",
+      "Competition",
+      "Hardware",
+      "Implementation",
+      "Microsoft Office 365",
+      "Risks",
+      "Sales/Procurement",
+      "Software",
+      "Staff Onboarding and offboarding",
+      "Webinar"
+    ],
+    "titleTemplate": null,
+    "bodyTemplate": null,
+    "formUrl": null,
+    "formRedirect": null,
+    "ddForm": {
+      "entityId": 28686,
+      "name": null
+    },
+    "taskTemplates": []
+  },
+  "ticket": {},
+  "filter": {
+    "entityId": 113,
+    "name": "Request a new install",
+    "rootFlag": true,
+    "inverseFlagTargets": []
+  }
+}
