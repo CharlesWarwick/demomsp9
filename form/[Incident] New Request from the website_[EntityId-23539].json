@@ -1,0 +1,146 @@
+{
+  "form": {
+    "entityId": 23539,
+    "name": "[Incident] New Request from the website",
+    "description": null,
+    "titleFormat": {
+      "format": "Web site initiated ticket from {1}",
+      "arguments": [
+        "contact_email"
+      ]
+    },
+    "tags": [],
+    "fields": [
+      {
+        "type": "multiple_choice",
+        "name": "Tick any of the subjects that apply",
+        "description": "So that we can create a ticket for you",
+        "identifier": "j98xws",
+        "required": true,
+        "choices": [
+          {
+            "name": "Can't log in",
+            "identifier": "0jme0m"
+          },
+          {
+            "name": "Forgot password",
+            "identifier": "5bp42g"
+          },
+          {
+            "name": "New employeed",
+            "identifier": "zawsjo"
+          },
+          {
+            "name": "None of these",
+            "identifier": "i0dfe4"
+          }
+        ]
+      },
+      {
+        "type": "api_single_select",
+        "name": "What priority would you like this to be given",
+        "identifier": "9753zh",
+        "required": true,
+        "api": {
+          "method": "GET",
+          "url": "/api/v2/ddform/dynamic/priorities",
+          "queryParams": null
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "General Description",
+        "description": "Can you give a general description of your ticket",
+        "identifier": "jdi60v",
+        "required": true
+      },
+      {
+        "type": "long_text",
+        "name": "Current Behavior",
+        "description": "If their is an issue where your I.T. is not behaving",
+        "identifier": "bthb29",
+        "required": true
+      },
+      {
+        "type": "long_text",
+        "name": "Expected Behavior",
+        "identifier": "tifb0m",
+        "required": true
+      },
+      {
+        "type": "single_choice",
+        "name": "Are you able to reproduce this issue?",
+        "identifier": "on65oi",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "pvekox"
+          },
+          {
+            "name": "No",
+            "identifier": "onx9ks"
+          }
+        ]
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide detailed steps to reproduce this issue",
+        "identifier": "3yxhn5",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "on65oi",
+          "operator": "in",
+          "identifiers": [
+            "pvekox"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "As best as you can, please describe the tasks performed that produced this issue",
+        "identifier": "czkxzi",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "on65oi",
+          "operator": "in",
+          "identifiers": [
+            "onx9ks"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Has another user reported a similar issue?",
+        "identifier": "z6stng",
+        "required": true,
+        "choices": [
+          {
+            "name": "Just me",
+            "identifier": "40b6mc"
+          },
+          {
+            "name": "All users",
+            "identifier": "0egp53"
+          },
+          {
+            "name": "Unsure",
+            "identifier": "3mf2p8"
+          }
+        ]
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide any additional information that will help",
+        "description": "Supporting screenshots can be attached using the Paperclip icon.",
+        "identifier": "ochkqz",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CF5"
+  }
+}
