@@ -1,0 +1,101 @@
+{
+  "form": {
+    "entityId": 22214,
+    "name": "[HR] User Onboarding",
+    "description": "User Account type form.",
+    "titleFormat": null,
+    "tags": [
+      "hr"
+    ],
+    "fields": [
+      {
+        "type": "short_text",
+        "name": "New Employee Full Name",
+        "description": "Demo for Epoch",
+        "identifier": "0ubtht",
+        "required": true
+      },
+      {
+        "type": "short_text",
+        "name": "Title",
+        "identifier": "i8bmyh",
+        "required": false
+      },
+      {
+        "type": "date",
+        "name": "Starting Date",
+        "identifier": "8id6n3",
+        "required": false,
+        "meta": {
+          "render": "date"
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Who will this person report to?",
+        "identifier": "qbm6ms",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "Does this user require an email address that isn't following the standard Firstname.Lastname@ddportal.com convention?",
+        "identifier": "zu6pnn",
+        "required": false,
+        "choices": [
+          {
+            "name": "No, Standard email convention is fine",
+            "identifier": "32yrbr"
+          },
+          {
+            "name": "Yes, A different email address is required",
+            "identifier": "c1c9yp"
+          }
+        ]
+      },
+      {
+        "type": "short_text",
+        "name": "Please enter the additional email alias required",
+        "description": "Please note, this is NOT the user's primary email address. This is treated as a secondary mail address.",
+        "identifier": "ahy71c",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "zu6pnn",
+          "operator": "in",
+          "identifiers": [
+            "c1c9yp"
+          ]
+        }
+      },
+      {
+        "type": "multiple_choice",
+        "name": "Does this person require access to any shared mail boxes? Please select as required:",
+        "identifier": "5kk3uc",
+        "required": false,
+        "choices": [
+          {
+            "name": "Accounts",
+            "identifier": "0jtzpo"
+          },
+          {
+            "name": "Info",
+            "identifier": "5ci63f"
+          },
+          {
+            "name": "Sales",
+            "identifier": "nbm9p5"
+          }
+        ]
+      },
+      {
+        "type": "long_text",
+        "name": "Have we missed something? Use this field for additional notes:",
+        "identifier": "0rilaq",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CF8"
+  }
+}
