@@ -1,0 +1,33 @@
+{
+  "entityId": "1-A",
+  "name": "Change Management Task Template",
+  "tags": [
+    "test"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Assess for Change Management Control",
+      "description": {
+        "content": "### Tick this task when you have completed the risk assessment \n\n- (a) If the service fails how many people will be affected.\n    - Rate 0 (nobody) to 5 (everybody)  \n\n - (b) If the service fails how badly will  will be affected.\n    - Rate 0 (not at all) to 5 (cannot work) \n\nIf the multiple of (a) x  (b) > 3 you need change management",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "How will you  reverse the change",
+      "description": {
+        "content": "### Tick this task when you have written a roll-back plan into the ticket \n\nYou will need to add a roll-back plan",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  },
+  "lastModifiedAt": "2021-09-01T12:39:28.4048682Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
