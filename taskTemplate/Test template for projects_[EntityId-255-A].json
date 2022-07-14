@@ -1,0 +1,32 @@
+{
+  "entityId": "255-A",
+  "name": "Test template for projects",
+  "tags": [
+    "demo",
+    "projects"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "task 1",
+      "description": null
+    },
+    {
+      "instruction": "task 2",
+      "description": null
+    },
+    {
+      "instruction": "task 3",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.5726062Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
