@@ -1,0 +1,26 @@
+{
+  "entityId": "231-A",
+  "name": "Incident Response",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Do you understand the three customer metrics of an incident",
+      "description": {
+        "content": "From the `customer's` point of view, do you understand the following \n\n1. What is the outcome required (e.g. what is the desired outcome that prompted this user to create this ticket) \n2. How important is this outcome (i.e.  is it vital, is it a nice-to-have outcome) \n3. Are there any time constraints (e.g. does it have to be ready for the start date of a new employee) \n\nIf you are unsure, feel free to ask the customer",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.5466166Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
