@@ -1,0 +1,88 @@
+{
+  "general": {
+    "entityId": 87,
+    "enabled": true,
+    "parentName": "4. Software and Apps",
+    "name": "I need to remove a software application from my computer",
+    "tags": [],
+    "parentOptions": [
+      "[ITIL-Style] Communication (Email and calendars, Phone Systems)",
+      "[ITIL-Style] Networks and Servers",
+      "[ITIL-Style] Printing and Scanning",
+      "[ITIL-Style] Security",
+      "[ITIL-Style] Software and Application",
+      "[ITIL-Style] User Accounts",
+      "[ITIL-Style] Workstation (OS, Hardware and Peripherals)",
+      "0: The Most Common Tickets",
+      "1. Self Service Area",
+      "1. Showcase",
+      "1: Computer",
+      "2. User Account",
+      "3. Email",
+      "4. Software and Apps",
+      "Account/Access",
+      "Competition",
+      "Hardware",
+      "Implementation",
+      "Microsoft Office 365",
+      "Risks",
+      "Sales/Procurement",
+      "Software",
+      "Staff Onboarding and offboarding",
+      "Webinar"
+    ],
+    "titleTemplate": null,
+    "bodyTemplate": null,
+    "formUrl": null,
+    "formRedirect": null,
+    "ddForm": {
+      "entityId": 22210,
+      "name": "I need software removed on my computer"
+    },
+    "taskTemplates": []
+  },
+  "ticket": {
+    "connectWise": {
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 39,
+        "name": "New (portal)"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "type": null,
+      "subType": null,
+      "subTypeItem": null,
+      "source": {
+        "entityId": 8,
+        "name": "Customer Portal"
+      }
+    }
+  },
+  "filter": {
+    "entityId": 87,
+    "name": "I need to remove a software application from my computer",
+    "rootFlag": false,
+    "inverseFlagTargets": [
+      {
+        "entityId": 16,
+        "name": "Bowling Green Consultants",
+        "type": "company",
+        "parent": null,
+        "inverseFlagTargets": null
+      },
+      {
+        "entityId": 27,
+        "name": "Deed and Viper",
+        "type": "company",
+        "parent": null,
+        "inverseFlagTargets": null
+      }
+    ]
+  }
+}
