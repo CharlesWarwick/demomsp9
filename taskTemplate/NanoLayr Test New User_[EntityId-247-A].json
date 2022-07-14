@@ -1,0 +1,18 @@
+{
+  "entityId": "247-A",
+  "name": "NanoLayr Test New User",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.0286187Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
