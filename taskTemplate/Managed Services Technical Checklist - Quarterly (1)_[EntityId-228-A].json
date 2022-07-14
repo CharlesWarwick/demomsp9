@@ -1,0 +1,194 @@
+{
+  "entityId": "228-A",
+  "name": "Managed Services Technical Checklist - Quarterly (1)",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Autopilot: Update Applications in Endpoint Manager with Newer Versions",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Autopilot: Update Configuration Items for Existing Endpoint Manager Applications",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Review admin accounts",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Ensure alerting is enabled on inactive admin accounts",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Review admin account MFA",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Rotate admin passwords",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: IAM/RBAC permissions review",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Ensure alerting is enabled on S3 buckets/blobs being made public",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Ensure alerting is enabled on security groups/NSGs have a rule added allowing all public traffic",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Enable Cloud Trail",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Review backup platform functionality",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Network Security: Review inbound NAT rules",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Network Security: Disable inbound NATs which are no longer required",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Network Security: Hacker Target External IP Scan",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Network Security: Check the Public IP if listed in Spamhaus or any RBL sites",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Review backups",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Review admin accounts",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Review MFA compliance (if enabled)",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Enable Auditing",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Ensure alerting is enabled when Exchange email forwarding is configured",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Microsoft Secure Score review",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Check for company Litigation hold policy, and verify against the account especially for the new employee.",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Check for user’s Rules if there are some unwanted rules that are forwarding to external emails. Maybe we can create a PS script to automate this.",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Check ILO/DRAC - Disk/RAID health",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Check firewall firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.3646484Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
