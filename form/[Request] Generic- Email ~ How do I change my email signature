@@ -1,0 +1,112 @@
+{
+  "form": {
+    "entityId": 24583,
+    "name": "[Request] Generic: Email | How do I change my email signature?",
+    "description": null,
+    "titleFormat": {
+      "format": "I would like to {1}",
+      "arguments": [
+        "rc280j"
+      ]
+    },
+    "tags": [],
+    "fields": [
+      {
+        "type": "single_choice",
+        "name": "I would like to:",
+        "identifier": "rc280j",
+        "required": true,
+        "choices": [
+          {
+            "name": "Change my default signature",
+            "identifier": "hfe93a"
+          },
+          {
+            "name": "Edit my signature",
+            "identifier": "nqibc9"
+          }
+        ],
+        "meta": {
+          "render": "radio"
+        }
+      },
+      {
+        "type": "statement",
+        "name": "Check out the following Video Guide before proceeding:",
+        "description": "![video](https://www.youtube-nocookie.com/embed/YczfCaZw678?rel=0)",
+        "identifier": "ix78o8",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "rc280j",
+          "operator": "in",
+          "identifiers": [
+            "hfe93a"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "I have watched the above video and require some help.",
+        "identifier": "uq94j4",
+        "required": true,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "7mb95x"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "rc280j",
+          "operator": "in",
+          "identifiers": [
+            "hfe93a"
+          ]
+        },
+        "meta": {
+          "render": "radio"
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide some information that will help us resolve your support request.",
+        "identifier": "v5jvi9",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "uq94j4",
+          "operator": "in",
+          "identifiers": [
+            "7mb95x"
+          ]
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Let us know what information you would like altered.",
+        "description": "If possible, take a screenshot of your current signature and upload it to this form.",
+        "identifier": "r0p30c",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "rc280j",
+          "operator": "in",
+          "identifiers": [
+            "nqibc9"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Have we missed something? Use this field for additional notes:",
+        "description": "* Additional information to help your service request\n* Supporting screenshots can be attached using the Paperclip icon.\n* Suggestions on improving this form",
+        "identifier": "v38eja",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003D17"
+  }
+}
