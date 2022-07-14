@@ -1,0 +1,59 @@
+{
+  "entityId": "210-A",
+  "name": "Biannual Preventative Maintenance - On-Prem Infrastructure",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Check status of all hardware LED indicators",
+      "description": null
+    },
+    {
+      "instruction": "Check server BIOS and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Check server drivers and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Check server firmware and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Check NAS firmware and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Check SAN firmware and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Check fabric switch firmware and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Ensure all connections are securely seated",
+      "description": null
+    },
+    {
+      "instruction": "Update server diagrams",
+      "description": null
+    },
+    {
+      "instruction": "\"Take a 2 minutes video of the servers and devices, that  will show the LED, and cable connection. Good to  review later if there are any issues.\"",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.7866402Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
