@@ -1,0 +1,84 @@
+{
+  "entityId": "256-A",
+  "name": "Professional Building Consultants: Staff Onboarding",
+  "tags": [
+    "demo",
+    "newusersetup",
+    "professionalbuildingconsultants"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Get the user to SETUP MFA on Microsoft Authenticator APP and Set this as default",
+      "description": {
+        "content": "USer setup is NOT! complete untill this is done.\nPlease Refer to this link(also in Lancom Button):\n[https://youtu.be/36ZFhY-47Ts](https://youtu.be/36ZFhY-47Ts)\n\nALL Users must be Setup with Push Notifications on Microsoft Authenticator Application - include RDS sign-in and Microsoft services",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Active Directory",
+      "description": {
+        "content": "Screen connect to PBC-DC01 and [log in as pbcadmin](https://lancom.itglue.com/822754/passwords/439045).\nUsers will be created under PBC Users -> !Live Users\nIf ticket comments to be setup like another staff member, right click this user and select  Copy...\nUsername: firstname+lastname@pbc.co.nz\ne.g. Joe Bloggs would be Joe.Bloggs@pbc.co.nz\nMake your password Office 365 friendly. Preferably with:\n8 Characters minimum\nUppercase letter\nSymbol\nNumber\nMake sure to have Password Never Expires Deselected\nMake sure to deselect \"User must change password at next logon\"\nEnsure the user is a member of the group RDS - Redirected Folders\nCreate a folder in \\\\pbc-fs01\\Data\\Users Shared Folders named with the first name of the new user (i.e Barry) and assign it the following permissions in Properties->Security:\nAdministrator@Profcon - Full Control\nAdministrators@PBC-FS01 - Full Control\nThe new user's AD account (i.e. barry.chen@pbc.co.nz)  - Full Control",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365",
+      "description": {
+        "content": "Once your AD Sync has completed your user should now appear on the [Office 365 portal](https://lancom.itglue.com/822754/passwords/812284).\n\n## Does this person require a copy of Microsoft Office?\n\nRequest for a license to be purchased by one of the Dickerdata seniors\n\nEach user will need a Microsoft 365 Business license in most cases, this includes things such as ATP automatically.\n\n\nAfter your license has been processed, assign this to your user.\nAdd to any relevant Distribution Groups\nAll users will need to be a part of ProfessionalBuildingConsultantsLtd\nOther groups will be as per request on new user form",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Login as PBC 365 admin to this address",
+      "description": {
+        "content": "[https://account.activedirectory.windowsazure.com/UserManagement/MultifactorVerification.aspx](https://account.activedirectory.windowsazure.com/UserManagement/MultifactorVerification.aspx) to enable 2FA for a given user",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Log a ticket in CW under the New user",
+      "description": {
+        "content": "*Schedule yourself time for 1 day after the new user's start date to confirm they have enabled 2FA.\n2FA Setup documentation can be found [here](https://lancom.itglue.com/822754/docs/4471309#documentMode=edit&version=published). One day after the user starts (using the above logged ticket as a reminder), confirm whether they have setup 2FA by logging into [https://account.activedirectory.windowsazure.com/UserManagement/MultifactorVerification.aspx](https://account.activedirectory.windowsazure.com/UserManagement/MultifactorVerification.aspx). If they have configured 2FA, their account will be 'Enforced' instead of 'Enabled'.\nIf not, please send them the user documentation to setup 2FA on their account and follow up to confirm this happens.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Default Font Configuration",
+      "description": {
+        "content": "To configure default font in OWA, follow instructions below. This is to be done for all new staff.\n\nDownload the attached PowerShell script - Connect365.ps1\nOpen this script from a PowerShell ISE window\nRun the script\nLog in as PBC O365 administrator\nRun the command as below, replacing the identity as the new users UPN\nSet-MailboxMessageConfiguration -Identity USERNAME@pbc.co.nz -DefaultFontFlags Normal -DefaultFontName \"Century Gothic\" -DefaultFontSize 11\nLog into OWA and confirm the command went through, you should get font set as Century Gothic size 11 \nIf this is successful, run the PowerShell command from your active ISE window: Remove-PSSession $Session",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Adobe Acrobat Pro",
+      "description": {
+        "content": "IF REQUIRED -->\n\n- Confirm whether the user requires Adobe Acrobat Pro access on the RDS. If they do, set them up with a user account and license in the [Adobe Acrobat for Teams portal](https://lancom.itglue.com/822754/passwords/6903911).\n- You may need to purchase an additional Acrobat Pro license if the user isn't replacing someone. Get confirmation from Brent before purchasing this.\n- When the account is setup, the user will receive an invitation email requesting they set an adobe account password. Set this to the same as the user's RDS password. Email should be firstname.lastname@pbc.co.nz\n- When logging into the RDS for the first time, launch Adobe Acrobat Pro. You will be prompted for the user's adobe ID. Enter credentials and confirm the application activates (lets you continue). Note* Please enable Javascript temporarily to log in to Acrobat. Internet Options>> Security>> Custom Level>> Scripting Section>> Active Scripting-enable.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "RDS Shortcut Setup",
+      "description": {
+        "content": "For setup : [IT Glue Guide Available Here](https://lancom.itglue.com/822754/docs/1096941#version=published&documentMode=view)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Phone Setup",
+      "description": {
+        "content": "14/9/2017 - This service has now changed to 2Talk from freePBX.\nPlease contact Mike for any phone system requests \nMike Small \nM & M Solutions Ltd \np 815-6530 \n021741131 \nmike.small@outlook.co.nz",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.5795879Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
