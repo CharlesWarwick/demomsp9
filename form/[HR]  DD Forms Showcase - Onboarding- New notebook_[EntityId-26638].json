@@ -1,0 +1,96 @@
+{
+  "form": {
+    "entityId": 26638,
+    "name": "[HR]  DD Forms Showcase - Onboarding: New notebook",
+    "description": null,
+    "titleFormat": null,
+    "tags": [
+      "hr"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "Buy a new Notebook",
+        "identifier": "badze1",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "Do you need a docking station?",
+        "description": "This will allow you to quickly access any screens, keyboards, mice and other peripherals that are permanently on your desktop",
+        "identifier": "0arsgj",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "s2fo49"
+          },
+          {
+            "name": "No",
+            "identifier": "7rw7vv"
+          }
+        ]
+      },
+      {
+        "type": "single_choice",
+        "name": "Do you want extra screens? How many screens?",
+        "description": "You may wish to have desktop sized screens and multiple screens at your desktop",
+        "identifier": "z0rh94",
+        "required": false,
+        "choices": [
+          {
+            "name": "1 x screen",
+            "identifier": "ckkxdb"
+          },
+          {
+            "name": "2 x screen",
+            "identifier": "kyjao3"
+          },
+          {
+            "name": "3 x screen",
+            "identifier": "ftzwq3"
+          },
+          {
+            "name": "No thanks",
+            "identifier": "l2sh1q"
+          }
+        ]
+      },
+      {
+        "type": "single_choice",
+        "name": "Do want a screen  mount frame",
+        "description": "This is a steel frame that clamps to your desk and takes the screes off the surface of your desk",
+        "identifier": "f4iqhd",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "dif14s"
+          },
+          {
+            "name": "No",
+            "identifier": "k2dtms"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "z0rh94",
+          "operator": "not_in",
+          "identifiers": [
+            "l2sh1q"
+          ]
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Is there any other requirements for your notebook",
+        "description": "Write any requirements  or specific needs or questions about the notebook here",
+        "identifier": "cf22ju",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CC1"
+  }
+}
