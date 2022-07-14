@@ -1,0 +1,84 @@
+{
+  "entityId": "252-A",
+  "name": "Deed and Viper: Staff Onboarding - Manila User",
+  "tags": [
+    "demo",
+    "newusersetup",
+    "deev"
+  ],
+  "filter": {
+    "companies": [
+      {
+        "entityId": 27,
+        "name": "Deed and Viper"
+      }
+    ]
+  },
+  "items": [
+    {
+      "instruction": "Important",
+      "description": {
+        "content": "Note: Manila users sometimes have 2 AD profiles one of them in Manila Citrix OU and other in Australian OU. Check the \"### Who should this user be copied from?\" details on the ticket and verify on AD if the user has 1 or 2 AD profiles and create the AD account in that specific OU folder only.\nPlease ensure you type the name of the user correctly while creating the user profile as this cannot be changed once the user profile is created.\nUser setup for Manial Mondiale are created by Kevin and if you have any queries related to the user setup please get in touch with Kevin Caramat from Manila and his details should be available in the ticket",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Create an Active Directory Account",
+      "description": {
+        "content": "[IT glue available here](https://lancom.itglue.com/529117/docs/8142911#version=published&documentMode=view)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Create a mailbox in local exchange:",
+      "description": {
+        "content": "To create a mailbox, login to [https://webmail.mondiale.co.nz/ecp/?ExchClientVer=15](https://webmail.mondiale.co.nz/ecp/?ExchClientVer=15)  nd create a user mailbox.\n\nBrowse for the existing users > Select the user created on AD > Save to create the mailbox.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Migrate mailbox to O365 (Only Australian active directory profile mailbox)",
+      "description": {
+        "content": "(Please ensure that the user does not have a license assigned on O365 until the migration is complete.)\nOnce the mailbox is created on local Exchange, head to O365 Exchange Admin center using [these credentials](https://lancom.itglue.com/xx/passwords/3143235) .",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Find the account in office 365 and assign the appropriate license",
+      "description": {
+        "content": "M365 Business Standard for AU users. \nLogin to the account and test inbound and outbound emails.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "!!!IMPORTANT!!!Enable MFA for the user account in Office 365.",
+      "description": {
+        "content": "YOU ARE NOT FINISHED UNTIL THE MFA is completed with the user (Enforce MFA for AU and PH user accounts).",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "CAFs Setup",
+      "description": {
+        "content": "Login to MONDIT2 with a domain administrator account, and follow [this document](https://lancom.itglue.com/529117/docs/760450).",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Citrix Setup",
+      "description": {
+        "content": "The below following steps is only for the Citrix profile user for MFS PH active directory account:\nAdd the user to the \"Citrix Delivery Group Access\"\n\nLog In to [https://remote.deev.co.nz/](https://remote.deev.co.nz/) using Office 365 account of the user. Set up Outlook and test inbound and outbound emails. \n\nRun sign.exe from [https://deev.co.nz/](http://deev.co.nz/)Shares\\emailsigs\\ and check the user has email signature when writing new emails.\n\nOpen CAFS and make sure you can log in and open modules.\nOpen Doc Manager and make sure that loads.\n\nCheck printers and drives are mapped as required. \n\nPrinting for Citrix Users: Printers are mapped by Citrix Print Policies. The groups that map these are under the Deev Citrix Servers OU. Add the relevant one if the user will be using Citrix.",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T09:11:31.9960982Z",
+  "lastModifiedBy": {
+    "entityId": "m~20007",
+    "name": "jurgen@ddportal.com"
+  }
+}
