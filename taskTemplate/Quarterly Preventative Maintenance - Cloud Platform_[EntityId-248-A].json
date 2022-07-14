@@ -1,0 +1,55 @@
+{
+  "entityId": "248-A",
+  "name": "Quarterly Preventative Maintenance - Cloud Platform",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Review admin accounts",
+      "description": null
+    },
+    {
+      "instruction": "Ensure alerting is enabled on inactive admin accounts",
+      "description": null
+    },
+    {
+      "instruction": "Review admin account MFA",
+      "description": null
+    },
+    {
+      "instruction": "Rotate admin passwords",
+      "description": null
+    },
+    {
+      "instruction": "IAM/RBAC permissions review",
+      "description": null
+    },
+    {
+      "instruction": "Ensure alerting is enabled on S3 buckets/blobs being made public",
+      "description": null
+    },
+    {
+      "instruction": "Ensure alerting is enabled on security groups/NSGs have a rule added allowing all public traffic",
+      "description": null
+    },
+    {
+      "instruction": "Enable Cloud Trail",
+      "description": null
+    },
+    {
+      "instruction": "Review backup platform functionality",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.0676189Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
