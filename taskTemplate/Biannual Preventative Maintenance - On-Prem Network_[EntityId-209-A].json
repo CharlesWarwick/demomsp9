@@ -1,0 +1,55 @@
+{
+  "entityId": "209-A",
+  "name": "Biannual Preventative Maintenance - On-Prem Network",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Check status of all hardware LED indicators",
+      "description": null
+    },
+    {
+      "instruction": "Check router firmware and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Check switch firmware and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Check access point firmware and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Check UPS firmware and apply updates",
+      "description": null
+    },
+    {
+      "instruction": "Test UPS load and operation by unplugging power",
+      "description": null
+    },
+    {
+      "instruction": "Ensure all connections are securely seated",
+      "description": null
+    },
+    {
+      "instruction": "Update network diagrams",
+      "description": null
+    },
+    {
+      "instruction": "Update physical host/hardware firmware",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.8796433Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
