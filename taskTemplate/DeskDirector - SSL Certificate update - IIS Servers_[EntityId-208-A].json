@@ -1,0 +1,89 @@
+{
+  "entityId": "208-A",
+  "name": "DeskDirector - SSL Certificate update - IIS Servers",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Confirm SSL Expiry date and Renewal availability",
+      "description": {
+        "content": "Comodo SSL certs are only available for renewal 30days prior to expiry. Check engineering@lancom.tech for the email for this.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Generate CSR",
+      "description": {
+        "content": "Log into any of the servers listed here : https://lancom.itglue.com/5596/docs/6089710#version=published&documentMode=edit\nGenerate a new CSR request",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Export certificate details",
+      "description": {
+        "content": "Once you've created the new certificate on the given server - Export this and generate a private key. Share this .pkk file to Jason for Deskdirector to update Raven DB's from their end. Upload it to :https://lancom.itglue.com/5596/ssl_certificates/341595 as an attachment along with the private key.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Update Bindings - First server",
+      "description": {
+        "content": "Each sever from the list will have a list of websites in IIS. We need to update ALL their *.deskdirector bindings on port 443.\n\nDo this by going to the site -> manage bindings -> edit the http binding on port 443 with the domain .deskdirector.com and select the name of the new cert you created.\n\nIt will ask you if you'd like to make this change for all coresponding .deskdirector.com bindings. Select yes -> THEN MANUALLY CHECK EACH SITE TO ENSURE IT HAS THE UPDATED CERTIFICATE.\n\nMake note of any sites that are 1. not available, 2. showing offline",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Import certificate details - To all other servers",
+      "description": {
+        "content": "On each of the servers from the previous list - go to IIS -> server certificates -> import and upload the .pkk file along with the private key",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Update IIS site bindings for ALL SERVERS",
+      "description": {
+        "content": "Once each of the servers from the list have the NEW CERTIFICATE.\nupdate the bindings as per the \"Update Bindings - First server\" step.\n\nDouble check all sites and their bindings even after you've selected to carry this change through.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Manually check certificate details - Internally and Externally",
+      "description": {
+        "content": "Once you're done with updating the bindings, Test the websites by browsing to them internally AND externally. \nChecking the certificate for each site (especially the custom domain sites) to make sure the new certificate details are showing",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Re-Schedule this ticket for the same date the following month",
+      "description": {
+        "content": "Once you've updated the certificate for all sites on all the servers listed. Re-schedule yourself to update the Load balancer certificates the same date next month as there is exactly 1 month difference between expiry dates.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Update all configurations with new expiry dates",
+      "description": {
+        "content": "Update and upload the certificate to the ITG SSL tracker : https://lancom.itglue.com/5596/ssl_certificates/341595\n\nUpdate the Connect wise config with the new dates",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Confirm with Jason from DD",
+      "description": {
+        "content": "Get Jason to test all functionality he sees fit regarding the certificates. Once signed off by him only then proceed.",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.7396389Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
