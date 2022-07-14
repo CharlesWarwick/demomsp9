@@ -1,0 +1,194 @@
+{
+  "entityId": "240-A",
+  "name": "Managed Services Technical Checklist - Quarterly and Biannual (2)",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Network Security: Review admin access location",
+      "description": {
+        "content": "On-SIte: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Network Security: Ensure firewall management interface access is locked down to Lancom's external IPs only",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Network Security: Review inbound NAT rules",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Network Security: Disable inbound NATs which are no longer required",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Network Security: Hacker Target External IP Scan",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Network Security: Check the Public IP if listed in Spamhaus or any RBL sites",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Review license usage",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Ensure ex-employee accounts are disabled/archived",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Compare mailbox sizes to limits",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Review, Document and Resolve AD Connect Conflicts/Errors",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Test autodiscover/Exchange RCA",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Review backups",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Review admin accounts",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Review MFA compliance (if enabled)",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Enable Auditing",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Ensure alerting is enabled when Exchange email forwarding is configured",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Microsoft Secure Score review",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Check for company Litigation hold policy, and verify against the account especially for the new employee.",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Office 365 / AAD: Check for user’s Rules if there are some unwanted rules that are forwarding to external emails. Maybe we can create a PS script to automate this.",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Infrastructure: Check status of all hardware LED indicators",
+      "description": {
+        "content": "On-Site: Yes\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Infrastructure: Check server BIOS and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: Yes\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Infrastructure: Check server drivers and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: Yes\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Infrastructure: Check server firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: Yes\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Infrastructure: Check NAS firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: Yes\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Infrastructure: Check SAN firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: Yes\nSecurity: Yes",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.8956175Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
