@@ -1,0 +1,50 @@
+{
+  "entityId": "219-A",
+  "name": "Auto Advance Finance: Staff Onboarding",
+  "tags": [
+    "demo",
+    "newusersetup"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Create AD Account / Profile",
+      "description": {
+        "content": "https://lancom.itglue.com/5597/passwords/257022",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Add to required Security Groups",
+      "description": null
+    },
+    {
+      "instruction": "Setup Office 365 account",
+      "description": null
+    },
+    {
+      "instruction": "User Login Testing / Validation",
+      "description": null
+    },
+    {
+      "instruction": "Enable MFA",
+      "description": null
+    },
+    {
+      "instruction": "Tasks when new user starts",
+      "description": {
+        "content": "Call new user and setup MFA to push notifications\nVerify mapped drives, Outlook profile, printers are setup properly",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.8716416Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
