@@ -1,0 +1,650 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_excelonlinebusiness_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_excelonlinebusiness"
+        }
+      },
+      "shared_excelonlinebusiness": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_excelonlinebusiness"
+        }
+      },
+      "shared_deskdirector_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Http",
+          "inputs": {}
+        }
+      },
+      "actions": {
+        "Config": {
+          "runAfter": {},
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "refererHostURL:": "@{triggerOutputs()?['headers']?['Referer']}",
+              "refererHostName": "@{last(split(first(split(concat(triggerOutputs()?['headers']?['Referer'], 'x.x.x'), '.')), '/'))}",
+              "searchTerm": "@{triggerOutputs()?['queries']?['term']}",
+              "msp": "demomsp9",
+              "user": "test@deskdirector.com",
+              "timeZone": "Eastern Standard Time",
+              "dateFormat": "yyyy MMMM dd",
+              "timeFormat": "hh:mm tt",
+              "groupSite": "groups/86a92042-976b-44ce-9c03-5aee6939920a",
+              "excelFilePath": "/_System/FormDynamicList.xlsx",
+              "documentLibrary": "b!b-06vePJvkek-DqvaVRvVUEdGKAUZvNLm82dAVyY03mqSZVJDWfnQq5eEt_fhlqk"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refererHostURL:": {
+                  "type": "string"
+                },
+                "refererHostName": {
+                  "type": "string"
+                },
+                "searchTerm": {
+                  "type": "string"
+                },
+                "msp": {
+                  "type": "string"
+                },
+                "user": {
+                  "type": "string"
+                },
+                "timeZone": {
+                  "type": "string"
+                },
+                "dateFormat": {
+                  "type": "string"
+                },
+                "timeFormat": {
+                  "type": "string"
+                },
+                "groupSite": {
+                  "type": "string"
+                },
+                "excelFilePath": {
+                  "type": "string"
+                },
+                "documentLibrary": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "Put configuration for this flow here. (TODO, get site, docID from a table)"
+        },
+        "Setup": {
+          "actions": {
+            "TriggerOutputs": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@triggerOutputs()",
+              "description": "We extract URL queries from TriggerOutputs(). This action is mainly for debugging"
+            },
+            "Queries": {
+              "runAfter": {
+                "TriggerOutputs": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(triggerOutputs()?['queries'], json('{}'))",
+              "description": "The Queries object holds all the URL parameters passed in with the GET request "
+            },
+            "RunMode": {
+              "runAfter": {
+                "Queries": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(outputs('Queries')?['mode'], 'DEFAULT')",
+              "description": "Look for special mode, ie Warmup or TestData"
+            },
+            "Test_for_RunMode_-_branch_if_not_DEFAULT": {
+              "actions": {},
+              "runAfter": {
+                "filterFieldName": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Sample_Date_Range": {
+                    "runAfter": {},
+                    "type": "Compose",
+                    "inputs": "@range(0, 10)",
+                    "description": "Debug used to generate sample data sample values "
+                  },
+                  "ResponseTestMode": {
+                    "runAfter": {
+                      "Get_tables_for_warmup": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Response",
+                    "kind": "Http",
+                    "inputs": {
+                      "statusCode": 200,
+                      "headers": {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                      },
+                      "body": {
+                        "value": "@outputs('TestSampleResponse')"
+                      }
+                    },
+                    "description": "Send the list back to the calling form"
+                  },
+                  "TestSampleResponse": {
+                    "runAfter": {
+                      "Map_to_values_Test_Sample": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Compose",
+                    "inputs": "@body('Map_to_values_Test_Sample')"
+                  },
+                  "Map_to_values_Test_Sample": {
+                    "runAfter": {
+                      "Sample_Date_Range": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Select",
+                    "inputs": {
+                      "from": "@outputs('Sample_Date_Range')",
+                      "select": {
+                        "name": "@addDays(utcNow(), item())",
+                        "identifier": "@item()"
+                      }
+                    },
+                    "description": "Shape the table query to name, identifier pattern "
+                  },
+                  "Terminate_for_success_in_sample_path": {
+                    "runAfter": {
+                      "ResponseTestMode": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Succeeded"
+                    }
+                  },
+                  "Terminate_for_failure_in_sample_path_": {
+                    "runAfter": {
+                      "Terminate_for_success_in_sample_path": [
+                        "Failed",
+                        "Skipped",
+                        "TimedOut"
+                      ]
+                    },
+                    "type": "Terminate",
+                    "inputs": {
+                      "runStatus": "Failed",
+                      "runError": {
+                        "message": "Failure executing sample / test mode"
+                      }
+                    }
+                  },
+                  "Get_tables_for_warmup": {
+                    "runAfter": {
+                      "TestSampleResponse": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57": "/_System/FormDynamicList.xlsx",
+                      "tableId": null
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                        "connectionName": "shared_excelonlinebusiness_1",
+                        "operationId": "GetTables"
+                      },
+                      "parameters": {
+                        "source": "@body('Config')?['groupSite']",
+                        "drive": "@body('Config')?['documentLibrary']",
+                        "file": "@body('Config')?['excelFilePath']"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    },
+                    "description": "This is to 'warmup' file access to the SP library"
+                  }
+                }
+              },
+              "expression": {
+                "or": [
+                  {
+                    "equals": [
+                      "@outputs('RunMode')",
+                      "DEFAULT"
+                    ]
+                  },
+                  {
+                    "equals": [
+                      "@outputs('RunMode')",
+                      "tech"
+                    ]
+                  }
+                ]
+              },
+              "type": "If",
+              "description": "We can warmup the flow, or send back test data"
+            },
+            "LookupTable": {
+              "runAfter": {
+                "TicketId": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(outputs('Queries')?['lookupTableName'], 'PersonalQuestions')",
+              "description": "LookupTable is the Excel table we are using for this lookup"
+            },
+            "filterFieldName": {
+              "runAfter": {
+                "LookupTable": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(outputs('Queries')?['filterFieldName'], 'clientId')",
+              "description": "filterFieldName is the property in the queries object that will hold the filter value"
+            },
+            "TicketId": {
+              "runAfter": {
+                "RunMode": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(outputs('Queries')?['ticketId'], triggerBody()?['ticketId'],'0')"
+            }
+          },
+          "runAfter": {
+            "Config": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope",
+          "description": "Run setup functions. Fork to 'warmup' or 'test' mode is indicated"
+        },
+        "Find,_filter_and_return_values": {
+          "actions": {
+            "Test_to_see_if_we_have_a_FilterFieldValue": {
+              "actions": {
+                "FilterFieldValue": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@triggerBody()?['contactId']",
+                  "description": "coalesce(outputs('queries')[outputs('filterFieldName')], 'NOFILTERVALUE') ______ We will use this value to filter the results"
+                }
+              },
+              "runAfter": {},
+              "expression": {
+                "not": {
+                  "equals": [
+                    "@outputs('filterFieldName')",
+                    "NOFILTER"
+                  ]
+                }
+              },
+              "type": "If",
+              "description": "FilterFieldValue is used to filter the results"
+            },
+            "Return_a_table_or_list_of_tables": {
+              "actions": {
+                "List_rows_present_in_a_table": {
+                  "runAfter": {},
+                  "metadata": {
+                    "01HPUCNMUI2OVS57WLZZDLKNRW47Y4GUVV": "/_System/FormDynamicList.xlsx",
+                    "tableId": "@outputs('LookupTable')",
+                    "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57": "/_System/FormDynamicList.xlsx"
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                      "connectionName": "shared_excelonlinebusiness",
+                      "operationId": "GetItems"
+                    },
+                    "parameters": {
+                      "source": "@body('Config')?['groupSite']",
+                      "drive": "@body('Config')?['documentLibrary']",
+                      "file": "@body('Config')?['excelFilePath']",
+                      "table": "@outputs('LookupTable')"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  },
+                  "description": "Gety the table values. **Could add orderBy and filter clauses here later**"
+                },
+                "Map_to_values": {
+                  "runAfter": {
+                    "List_rows_present_in_a_table": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@outputs('List_rows_present_in_a_table')?['body/value']",
+                    "select": {
+                      "name": "@item()?['Name']",
+                      "identifier": "@item()?['Identifier']"
+                    }
+                  },
+                  "description": "Shape the table query to name, identifier pattern "
+                },
+                "Check_for_a_filter_condition": {
+                  "actions": {
+                    "FilteredValues": {
+                      "runAfter": {},
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@body('Map_to_values')",
+                        "where": "@equals(item()['identifier'], concat(outputs('FilterFieldValue')))"
+                      },
+                      "description": "Filter for filterFieldName"
+                    }
+                  },
+                  "runAfter": {
+                    "Map_to_values": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": {
+                    "not": {
+                      "equals": [
+                        "@outputs('filterFieldName')",
+                        "NOFILTER"
+                      ]
+                    }
+                  },
+                  "type": "If",
+                  "description": "If there is a valid filter value, then filter for that "
+                },
+                "ReturnValues": {
+                  "runAfter": {
+                    "Check_for_a_filter_condition": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@coalesce(body('FilteredValues'), body('Map_to_values'))",
+                  "description": "Set Return values depending on whether a filter has been processed"
+                }
+              },
+              "runAfter": {
+                "Test_to_see_if_we_have_a_FilterFieldValue": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Get_tables": {
+                    "runAfter": {},
+                    "metadata": {
+                      "01YHOR3YAE6GGCR2KEH5AZ5Y3GR7FEQQ57": "/_System/FormDynamicList.xlsx",
+                      "tableId": null
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                        "connectionName": "shared_excelonlinebusiness_1",
+                        "operationId": "GetTables"
+                      },
+                      "parameters": {
+                        "source": "@body('Config')?['groupSite']",
+                        "drive": "@body('Config')?['documentLibrary']",
+                        "file": "@body('Config')?['excelFilePath']"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    }
+                  },
+                  "TableList": {
+                    "runAfter": {
+                      "Get_tables": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Select",
+                    "inputs": {
+                      "from": "@outputs('Get_tables')?['body/value']",
+                      "select": {
+                        "name": "@item()?['Name']",
+                        "identifier": "@item()?['Name']"
+                      }
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "not": {
+                  "contains": [
+                    "@toLower(outputs('LookupTable'))",
+                    "masterlist"
+                  ]
+                }
+              },
+              "type": "If",
+              "description": "If no LookupTable is specified we will return a list of  all tables in the XLSX i"
+            },
+            "ResponseList": {
+              "runAfter": {
+                "Return_a_table_or_list_of_tables": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(outputs('ReturnValues'), body('TableList'))",
+              "description": "Return table's requested values (filtered ort not). If no table requested then send back a list of tables"
+            },
+            "HTML_or_List_response": {
+              "actions": {
+                "Response_HTML": {
+                  "runAfter": {
+                    "Update_a_ticket": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Response",
+                  "kind": "Http",
+                  "inputs": {
+                    "statusCode": 200,
+                    "headers": {
+                      "Content-Type": "text/html"
+                    },
+                    "body": "@outputs('Internal_Note')"
+                  },
+                  "description": "Send the list back to the calling form"
+                },
+                "Create_HTML_table": {
+                  "runAfter": {},
+                  "type": "Table",
+                  "inputs": {
+                    "from": "@outputs('QnAList')",
+                    "format": "HTML"
+                  }
+                },
+                "Get_a_ticket": {
+                  "runAfter": {
+                    "Internal_Note": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+                      "connectionName": "shared_deskdirector_1",
+                      "operationId": "GetTicket"
+                    },
+                    "parameters": {
+                      "ticketId": "@outputs('TicketId')"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Update_a_ticket": {
+                  "runAfter": {
+                    "Get_a_ticket": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+                      "connectionName": "shared_deskdirector_1",
+                      "operationId": "UpdateTicket"
+                    },
+                    "parameters": {
+                      "ticketId": "@outputs('Get_a_ticket')?['body/id']",
+                      "req/noteContent": "@outputs('Internal_Note')",
+                      "req/noteIsInternal": true
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                },
+                "Internal_Note": {
+                  "runAfter": {
+                    "Headline": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@concat( '<html>', body('Create_HTML_table'), '</html>')"
+                },
+                "Headline": {
+                  "runAfter": {
+                    "Create_HTML_table": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "### Here is the personal identifying QnA"
+                }
+              },
+              "runAfter": {
+                "QnAList": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "Response": {
+                    "runAfter": {
+                      "Map_lookup_list": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Response",
+                    "kind": "Http",
+                    "inputs": {
+                      "statusCode": 200,
+                      "headers": {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                      },
+                      "body": {
+                        "value": "@body('Map_lookup_list')"
+                      }
+                    },
+                    "description": "Send the list back to the calling form"
+                  },
+                  "QnAExtracted": {
+                    "runAfter": {},
+                    "type": "Compose",
+                    "inputs": "@outputs('QnAList')"
+                  },
+                  "Map_lookup_list": {
+                    "runAfter": {
+                      "QnAExtracted": [
+                        "Succeeded"
+                      ]
+                    },
+                    "type": "Select",
+                    "inputs": {
+                      "from": "@outputs('QnAExtracted')",
+                      "select": {
+                        "name": "@substring(concat(item()?['Question'], ' -- ',item()?['Answer']),1,5)",
+                        "identifier": "@rand(1000,9999)"
+                      }
+                    }
+                  }
+                }
+              },
+              "expression": {
+                "equals": [
+                  "@outputs('RunMode')",
+                  "tech"
+                ]
+              },
+              "type": "If"
+            },
+            "First_Response": {
+              "runAfter": {
+                "ResponseList": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@first( outputs('ResponseList'))"
+            },
+            "QnAList": {
+              "runAfter": {
+                "First_Response": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@json( decodeBase64( outputs('First_Response')?['name']))"
+            }
+          },
+          "runAfter": {
+            "Setup": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope",
+          "description": "Find Excel table, get the values, filter if indicated, shape response array"
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

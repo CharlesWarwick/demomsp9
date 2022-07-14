@@ -1,0 +1,670 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d"
+        }
+      },
+      "shared_teams": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_teams"
+        }
+      },
+      "shared_excelonlinebusiness_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_excelonlinebusiness"
+        }
+      },
+      "shared_deskdirector_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_chat_session_is_created_or_updated": {
+          "metadata": {
+            "operationMetadataId": "85bf30bb-079b-4e75-9ceb-72b443c425a6"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+              "operationId": "ChatEventSubscribe"
+            },
+            "parameters": {
+              "filter": "chat.session.new",
+              "name": "New Chat ",
+              "requestBody/type": "request",
+              "requestBody/status": "created"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Chat_Details": {
+          "runAfter": {
+            "Invite_users_to_chat": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "138d24bc-4a33-4b85-b9db-403c10bf68e0"
+          },
+          "type": "Compose",
+          "inputs": "@triggerBody()"
+        },
+        "Wait_10_seconds": {
+          "runAfter": {
+            "Get_ticket_details": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "67bd3563-ddb3-4073-b22f-48b6f4953469"
+          },
+          "type": "Wait",
+          "inputs": {
+            "interval": {
+              "count": 10,
+              "unit": "Second"
+            }
+          }
+        },
+        "TicketId": {
+          "runAfter": {
+            "Chat_Details": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "34fe4905-97b2-40f3-9ae2-1b34b4136394"
+          },
+          "type": "Compose",
+          "inputs": "@outputs('Chat_Details')['reference']['Id']"
+        },
+        "Get_ticket_details": {
+          "runAfter": {
+            "Terminate": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "ec3677f4-ec52-4d47-8810-80e4259aaa12"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+              "operationId": "TicketGetById"
+            },
+            "parameters": {
+              "id": "@outputs('TicketId')"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Get_chatbot_member_access_token": {
+          "runAfter": {
+            "Chatbot_Config": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "186601e0-1c87-4bdd-a5f5-20b30ebd4493"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+              "operationId": "MemberJwtById"
+            },
+            "parameters": {
+              "id": "@body('Chatbot_Config')?['chatMemberId']"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "description": "Chatbot user needs to be master admin as it accesses other tech member profiles"
+        },
+        "Chatbot_Config": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "460c9f89-0361-4025-8da6-5eeedd032377"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "chatMemberId": 20037,
+              "hostname": "https://demomsp9.deskdirector.com",
+              "oneClick": "https://prod-143.westus.logic.azure.com:443/workflows/3a5c22325fbd4b008deafde207d3465d/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=CDYx0tmWjN5b1SRh-2st0ynAukGP3loJnb6zsOijL04"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "chatMemberId": {
+                  "type": "integer"
+                },
+                "hostname": {
+                  "type": "string"
+                },
+                "oneClick": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "Chatbot user needs to be master admin as it accesses other tech member profiles"
+        },
+        "ChatSessionId": {
+          "runAfter": {
+            "TicketId": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "6157566d-6ebe-4b7a-9a8b-c4b02761a4ac"
+          },
+          "type": "Compose",
+          "inputs": "@triggerOutputs()?['body/id']"
+        },
+        "GET_messages": {
+          "runAfter": {
+            "Wait_10_seconds": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "d127a114-e88c-4dd4-8d37-8bc923d6da26"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+              "operationId": "DdApiWrapper"
+            },
+            "parameters": {
+              "x-dd-auth-parameter": "@outputs('Get_chatbot_member_access_token')?['body/userKey']",
+              "x-flow-group": "Tech Chat",
+              "x-flow-operation-id": "Get|/api/v2/tech/chat/sessions/{chatSessionId}/messages|Api2TechChat_GetMessages",
+              "x-flow-raw-body": true,
+              "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@outputs('ChatSessionId')"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "description": "Call API using chatsessionid to see who is in the chat atm"
+        },
+        "Number_of_users_in_chat": {
+          "runAfter": {
+            "GET_messages": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "4bb688d0-c8a6-40da-9097-6cfcee920978"
+          },
+          "type": "Compose",
+          "inputs": "@length(outputs('GET_messages')?['body/session/users'])"
+        },
+        "Check_number_of_users_in_chat": {
+          "actions": {},
+          "runAfter": {
+            "Number_of_users_in_chat": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Join_the_chat_as_a_bot": {
+                "runAfter": {},
+                "metadata": {
+                  "operationMetadataId": "9dd50fd1-d6b3-4eaa-816f-3cf5f5a684ec"
+                },
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                    "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                    "operationId": "DdApiWrapper"
+                  },
+                  "parameters": {
+                    "x-dd-auth-parameter": "@outputs('Get_chatbot_member_access_token')?['body/userKey']",
+                    "x-flow-group": "Tech Chat",
+                    "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/join|Api2TechChat_Join",
+                    "x-flow-raw-body": false,
+                    "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']"
+                  },
+                  "authentication": "@parameters('$authentication')"
+                }
+              },
+              "Check_number_of_assigned_techs": {
+                "actions": {
+                  "Sign_out_of_Chat": {
+                    "runAfter": {
+                      "Assigned_techs_notifications_sent": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "e43a3155-0b3c-40e7-b72e-7ce8a9140930"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                        "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                        "operationId": "DdApiWrapper"
+                      },
+                      "parameters": {
+                        "x-dd-auth-parameter": "@outputs('Get_chatbot_member_access_token')?['body/userKey']",
+                        "x-flow-group": "Tech Chat",
+                        "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/leave|Api2TechChat_Leave",
+                        "x-flow-raw-body": false,
+                        "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']"
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    }
+                  },
+                  "Assigned_techs_intro_msg": {
+                    "runAfter": {},
+                    "metadata": {
+                      "operationMetadataId": "e876db62-7775-413c-9807-46ca2dacab94"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                        "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                        "operationId": "DdApiWrapper"
+                      },
+                      "parameters": {
+                        "x-dd-auth-parameter": "@outputs('Get_chatbot_member_access_token')?['body/userKey']",
+                        "x-flow-group": "Tech Chat",
+                        "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/messages|Api2TechChat_AddMessage",
+                        "x-flow-raw-body": false,
+                        "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']",
+                        "ddApiWrapperRequestSchema/content": "Hi there, we will try reach out to the assigned technician(s)..."
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    }
+                  },
+                  "Assigned_techs_notifications_sent": {
+                    "runAfter": {
+                      "Send_notifications_to_each_assigned_tech": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "d8738570-2664-4f03-9331-2cd1b1e50046"
+                    },
+                    "type": "OpenApiConnection",
+                    "inputs": {
+                      "host": {
+                        "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                        "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                        "operationId": "DdApiWrapper"
+                      },
+                      "parameters": {
+                        "x-dd-auth-parameter": "@outputs('Get_chatbot_member_access_token')?['body/userKey']",
+                        "x-flow-group": "Tech Chat",
+                        "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/messages|Api2TechChat_AddMessage",
+                        "x-flow-raw-body": false,
+                        "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']",
+                        "ddApiWrapperRequestSchema/content": "The assigned technician(s) have been notified and should be with you shortly."
+                      },
+                      "authentication": "@parameters('$authentication')"
+                    }
+                  },
+                  "Send_notifications_to_each_assigned_tech": {
+                    "foreach": "@outputs('Assigned_techs')",
+                    "actions": {
+                      "GET_tech_member_profile": {
+                        "runAfter": {},
+                        "metadata": {
+                          "operationMetadataId": "9387e4f2-1c0f-4fe8-9cf6-81fb427da3b5"
+                        },
+                        "type": "Http",
+                        "inputs": {
+                          "method": "GET",
+                          "uri": "@{concat( body('Chatbot_Config')?['hostname'],'/api/v3/tech/members/', items('Send_notifications_to_each_assigned_tech')['entityId'], '/configs/profile')}",
+                          "headers": {
+                            "Authorization": "DdAccessToken @{outputs('Get_chatbot_member_access_token')?['body/userKey']}"
+                          }
+                        }
+                      },
+                      "EmailAddress": {
+                        "runAfter": {
+                          "DemoEmail": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "d2740cb8-0c0e-4c39-ab6d-cacb2bf155ca"
+                        },
+                        "type": "Compose",
+                        "inputs": "@outputs('DemoEmail')",
+                        "description": "@{outputs('GET_tech_member_profile')?['body/email']}"
+                      },
+                      "Send_a_templated_email": {
+                        "runAfter": {
+                          "Send_a_template_": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "5063d25a-7884-4595-a55a-562f6c2a50c0"
+                        },
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                            "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                            "operationId": "EmailTemplateUtilize"
+                          },
+                          "parameters": {
+                            "xDdTo": "@outputs('EmailAddress')",
+                            "xDdSub": "[Ticket #@{outputs('Get_ticket_details')?['body/entityId']}] @{outputs('Get_ticket_details')?['body/contact/name']} would like to chat.",
+                            "xDdDynamicEmailTemplateId": "gf2x17bvki",
+                            "emailTemplateSchema/AcceptChatUrl": "@concat(body('Chatbot_Config')?['oneClick']  , '&csi=', outputs('ChatSessionId'), '&eid=', body('GET_tech_member_profile')?['entityId'])",
+                            "emailTemplateSchema/TicketUrl": "@concat( body('Chatbot_Config')?['hostname'] , '/tech/tickets/', outputs('Get_ticket_details')?['body/entityId'], '/details')",
+                            "emailTemplateSchema/CreatedDateTime": "@triggerOutputs()?['body/createdDateTime']",
+                            "emailTemplateSchema/TicketId": "@outputs('Get_ticket_details')?['body/entityId']",
+                            "emailTemplateSchema/ChatRequestor": "@outputs('Get_ticket_details')?['body/contact/name']",
+                            "emailTemplateSchema/TicketName": "@outputs('Get_ticket_details')?['body/name']",
+                            "emailTemplateSchema/TechName": "@outputs('GET_tech_member_profile')?['body/name']"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      },
+                      "Post_a_message_as_the_Flow_bot_to_a_user": {
+                        "runAfter": {
+                          "Send_a_templated_email": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "49a1dd83-0ffb-4f8a-90e8-ccf86d1af038"
+                        },
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams",
+                            "connectionName": "shared_teams",
+                            "operationId": "PostUserNotification"
+                          },
+                          "parameters": {
+                            "PostNotificationRequest/recipient/to": "@outputs('DemoEmail')",
+                            "PostNotificationRequest/messageBody": "Hi @{outputs('GET_tech_member_profile')?['body/name']}, \n\n[Ticket link](@{concat( body('Chatbot_Config')?['hostname'] ,'/tech/tickets/', outputs('Get_ticket_details')?['body/entityId'], '/details')})\n\n[Accept chat](@{concat( body('Chatbot_Config')?['oneClick'] , '&csi=', outputs('ChatSessionId'), '&eid=', body('GET_tech_member_profile')?['entityId'])})",
+                            "PostNotificationRequest/messageTitle": "[Ticket #@{outputs('Get_ticket_details')?['body/entityId']}] @{outputs('Get_ticket_details')?['body/contact/name']} would like to chat."
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      },
+                      "Get_a_row": {
+                        "runAfter": {
+                          "Filepath": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "01AFFXYHNOJMTTDB5DMRDI7SGCCIKVCNUI": "/ChatbotFindsAssignedTech/Technician_Mobile_Numbers.xlsx",
+                          "tableId": "Mobile_Numbers",
+                          "operationMetadataId": "d7d0d3ad-6821-49d7-a25b-ee0b1bef36c4"
+                        },
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                            "connectionName": "shared_excelonlinebusiness_1",
+                            "operationId": "GetItem"
+                          },
+                          "parameters": {
+                            "source": "me",
+                            "drive": "b!jgO8IbjVoECHuonuAQWXMUroZKOgcpVBtZ4cXXtPcZi-9aIOahGzT7KOAETq3dpk",
+                            "file": "@outputs('Filepath')",
+                            "table": "Mobile_Numbers",
+                            "idColumn": "EntityId",
+                            "id": "@outputs('GET_tech_member_profile')?['body/entityId']"
+                          },
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      },
+                      "DemoEmail": {
+                        "runAfter": {
+                          "GET_tech_member_profile": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "2d7c56f5-79b1-45ae-9192-57e1e57b470a"
+                        },
+                        "type": "Compose",
+                        "inputs": "@concat('jurgen@ddportal.com')"
+                      },
+                      "Filepath": {
+                        "runAfter": {
+                          "EmailAddress": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "7ca749f7-5aa2-4dd6-b9d3-83d6fa43e5d2"
+                        },
+                        "type": "Compose",
+                        "inputs": "@concat('/ChatbotFindsAssignedTech/Technician_Mobile_Numbers.xlsx')"
+                      },
+                      "Send_a_template_": {
+                        "runAfter": {
+                          "Get_a_row": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "operationMetadataId": "cf369e1c-5bd6-487e-8164-d2abacb7b740"
+                        },
+                        "type": "Compose",
+                        "inputs": {
+                          "Subject": "@concat( '[Ticket #',outputs('Get_ticket_details')?['body/entityId'],']',outputs('Get_ticket_details')?['body/contact/name'], 'would like to chat.')"
+                        }
+                      }
+                    },
+                    "runAfter": {
+                      "Assigned_techs_intro_msg": [
+                        "Succeeded"
+                      ]
+                    },
+                    "metadata": {
+                      "operationMetadataId": "27df86bc-166d-4c21-b1f8-44b2a7b6d8bf"
+                    },
+                    "type": "Foreach"
+                  }
+                },
+                "runAfter": {
+                  "Assigned_techs": [
+                    "Succeeded"
+                  ]
+                },
+                "else": {
+                  "actions": {
+                    "Sign_out_of_Chat_2": {
+                      "runAfter": {
+                        "No_assigned_techs_intro_msg": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "operationMetadataId": "546ffbc8-06dd-40a5-ba91-aad50c81cb3d"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                          "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                          "operationId": "DdApiWrapper"
+                        },
+                        "parameters": {
+                          "x-dd-auth-parameter": "@outputs('Get_chatbot_member_access_token')?['body/userKey']",
+                          "x-flow-group": "Tech Chat",
+                          "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/leave|Api2TechChat_Leave",
+                          "x-flow-raw-body": false,
+                          "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    },
+                    "No_assigned_techs_intro_msg": {
+                      "runAfter": {},
+                      "metadata": {
+                        "operationMetadataId": "2d695ced-1290-48d5-a0ed-86777d5d1e20"
+                      },
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                          "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                          "operationId": "DdApiWrapper"
+                        },
+                        "parameters": {
+                          "x-dd-auth-parameter": "@outputs('Get_chatbot_member_access_token')?['body/userKey']",
+                          "x-flow-group": "Tech Chat",
+                          "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/messages|Api2TechChat_AddMessage",
+                          "x-flow-raw-body": false,
+                          "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']",
+                          "ddApiWrapperRequestSchema/content": "Hi there, this ticket currently has no assigned technicians. We will try find an available one."
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    }
+                  }
+                },
+                "expression": {
+                  "greater": [
+                    "@length(outputs('Assigned_techs'))",
+                    "@int(0)"
+                  ]
+                },
+                "metadata": {
+                  "operationMetadataId": "2b1c6284-fb30-4366-9841-a5656a6f5b74"
+                },
+                "type": "If"
+              },
+              "Assigned_techs": {
+                "runAfter": {
+                  "Join_the_chat_as_a_bot": [
+                    "Succeeded"
+                  ]
+                },
+                "metadata": {
+                  "operationMetadataId": "25fbad96-ff96-4f16-8de1-f7621f4a8b51"
+                },
+                "type": "Compose",
+                "inputs": "@outputs('Join_the_chat_as_a_bot')?['body/session/targetusers']"
+              }
+            }
+          },
+          "expression": {
+            "greater": [
+              "@int(outputs('Number_of_users_in_chat'))",
+              "@int(10)"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "dec37a64-7b29-4f29-927a-ec4847e81a02"
+          },
+          "type": "If"
+        },
+        "Invite_users_to_chat": {
+          "runAfter": {
+            "Send_a_system_message_in_chat": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "a25458dc-63af-49c6-9bae-f94e72f99103"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+              "connectionName": "shared_deskdirector_1",
+              "operationId": "InviteUsersToChat"
+            },
+            "parameters": {
+              "sessionId": "@triggerOutputs()?['body/id']",
+              "req/members": [
+                186,
+                187
+              ]
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Send_a_system_message_in_chat": {
+          "runAfter": {
+            "Get_chatbot_member_access_token": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "24ec6ff9-e0b5-4fcb-8365-efd8134f2fc0"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+              "connectionName": "shared_deskdirector_1",
+              "operationId": "AddChatSystemMessage"
+            },
+            "parameters": {
+              "sessionId": "@triggerOutputs()?['body/id']",
+              "req/message": "Describe relevant information security industry or independent certifications that you currently hold for the services offered. \nThese may include but are not limited \n"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Terminate": {
+          "runAfter": {
+            "ChatSessionId": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "8572e3f9-4d8b-40d2-8ec0-27c703b29c00"
+          },
+          "type": "Terminate",
+          "inputs": {
+            "runStatus": "Succeeded"
+          }
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

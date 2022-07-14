@@ -1,0 +1,272 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_chat_session_is_created_or_updated": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+              "operationId": "ChatEventSubscribe"
+            },
+            "parameters": {
+              "filter": "chat.session.new",
+              "name": "New Chat ",
+              "requestBody/type": "request",
+              "requestBody/status": "created"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Chat_Details": {
+          "runAfter": {
+            "Config": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@triggerBody()"
+        },
+        "Get_member_access_token": {
+          "runAfter": {
+            "Terminate": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+              "operationId": "MemberJwtById"
+            },
+            "parameters": {
+              "id": "@body('Config')?['chatMemberId']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Config": {
+          "runAfter": {},
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "chatMemberId": 20037
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "chatMemberId": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "Join_the_chat_as_a_bot": {
+          "runAfter": {
+            "Wait_10_seconds": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+              "operationId": "DdApiWrapper"
+            },
+            "parameters": {
+              "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+              "x-flow-group": "Tech Chat",
+              "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/join|Api2TechChat_Join",
+              "x-flow-raw-body": false,
+              "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Number_of_users_in_chat": {
+          "runAfter": {
+            "Join_the_chat_as_a_bot": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@length( outputs('Join_the_chat_as_a_bot')?['body/session/users'])"
+        },
+        "Exit_if_tech_has_picked_up_": {
+          "actions": {
+            "I_don't_need_to_say_this__..._": {
+              "runAfter": {},
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                  "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                  "operationId": "DdApiWrapper"
+                },
+                "parameters": {
+                  "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+                  "x-flow-group": "Tech Chat",
+                  "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/messages|Api2TechChat_AddMessage",
+                  "x-flow-raw-body": false,
+                  "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']",
+                  "ddApiWrapperRequestSchema/content": "Charlie Chat here, I can see I am not needed. Harvey will look after you!"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Sign_out_of_Chat": {
+              "runAfter": {
+                "I_don't_need_to_say_this__..._": [
+                  "Succeeded"
+                ]
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                  "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                  "operationId": "DdApiWrapper"
+                },
+                "parameters": {
+                  "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+                  "x-flow-group": "Tech Chat",
+                  "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/leave|Api2TechChat_Leave",
+                  "x-flow-raw-body": false,
+                  "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            }
+          },
+          "runAfter": {
+            "Number_of_users_in_chat": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Start_asking_some_questions": {
+                "runAfter": {},
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                    "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                    "operationId": "DdApiWrapper"
+                  },
+                  "parameters": {
+                    "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+                    "x-flow-group": "Tech Chat",
+                    "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/messages|Api2TechChat_AddMessage",
+                    "x-flow-raw-body": false,
+                    "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']",
+                    "ddApiWrapperRequestSchema/content": "Hi, I'm the Charlie Chat, how can I help you today?"
+                  },
+                  "authentication": "@parameters('$authentication')"
+                }
+              },
+              "Wait_5_seconds": {
+                "runAfter": {
+                  "Start_asking_some_questions": [
+                    "Succeeded"
+                  ]
+                },
+                "type": "Wait",
+                "inputs": {
+                  "interval": {
+                    "count": 5,
+                    "unit": "Second"
+                  }
+                }
+              },
+              "Sign_out_of_Chat_2": {
+                "runAfter": {
+                  "Wait_5_seconds": [
+                    "Succeeded"
+                  ]
+                },
+                "type": "OpenApiConnection",
+                "inputs": {
+                  "host": {
+                    "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                    "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+                    "operationId": "DdApiWrapper"
+                  },
+                  "parameters": {
+                    "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+                    "x-flow-group": "Tech Chat",
+                    "x-flow-operation-id": "Post|/api/v2/tech/chat/sessions/{chatSessionId}/leave|Api2TechChat_Leave",
+                    "x-flow-raw-body": false,
+                    "ddApiWrapperRequestSchema/x-dd-path-parameters/chatSessionId": "@triggerOutputs()?['body/id']"
+                  },
+                  "authentication": "@parameters('$authentication')"
+                }
+              }
+            }
+          },
+          "expression": {
+            "greater": [
+              "@outputs('Number_of_users_in_chat')",
+              2
+            ]
+          },
+          "type": "If"
+        },
+        "Wait_10_seconds": {
+          "runAfter": {
+            "Get_member_access_token": [
+              "Succeeded"
+            ]
+          },
+          "type": "Wait",
+          "inputs": {
+            "interval": {
+              "count": 5,
+              "unit": "Second"
+            }
+          }
+        },
+        "Terminate": {
+          "runAfter": {
+            "Chat_Details": [
+              "Succeeded"
+            ]
+          },
+          "type": "Terminate",
+          "inputs": {
+            "runStatus": "Succeeded"
+          }
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

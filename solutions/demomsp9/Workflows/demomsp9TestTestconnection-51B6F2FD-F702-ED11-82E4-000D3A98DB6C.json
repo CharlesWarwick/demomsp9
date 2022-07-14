@@ -1,0 +1,81 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_ticket_is_created_or_updated": {
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+              "operationId": "TicketEventSubscribe"
+            },
+            "parameters": {
+              "filter": "ticket.closed",
+              "name": "Test"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Compose": {
+          "runAfter": {},
+          "type": "Compose",
+          "inputs": "@triggerBody()"
+        },
+        "Get_ticket_details": {
+          "runAfter": {
+            "Compose": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d_1",
+              "operationId": "TicketGetById"
+            },
+            "parameters": {
+              "id": "@triggerOutputs()?['body/ticket/entityId']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "TicketDetails": {
+          "runAfter": {
+            "Get_ticket_details": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@outputs('Get_ticket_details')?['body']"
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

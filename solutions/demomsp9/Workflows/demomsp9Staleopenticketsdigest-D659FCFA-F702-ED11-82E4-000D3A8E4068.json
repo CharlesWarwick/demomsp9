@@ -1,0 +1,304 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "recurrence": {
+            "frequency": "Day",
+            "interval": 1,
+            "timeZone": "New Zealand Standard Time",
+            "schedule": {
+              "hours": [
+                "9"
+              ],
+              "minutes": [
+                0
+              ]
+            }
+          },
+          "metadata": {
+            "operationMetadataId": "3e60fe88-a938-43b7-bbf2-dbe7949f9004"
+          },
+          "type": "Recurrence",
+          "description": "Frequency of digests"
+        }
+      },
+      "actions": {
+        "Find_tickets": {
+          "runAfter": {
+            "Cancel_weekend_runs": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "79673d34-a90e-4dd2-be29-fd43f2ab4922"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+              "connectionName": "shared_deskdirector",
+              "operationId": "FindTickets"
+            },
+            "parameters": {
+              "req/isOpen": true,
+              "req/order": "Least_Recently_Updated",
+              "req/timeFilters": [
+                {
+                  "type": "Updated",
+                  "end": "@convertToUtc(subtractFromTime(body('Convert_time_zone'),body('Config')?['staleInterval'],body('Config')?['staleUnit'],'o'), body('Config')?['timezone'], 'o')"
+                }
+              ],
+              "req/take": "@body('Config')?['take']"
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "description": "Open and stale tickets. Ticket order is least recently updated."
+        },
+        "Convert_time_zone": {
+          "runAfter": {
+            "Config": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "ddf0c8df-eeef-4be0-ad2a-1848d1de6310"
+          },
+          "type": "Expression",
+          "kind": "ConvertTimeZone",
+          "inputs": {
+            "baseTime": "@{utcNow()}",
+            "formatString": "s",
+            "sourceTimeZone": "UTC",
+            "destinationTimeZone": "@body('Config')?['timezone']"
+          },
+          "description": "Get current time in your timezone"
+        },
+        "Cancel_weekend_runs": {
+          "actions": {
+            "Terminate_-_weekend_run": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "6d84ee84-30ba-4c0f-98c4-4adee36a4dbd"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Cancelled"
+              }
+            }
+          },
+          "runAfter": {
+            "Convert_time_zone": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "or": [
+              {
+                "equals": [
+                  "@dayOfWeek(body('Convert_time_zone'))",
+                  6
+                ]
+              },
+              {
+                "equals": [
+                  "@dayOfWeek(body('Convert_time_zone'))",
+                  0
+                ]
+              }
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "96b970bf-688a-4fe7-afb0-749ca4918c00"
+          },
+          "type": "If",
+          "description": "6: Saturday, 0: Sunday"
+        },
+        "Create_HTML_table": {
+          "runAfter": {
+            "If_no_results": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "9e60eba2-1ab5-4bd2-bf2a-deb03597553b"
+          },
+          "type": "Table",
+          "inputs": {
+            "from": "@outputs('Find_tickets')?['body/results']",
+            "format": "HTML",
+            "columns": [
+              {
+                "header": "ID",
+                "value": "@item()?['id']"
+              },
+              {
+                "header": "Ticket Name",
+                "value": "@item()?['name']"
+              },
+              {
+                "header": "Contact",
+                "value": "@item()?['contact/name']"
+              },
+              {
+                "header": "Company",
+                "value": "@item()?['company/name']"
+              },
+              {
+                "header": "Team",
+                "value": "@item()?['team/name']"
+              },
+              {
+                "header": "Board",
+                "value": "@item()?['board/name']"
+              },
+              {
+                "header": "Status",
+                "value": "@item()?['status/name']"
+              },
+              {
+                "header": "Priority",
+                "value": "@item()?['priority/name']"
+              },
+              {
+                "header": "Created",
+                "value": "@convertFromUtc(item()?['createdOn'], body('Config')?['timezone'], 'yyyy-MM-dd h:mm tt')"
+              },
+              {
+                "header": "Updated",
+                "value": "@convertFromUtc(item()?['modifiedOn'], body('Config')?['timezone'], 'yyyy-MM-dd h:mm tt')"
+              },
+              {
+                "header": "Link",
+                "value": "<a href=\"https://@{body('Config')?['ddDomain']}/tech/tickets/@{item()?['id']}/details\">Link</a>"
+              }
+            ]
+          },
+          "description": "Add or remove columns to your liking"
+        },
+        "Send_an_email_(V2)": {
+          "runAfter": {
+            "Create_HTML_table": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "47dc81a6-fead-491c-bddc-c16272866e4a"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+              "connectionName": "shared_office365",
+              "operationId": "SendEmailV2"
+            },
+            "parameters": {
+              "emailMessage/To": "jurgen@ddportal.com",
+              "emailMessage/Subject": "Stale and Open Tickets Digest",
+              "emailMessage/Body": "<p>Hi,<br>\n<br>\nThere are @{outputs('Find_tickets')?['body/total']} open tickets that have not been updated in: @{body('Config')?['staleInterval']} @{body('Config')?['staleUnit']}@{if(equals(body('Config')?['staleInterval'],1),'','s')}.<br>\n<br>\nBelow are the top @{outputs('Find_tickets')?['body/resultsCount']} stale and open tickets, ordered by least recently updated:<br>\n<br>\n@{replace(replace(replace(body('Create_HTML_table'), '&lt;', '<'), '&gt;', '>'), '&quot;', '\"')}</p>",
+              "emailMessage/Importance": "Normal"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "If_no_results": {
+          "actions": {
+            "Terminate_-_no_results": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "1b40a508-da3f-41ef-8b80-7525ffe999d1"
+              },
+              "type": "Terminate",
+              "inputs": {
+                "runStatus": "Succeeded"
+              }
+            }
+          },
+          "runAfter": {
+            "Find_tickets": [
+              "Succeeded"
+            ]
+          },
+          "expression": {
+            "equals": [
+              "@outputs('Find_tickets')?['body/total']",
+              0
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "99df618a-1561-4c51-b1ad-144495052e82"
+          },
+          "type": "If",
+          "description": "No results from find tickets action"
+        },
+        "Config": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "ed37b144-e936-4dda-a94f-b3fccf81d5a5"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "timezone": "New Zealand Standard Time",
+              "ddDomain": "demomsp9.deskdirector.com",
+              "take": 20,
+              "staleInterval": 3,
+              "staleUnit": "Day"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "timezone": {
+                  "type": "string"
+                },
+                "ddDomain": {
+                  "type": "string"
+                },
+                "take": {
+                  "type": "integer"
+                },
+                "staleInterval": {
+                  "type": "integer"
+                },
+                "staleUnit": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "See README for details"
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

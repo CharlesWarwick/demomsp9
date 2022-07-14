@@ -1,0 +1,386 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_ticket_is_created_or_updated": {
+          "metadata": {
+            "operationMetadataId": "0348977f-583a-466b-9522-1c3e8edf1a2c"
+          },
+          "type": "OpenApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+              "connectionName": "shared_deskdirector",
+              "operationId": "CreateTicketWorkflow"
+            },
+            "parameters": {
+              "type": "ticket.new",
+              "req/description": "Attach inline forms based on initial form answers",
+              "req/advancedFilters/formId": 22217
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "Get_a_form_result": {
+          "runAfter": {
+            "Config": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "cc878e47-f174-4b09-8002-6cf4ab670aed"
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+              "connectionName": "shared_deskdirector",
+              "operationId": "GetFormResult"
+            },
+            "parameters": {
+              "formId": 22217,
+              "resultId": "@triggerOutputs()?['body/ticket/form/resultId']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Config": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "a2cf6264-5e7d-4294-a97c-24348a6706ce"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "domain": "demomsp9.deskdirector.com",
+              "apiKey": "DKmIIGD9BD1e3sdz3TsZ1Rx6ILbsY81eCV6JjMNyIQRJrULkPyJbbxIEOJML9GTwGe9VT03EjUB8PTfgJTQGkH7aj9DwpvECtovt",
+              "botMemberId": 20007
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "domain": {
+                  "type": "string"
+                },
+                "apiKey": {
+                  "type": "string"
+                },
+                "botMemberId": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "Member_Token": {
+          "actions": {
+            "HTTP_-_Get_member_token": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "872cbb40-6c71-4155-a636-60bdf19dc7f0"
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "GET",
+                "uri": "https://@{body('Config')?['domain']}/api/v2/user/member/@{body('Config')?['botMemberId']}/userkey?expiresIn=300",
+                "headers": {
+                  "Authorization": "DdApi @{body('Config')?['apiKey']}"
+                }
+              }
+            },
+            "Parse_member_token_response": {
+              "runAfter": {
+                "HTTP_-_Get_member_token": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "c224ad44-86d6-4c67-b29f-68c56ac2d833"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": {
+                  "botMemberToken": "@body('HTTP_-_Get_member_token')?['userKey']"
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "botMemberToken": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Get_a_form_result": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "17d19149-ad25-4099-87c6-d757c3e657b1"
+          },
+          "type": "Scope"
+        },
+        "Delay": {
+          "runAfter": {
+            "Get_a_form_result": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "faaaa76c-4d9a-4ccd-a36d-25f57683a11e"
+          },
+          "type": "Wait",
+          "inputs": {
+            "interval": {
+              "count": 5,
+              "unit": "Second"
+            }
+          }
+        },
+        "Initialize_forms_array": {
+          "runAfter": {
+            "Delay": [
+              "Succeeded"
+            ],
+            "Member_Token": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "dc851bc4-dfbf-4f3f-88df-d2d808c924da"
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "formsArray",
+                "type": "array",
+                "value": []
+              }
+            ]
+          }
+        },
+        "Terminate": {
+          "runAfter": {
+            "HTTP_-_Send_choices": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "e2221068-8434-4d36-ac9f-3c3afaf37c41"
+          },
+          "type": "Terminate",
+          "inputs": {
+            "runStatus": "Succeeded"
+          }
+        },
+        "HTTP_-_Send_choices": {
+          "runAfter": {
+            "Read_Form_Answers": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "b8cc0555-ddde-486e-9456-c31b292ed522"
+          },
+          "type": "Http",
+          "inputs": {
+            "method": "POST",
+            "uri": "https://prod-10.westcentralus.logic.azure.com:443/workflows/22d9d59cbd2b4911814b2ccac52fc708/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qUknOmcW65AV273RE4eWnHz-_G-Osle-o5JCwDOEGM4",
+            "body": {
+              "ticketID": "@triggerOutputs()?['body/ticket/id']",
+              "notebookChoice": "@{outputs('Brand')}"
+            }
+          }
+        },
+        "Read_Form_Answers": {
+          "actions": {
+            "Re-use_equipment_form": {
+              "actions": {
+                "Append_to_array_variable": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "241f5f8c-d29c-4b5e-bfcd-c0502b4d94b3"
+                  },
+                  "type": "AppendToArrayVariable",
+                  "inputs": {
+                    "name": "formsArray",
+                    "value": {
+                      "entityId": 26637,
+                      "name": "Re-use eqipment form",
+                      "completed": false
+                    }
+                  }
+                }
+              },
+              "runAfter": {},
+              "expression": {
+                "contains": [
+                  "@outputs('Get_a_form_result')?['body/p6e3lqr']",
+                  "existing"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "83652d45-5324-4bdb-b089-1f7955e9ecd5"
+              },
+              "type": "If"
+            },
+            "New_desktop_form": {
+              "actions": {
+                "Append_to_array_variable_2": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "a11f1f2e-4944-46bf-8f4e-eda3da568e80"
+                  },
+                  "type": "AppendToArrayVariable",
+                  "inputs": {
+                    "name": "formsArray",
+                    "value": {
+                      "entityId": 26639,
+                      "name": "New desktop form",
+                      "completed": false
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Re-use_equipment_form": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "equals": [
+                  "@outputs('Get_a_form_result')?['body/pw5rlhi']",
+                  "@true"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "2ead2af7-f4a3-4248-9078-85b2b554f9c8"
+              },
+              "type": "If"
+            },
+            "New_notebook_form": {
+              "actions": {
+                "Append_to_array_variable_3": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "4ac86054-1f71-4e9c-98e5-d89e8877b7fa"
+                  },
+                  "type": "AppendToArrayVariable",
+                  "inputs": {
+                    "name": "formsArray",
+                    "value": {
+                      "entityId": 26638,
+                      "name": "New notebook form",
+                      "completed": false
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "New_desktop_form": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "equals": [
+                  "@outputs('Get_a_form_result')?['body/pryz2zy']",
+                  "@true"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "aef49471-0486-48fe-b9ed-dd500f0f3b2a"
+              },
+              "type": "If"
+            },
+            "Post_forms": {
+              "actions": {
+                "HTTP_-_attach_forms": {
+                  "runAfter": {},
+                  "metadata": {
+                    "operationMetadataId": "c87ae936-9046-4856-95b6-755131e99d57"
+                  },
+                  "type": "Http",
+                  "inputs": {
+                    "method": "POST",
+                    "uri": "https://@{body('Config')?['domain']}/api/v2/member/tickets/@{triggerOutputs()?['body/ticket/id']}/forms",
+                    "headers": {
+                      "Authorization": "DdAccessToken @{body('Parse_member_token_response')?['botMemberToken']}"
+                    },
+                    "body": {
+                      "note": "Fill out the forms",
+                      "forms": "@variables('formsArray')"
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "New_notebook_form": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "greater": [
+                  "@length(variables('formsArray'))",
+                  0
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "5c51074f-b3a3-483c-94a4-e66c54780cde"
+              },
+              "type": "If"
+            },
+            "Brand": {
+              "runAfter": {
+                "Post_forms": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "90135396-b1e4-4222-b0f7-bd5ef00b37a9"
+              },
+              "type": "Compose",
+              "inputs": "@trim(toLower( outputs('Get_a_form_result')?['body/pueyv3f']))"
+            }
+          },
+          "runAfter": {
+            "Initialize_forms_array": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "9732427e-24bd-4bd6-abf9-04a12ddf71c9"
+          },
+          "type": "Scope"
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

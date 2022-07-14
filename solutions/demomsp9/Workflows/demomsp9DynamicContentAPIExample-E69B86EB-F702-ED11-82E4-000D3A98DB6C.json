@@ -1,0 +1,485 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "manual": {
+          "metadata": {
+            "operationMetadataId": "8bd66178-53c0-4930-bc3b-44d1b024dc8a"
+          },
+          "type": "Request",
+          "kind": "Http",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ticketId": {
+                  "type": "integer"
+                },
+                "access_token": {
+                  "type": "string"
+                },
+                "access_token_expiration": {
+                  "type": "integer"
+                }
+              }
+            },
+            "method": "POST"
+          },
+          "description": "method should be POST"
+        }
+      },
+      "actions": {
+        "Config": {
+          "runAfter": {},
+          "metadata": {
+            "operationMetadataId": "38fdd055-8d32-41c7-93a7-20639aed8564"
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "subdomain": "demomsp9.deskdirector.com",
+              "apiKey": "DKmIIGD9BD1e3sdz3TsZ1Rx6ILbsY81eCV6JjMNyIQRJrULkPyJbbxIEOJML9GTwGe9VT03EjUB8PTfgJTQGkH7aj9DwpvECtovt",
+              "emptyArray": []
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "subdomain": {
+                  "type": "string"
+                },
+                "apiKey": {
+                  "type": "string"
+                },
+                "emptyArray": {
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "User_Profile": {
+          "actions": {
+            "Get_user_contact_profile": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "4213699e-2201-40b7-ae8b-f64597ffc980"
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "GET",
+                "uri": "https://@{body('Config')?['subdomain']}/api/v2/portal/user",
+                "headers": {
+                  "Authorization": "DdAccessToken @{triggerBody()?['access_token']}"
+                }
+              },
+              "description": "This API only requires access token authorization"
+            },
+            "Parse_user_profile": {
+              "runAfter": {
+                "Get_user_contact_profile": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "af514166-5cbf-4c8b-8cd9-0183fcdfda73"
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": {
+                  "contactId": "@ body('Get_user_contact_profile')?['profile']?['entityId']",
+                  "companyId": "@ body('Get_user_contact_profile')?['profile']?['company']?['entityId']"
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "contactId": {
+                      "type": "integer"
+                    },
+                    "companyId": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Config": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "6527f764-590a-4cff-84c7-51a921d847ab"
+          },
+          "type": "Scope"
+        },
+        "Company_Portal_Users_Stat": {
+          "actions": {
+            "Get_Monthly_Report": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "4f9fa29b-64ac-4e69-9887-5b66d9bcfccb"
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "GET",
+                "uri": "https://@{body('Config')?['subdomain']}/api/v2/dashboards/portal/monthly/reports/g-@{formatDateTime(utcNow(),'yyyy-MM')}",
+                "authentication": {
+                  "type": "Raw",
+                  "value": "DdApi @{body('Config')?['apiKey']}"
+                }
+              }
+            },
+            "Filter_for_company": {
+              "runAfter": {
+                "Get_Monthly_Report": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "3e3b451b-9f35-4c18-951d-29f2cf6b574b"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@ coalesce(body('Get_Monthly_Report')?['data']?['companies'], body('Config')?['emptyArray'])",
+                "where": "@equals(item()?['entityId'], body('Parse_user_profile')?['companyId'])"
+              }
+            },
+            "Compose_portal_users_stat": {
+              "runAfter": {
+                "Filter_for_company": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "449cf918-c86e-4279-94df-968483d5b10a"
+              },
+              "type": "Compose",
+              "inputs": {
+                "title": "Company portal users for current calendar month",
+                "value": "@{ coalesce(body('Filter_for_company')?[0]?['userCount'], 0)}",
+                "color": "accent",
+                "secondary": {
+                  "value": "users",
+                  "color": "light"
+                }
+              },
+              "description": "StatsItem"
+            }
+          },
+          "runAfter": {
+            "User_Profile": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "ddeb0bba-40f4-4b5b-8292-9fc669eae3db"
+          },
+          "type": "Scope",
+          "description": "How many users from your company used portal for current calendar month"
+        },
+        "User_and_Company_Tickets_Stat": {
+          "actions": {
+            "Subtract_from_time": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "b3863cbe-ddce-44b3-994d-699931db576d"
+              },
+              "type": "Expression",
+              "kind": "SubtractFromTime",
+              "inputs": {
+                "baseTime": "@{utcNow()}",
+                "interval": 31,
+                "timeUnit": "Day"
+              }
+            },
+            "Find_closed_tickets_for_company": {
+              "runAfter": {
+                "Filter_own_open_tickets": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "d4663953-faec-472d-8426-749156ec70bf"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+                  "connectionName": "shared_deskdirector_1",
+                  "operationId": "FindTickets"
+                },
+                "parameters": {
+                  "req/isOpen": false,
+                  "req/companyId": "@body('Parse_user_profile')?['companyId']",
+                  "req/timeFilters": [
+                    {
+                      "type": "Created",
+                      "start": "@body('Subtract_from_time')"
+                    }
+                  ]
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "description": "Find closed tickets opened in past month belonging to user's company"
+            },
+            "Find_open_tickets_for_company": {
+              "runAfter": {
+                "Subtract_from_time": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "d4663953-faec-472d-8426-749156ec70bf"
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector",
+                  "connectionName": "shared_deskdirector_1",
+                  "operationId": "FindTickets"
+                },
+                "parameters": {
+                  "req/isOpen": true,
+                  "req/companyId": "@body('Parse_user_profile')?['companyId']",
+                  "req/timeFilters": [
+                    {
+                      "type": "Created",
+                      "start": "@body('Subtract_from_time')"
+                    }
+                  ]
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "description": "Find open tickets opened in past month belonging to user's company"
+            },
+            "Filter_own_open_tickets": {
+              "runAfter": {
+                "Find_open_tickets_for_company": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "7a6d5edc-e9c3-4a2c-8a08-589d2e0e274c"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Find_open_tickets_for_company')?['body/results']",
+                "where": "@equals(item()?['contact/id'], body('Parse_user_profile')?['contactId'])"
+              }
+            },
+            "Filter_own_closed_tickets": {
+              "runAfter": {
+                "Find_closed_tickets_for_company": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "7a6d5edc-e9c3-4a2c-8a08-589d2e0e274c"
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Find_closed_tickets_for_company')?['body/results']",
+                "where": "@equals(item()?['contact/id'], body('Parse_user_profile')?['contactId'])"
+              }
+            },
+            "Compose_user_ticket_stat": {
+              "runAfter": {
+                "Filter_own_closed_tickets": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "d4e8c126-467d-4868-b17b-da7ccf816ab7"
+              },
+              "type": "Compose",
+              "inputs": {
+                "title": "Your tickets in the past 31 days",
+                "value": "@{length(body('Filter_own_open_tickets'))} open",
+                "color": "accent",
+                "secondary": {
+                  "value": "@{length(body('Filter_own_closed_tickets'))} closed",
+                  "color": "light"
+                }
+              },
+              "description": "StatsItem"
+            },
+            "Compose_company_ticket_stat": {
+              "runAfter": {
+                "Compose_user_ticket_stat": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "operationMetadataId": "d4e8c126-467d-4868-b17b-da7ccf816ab7"
+              },
+              "type": "Compose",
+              "inputs": {
+                "title": "Company tickets in the past 31 days",
+                "value": "@{outputs('Find_open_tickets_for_company')?['body/total']} open",
+                "color": "accent",
+                "secondary": {
+                  "value": "@{outputs('Find_closed_tickets_for_company')?['body/total']} closed",
+                  "color": "light"
+                }
+              },
+              "description": "StatsItem"
+            }
+          },
+          "runAfter": {
+            "User_Profile": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "58bb9eb8-270f-4584-a0b1-ee4e9a2564b8"
+          },
+          "type": "Scope",
+          "description": "Tickets created in past month, open and closed count"
+        },
+        "Helpdocs_List": {
+          "actions": {
+            "Compose_helpdoc_list": {
+              "runAfter": {},
+              "metadata": {
+                "operationMetadataId": "7c271c2a-085b-439c-b1e9-a96ca6cd1273"
+              },
+              "type": "Compose",
+              "inputs": {
+                "type": "list",
+                "value": [
+                  {
+                    "title": "Differences Between Desktop Portal versions",
+                    "url": "https://help.deskdirector.com/article/d1mcmr06w0-differences-between-portal-for-desktop-v-2-and-v-3"
+                  },
+                  {
+                    "title": "Desktop Portal v5 Common Installation Issues",
+                    "url": "https://help.deskdirector.com/article/sxxvfw4te1-desktop-portal-v-5-common-installation-issues"
+                  },
+                  {
+                    "title": "Installing the DeskDirector Desktop Portal",
+                    "url": "https://help.deskdirector.com/article/a2c0uqfqpo-installing-dd-portal"
+                  }
+                ]
+              },
+              "description": "ListContent"
+            }
+          },
+          "runAfter": {
+            "Company_Portal_Users_Stat": [
+              "Succeeded"
+            ],
+            "User_and_Company_Tickets_Stat": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "1c3bce0a-51f6-4807-a2a3-a2e4c651c82b"
+          },
+          "type": "Scope"
+        },
+        "Response": {
+          "runAfter": {
+            "Compose_ContentResponse.value": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "2d3a2e88-4b80-4b97-a401-e154ffab3333"
+          },
+          "type": "Response",
+          "kind": "Http",
+          "inputs": {
+            "statusCode": 200,
+            "body": {
+              "value": "@outputs('Compose_ContentResponse.value')",
+              "request": null
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "identifier": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "identifier"
+                    ]
+                  }
+                },
+                "request": {
+                  "type": "object",
+                  "properties": {
+                    "term": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "description": "Response payload according to schema"
+        },
+        "Compose_ContentResponse.value": {
+          "runAfter": {
+            "Helpdocs_List": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "operationMetadataId": "bdb06f9f-025e-49ca-88fa-ac52dff53a7e"
+          },
+          "type": "Compose",
+          "inputs": [
+            {
+              "type": "stats",
+              "value": [
+                "@outputs('Compose_user_ticket_stat')",
+                "@outputs('Compose_company_ticket_stat')",
+                "@outputs('Compose_portal_users_stat')"
+              ]
+            },
+            {
+              "type": "markdown",
+              "text": "### Helpdocs that may be useful",
+              "color": "accent"
+            },
+            "@outputs('Compose_helpdoc_list')"
+          ]
+        }
+      },
+      "outputs": {}
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

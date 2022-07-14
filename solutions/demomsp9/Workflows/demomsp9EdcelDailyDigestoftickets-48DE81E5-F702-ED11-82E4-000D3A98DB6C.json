@@ -1,0 +1,606 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d"
+        }
+      },
+      "shared_office365_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_office365"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "Recurrence": {
+          "recurrence": {
+            "frequency": "Month",
+            "interval": 12,
+            "timeZone": "New Zealand Standard Time",
+            "startTime": "2021-02-03T04:30:00Z"
+          },
+          "type": "Recurrence"
+        }
+      },
+      "actions": {
+        "Get_recent_closed_tickets": {
+          "runAfter": {
+            "Exclude_boards_listed_under_ExcludedBoards_Array": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59",
+              "operationId": "DdApiWrapper"
+            },
+            "parameters": {
+              "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+              "x-flow-group": "Member Ticket",
+              "x-flow-operation-id": "Post|/api/v2/member/tickets/find|Api2MemberTicket_Find",
+              "x-flow-raw-body": false,
+              "ddApiWrapperRequestSchema/skip": 0,
+              "ddApiWrapperRequestSchema/take": 1000,
+              "ddApiWrapperRequestSchema/filterDefinition": {
+                "State": "closed",
+                "Boards": "@body('Exclude_boards_listed_under_ExcludedBoards_Array')"
+              }
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Initialize": {
+          "actions": {
+            "Today": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@formatDateTime(convertFromUtc(utcNow(), 'New Zealand Standard Time', 'yyyy-MM-ddTHH:mm:ss.fffffffK'), 'yyyy-MM-dd')"
+            },
+            "Initialize_Bot_Member_and_DD_API": {
+              "runAfter": {
+                "Today": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": {
+                  "botMemberEntityId": 187,
+                  "DdApi": "testmST6h3ixvYXnCDmRNVerJJ4aWVRywPhDoc7NE1FeeCEmk2reyOyEQZn70s5dT3lGPwETX6Bv4HQR7E7Ne2CPjBPNtHx2K2ya",
+                  "baseURL": "https://demomsp9.deskdirector.com/",
+                  "excludeBoards": [
+                    9,
+                    11,
+                    19,
+                    16,
+                    22
+                  ]
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "botMemberEntityId": {
+                      "type": "integer"
+                    },
+                    "DdApi": {
+                      "type": "string"
+                    },
+                    "baseURL": {
+                      "type": "string"
+                    },
+                    "excludeBoards": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "Get_member_access_token": {
+              "runAfter": {
+                "Initialize_Bot_Member_and_DD_API": [
+                  "Succeeded"
+                ]
+              },
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                  "connectionName": "shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59",
+                  "operationId": "MemberJwtById"
+                },
+                "parameters": {
+                  "id": "@body('Initialize_Bot_Member_and_DD_API')?['botMemberEntityId']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "SendToList": {
+              "runAfter": {
+                "Get_member_access_token": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "warwick@deskdirector.com;"
+            }
+          },
+          "runAfter": {},
+          "type": "Scope"
+        },
+        "Initialize_TicketsClosed__Array": {
+          "runAfter": {
+            "Initialize_ActualHours": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "TicketsClosed",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Build_final_array_for_TicketsClosed": {
+          "foreach": "@body('Get_dateClosed_tickets_=_\"Today\"')",
+          "actions": {
+            "Append_to_array_variable": {
+              "runAfter": {
+                "Final_TicketClosed_Array_for_email_template": [
+                  "Succeeded"
+                ]
+              },
+              "type": "AppendToArrayVariable",
+              "inputs": {
+                "name": "TicketsClosed",
+                "value": "@outputs('Final_TicketClosed_Array_for_email_template')"
+              }
+            },
+            "Call_to_API_to_get_ActualHours": {
+              "runAfter": {},
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                  "connectionName": "shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59",
+                  "operationId": "DdApiWrapper"
+                },
+                "parameters": {
+                  "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+                  "x-flow-group": "Member Ticket",
+                  "x-flow-operation-id": "Get|/api/v2/member/tickets/{ticketId}|Api2MemberTicket_Ticket",
+                  "x-flow-raw-body": false,
+                  "ddApiWrapperRequestSchema/x-dd-path-parameters/ticketId": "@items('Build_final_array_for_TicketsClosed')?['entityId']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Final_TicketClosed_Array_for_email_template": {
+              "runAfter": {
+                "Loop_through_each_ticket_timeEntry_to_increment_ActualHours": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": {
+                "ticketId": "@{items('Build_final_array_for_TicketsClosed')?['entityId']}",
+                "company": "@{items('Build_final_array_for_TicketsClosed')?['company']?['name']}",
+                "url": "@{body('Initialize_Bot_Member_and_DD_API')?['baseURL']}tech/tickets/@{items('Build_final_array_for_TicketsClosed')?['entityId']}/details",
+                "notes": "@{items('Build_final_array_for_TicketsClosed')?['name']}",
+                "assignedtech": "@{item()?['assignedMembers']?[0]?['name']}",
+                "totalhours": "@{variables('ActualHours')}",
+                "status": "@{items('Build_final_array_for_TicketsClosed')?['status']?['name']}",
+                "date": "@{formatDateTime(item()?['dateEntered'], 'yyyy-MM-dd')}"
+              }
+            },
+            "Filter_array_for_TimeEntries_to_build_total_ActualHours_for_each_ticket": {
+              "runAfter": {
+                "Call_to_API_to_get_ActualHours": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Call_to_API_to_get_ActualHours')?['body/timeline']",
+                "where": "@equals(item()?['type'], 'timeentry')"
+              }
+            },
+            "Loop_through_each_ticket_timeEntry_to_increment_ActualHours": {
+              "foreach": "@body('Filter_array_for_TimeEntries_to_build_total_ActualHours_for_each_ticket')",
+              "actions": {
+                "Increment_variable": {
+                  "runAfter": {},
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "ActualHours",
+                    "value": "@items('Loop_through_each_ticket_timeEntry_to_increment_ActualHours')?['meta']?['actualHours']"
+                  }
+                }
+              },
+              "runAfter": {
+                "Filter_array_for_TimeEntries_to_build_total_ActualHours_for_each_ticket": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Foreach"
+            },
+            "Reset_ActualHours_for_another_ticket_loop": {
+              "runAfter": {
+                "Append_to_array_variable": [
+                  "Succeeded"
+                ]
+              },
+              "type": "SetVariable",
+              "inputs": {
+                "name": "ActualHours",
+                "value": 0
+              }
+            }
+          },
+          "runAfter": {
+            "Get_dateClosed_tickets_=_\"Today\"": [
+              "Succeeded"
+            ]
+          },
+          "type": "Foreach"
+        },
+        "Get_all_boards_under_Lancom": {
+          "runAfter": {
+            "Initialize": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59",
+              "operationId": "DdApiWrapper"
+            },
+            "parameters": {
+              "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+              "x-flow-group": "Member Ticket",
+              "x-flow-operation-id": "Post|/api/v2/member/tickets/facet/boards|Api2MemberTicket_FacetBoard",
+              "x-flow-raw-body": false,
+              "ddApiWrapperRequestSchema/skip": 0,
+              "ddApiWrapperRequestSchema/take": 1000
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Exclude_boards_listed_under_ExcludedBoards_Array": {
+          "runAfter": {
+            "Get_all_boards_under_Lancom": [
+              "Succeeded"
+            ]
+          },
+          "type": "Query",
+          "inputs": {
+            "from": "@outputs('Get_all_boards_under_Lancom')?['body/values']",
+            "where": "@not(contains(body('Initialize_Bot_Member_and_DD_API')?['excludeBoards'], item()?['entityId']))"
+          }
+        },
+        "Initialize_TicketsWorked_Array": {
+          "runAfter": {
+            "Get_recent_open_tickets_": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "TicketsWorked",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Get_recent_open_tickets_": {
+          "runAfter": {
+            "Exclude_boards_listed_under_ExcludedBoards_Array": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59",
+              "operationId": "DdApiWrapper"
+            },
+            "parameters": {
+              "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+              "x-flow-group": "Member Ticket",
+              "x-flow-operation-id": "Post|/api/v2/member/tickets/find|Api2MemberTicket_Find",
+              "x-flow-raw-body": false,
+              "ddApiWrapperRequestSchema/skip": 0,
+              "ddApiWrapperRequestSchema/take": 1000,
+              "ddApiWrapperRequestSchema/filterDefinition": {
+                "State": "open",
+                "Boards": "@body('Exclude_boards_listed_under_ExcludedBoards_Array')"
+              }
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Build_final_array_for_TicketsWorked_": {
+          "foreach": "@body('Get_ticket_lastUpdated_=_\"Today\"')",
+          "actions": {
+            "Compose": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": {
+                "ticketId": "@{items('Build_final_array_for_TicketsWorked_')?['entityId']}",
+                "company": "@{items('Build_final_array_for_TicketsWorked_')?['company']?['name']}",
+                "url": "@{body('Initialize_Bot_Member_and_DD_API')?['baseURL']}tech/tickets/@{items('Build_final_array_for_TicketsWorked_')?['entityId']}/details",
+                "notes": "@{items('Build_final_array_for_TicketsWorked_')?['name']}",
+                "status": "@{items('Build_final_array_for_TicketsWorked_')?['status']?['name']}",
+                "date": "@{formatDateTime(item()?['dateEntered'], 'yyyy-MM-dd')}"
+              }
+            },
+            "Append_to_array_variable_3": {
+              "runAfter": {
+                "Compose": [
+                  "Succeeded"
+                ]
+              },
+              "type": "AppendToArrayVariable",
+              "inputs": {
+                "name": "TicketsWorked",
+                "value": "@outputs('Compose')"
+              }
+            }
+          },
+          "runAfter": {
+            "Get_tickets_LastUpdate_Today_and_more_than_3_days_ago": [
+              "Succeeded"
+            ]
+          },
+          "type": "Foreach"
+        },
+        "Get_dateClosed_tickets_=_\"Today\"": {
+          "runAfter": {
+            "Initialize_TicketsClosed__Array": [
+              "Succeeded"
+            ]
+          },
+          "type": "Query",
+          "inputs": {
+            "from": "@body('Notnull_recent_closed_tickets')",
+            "where": "@equals(formatDateTime(convertFromUtc(item()?['dateClosed'], 'New Zealand Standard Time', 'yyyy-MM-ddTHH:mm:ss.fffffffK'), 'yyyy-MM-dd'), outputs('Today'))"
+          }
+        },
+        "Initialize_IdleTickets_Array": {
+          "runAfter": {
+            "Initialize_TicketsWorked_Array": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "IdleTickets",
+                "type": "array"
+              }
+            ]
+          }
+        },
+        "Get_tickets_LastUpdate_Today_and_more_than_3_days_ago": {
+          "actions": {
+            "Get_ticket_lastUpdated_=_\"Today\"": {
+              "runAfter": {},
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Get_recent_open_tickets_')?['body/tickets']",
+                "where": "@equals(formatDateTime(convertFromUtc(item()?['lastUpdated'], 'New Zealand Standard Time', 'yyyy-MM-ddTHH:mm:ss.fffffffK'), 'yyyy-MM-dd'), outputs('Today'))"
+              }
+            },
+            "Get_Tickets_LastUpdated_more_than_3_days_ago": {
+              "runAfter": {
+                "Get_ticket_lastUpdated_=_\"Today\"": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Get_recent_open_tickets_')?['body/tickets']",
+                "where": "@less(formatDateTime(convertFromUtc(item()?['lastUpdated'], 'New Zealand Standard Time', 'yyyy-MM-ddTHH:mm:ss.fffffffK'), 'yyyy-MM-dd'), formatDateTime(addDays(outputs('Today'), -3), 'yyyy-MM-dd'))"
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_IdleTickets_Array": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Send_an_email_(V2)": {
+          "runAfter": {
+            "Create_an_email_from_template": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+              "connectionName": "shared_office365_1",
+              "operationId": "SendEmailV2"
+            },
+            "parameters": {
+              "emailMessage/To": "@outputs('SendToList')",
+              "emailMessage/Subject": "Lancom Daily Digest of Tickets",
+              "emailMessage/Body": "@outputs('Create_an_email_from_template')?['body/content']"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Initialize_ActualHours": {
+          "runAfter": {
+            "Notnull_recent_closed_tickets": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ActualHours",
+                "type": "float",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Build_final_array_of_idleTickets": {
+          "foreach": "@body('Get_Tickets_LastUpdated_more_than_3_days_ago')",
+          "actions": {
+            "Get_Ticket_details_of_each_tickets_lastUpdate_more_than_3_days": {
+              "runAfter": {},
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+                  "connectionName": "shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59",
+                  "operationId": "DdApiWrapper"
+                },
+                "parameters": {
+                  "x-dd-auth-parameter": "@outputs('Get_member_access_token')?['body/userKey']",
+                  "x-flow-group": "Member Ticket",
+                  "x-flow-operation-id": "Get|/api/v2/member/tickets/{ticketId}|Api2MemberTicket_Ticket",
+                  "x-flow-raw-body": false,
+                  "ddApiWrapperRequestSchema/x-dd-path-parameters/ticketId": "@items('Build_final_array_of_idleTickets')?['entityId']"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Only_build_array_where_last_note_isMember_false": {
+              "actions": {
+                "Compose_3": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": {
+                    "ticketId": "@{items('Build_final_array_of_idleTickets')?['entityId']}",
+                    "company": "@{items('Build_final_array_of_idleTickets')?['company']?['name']}",
+                    "url": "@{body('Initialize_Bot_Member_and_DD_API')?['baseURL']}tech/tickets/@{items('Build_final_array_of_idleTickets')?['entityId']}/details",
+                    "notes": "@{items('Build_final_array_of_idleTickets')?['name']}",
+                    "idleAgo": "@{div(sub(ticks(outputs('Today')), ticks(formatdatetime(item()?['lastUpdated'], 'yyyy-MM-dd'))), 864000000000)}",
+                    "assignedtech": "@{item()?['assignedMembers']?[0]?['name']}",
+                    "date": "@{formatDateTime(item()?['dateEntered'], 'yyyy-MM-dd')}"
+                  }
+                },
+                "Append_to_array_variable_4": {
+                  "runAfter": {
+                    "Compose_3": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "AppendToArrayVariable",
+                  "inputs": {
+                    "name": "IdleTickets",
+                    "value": "@outputs('Compose_3')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Get_Ticket_details_of_each_tickets_lastUpdate_more_than_3_days": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "equals": [
+                  "@outputs('Get_Ticket_details_of_each_tickets_lastUpdate_more_than_3_days')?['body/timeline']?[0]?['user']?['isMember']",
+                  false
+                ]
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "Build_final_array_for_TicketsWorked_": [
+              "Succeeded"
+            ]
+          },
+          "type": "Foreach"
+        },
+        "Ceate_an_email_from_template_placeholder": {
+          "runAfter": {
+            "Build_final_array_for_TicketsClosed": [
+              "Succeeded"
+            ],
+            "Build_final_array_of_idleTickets": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "X"
+        },
+        "Create_an_email_from_template": {
+          "runAfter": {
+            "Ceate_an_email_from_template_placeholder": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d",
+              "connectionName": "shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59",
+              "operationId": "EmailTemplateRenderV2"
+            },
+            "parameters": {
+              "xDdDynamicEmailTemplateId": "zme0jbept9",
+              "search": "*",
+              "emailTemplateSchema/TicketsClosed": "@variables('TicketsClosed')",
+              "emailTemplateSchema/TicketsWorked": "@variables('TicketsWorked')",
+              "emailTemplateSchema/IdleTickets": "@variables('IdleTickets')",
+              "emailTemplateSchema/DigestName": "Daily Digest of Tickets"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Notnull_recent_closed_tickets": {
+          "runAfter": {
+            "Get_recent_closed_tickets": [
+              "Succeeded"
+            ]
+          },
+          "type": "Query",
+          "inputs": {
+            "from": "@outputs('Get_recent_closed_tickets')?['body/tickets']",
+            "where": "@not(equals(coalesce(item()?['dateClosed'], 'xxx'), 'xxx'))"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}

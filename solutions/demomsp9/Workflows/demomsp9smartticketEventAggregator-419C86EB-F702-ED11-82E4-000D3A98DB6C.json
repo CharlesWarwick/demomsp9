@@ -1,0 +1,3513 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_azuretables_3": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azuretables"
+        }
+      },
+      "shared_azuretables_5": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azuretables"
+        }
+      },
+      "shared_flowmanagement": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_flowmanagement"
+        }
+      },
+      "shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_deskdirector-20demo-5f89f58fe2f889bfb4-5f7ea52601e4332b5d"
+        }
+      },
+      "shared_azuretables_4": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azuretables"
+        }
+      },
+      "shared_azuretables_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azuretables"
+        }
+      },
+      "shared_azureblob_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azureblob"
+        }
+      },
+      "shared_azurequeues": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azurequeues"
+        }
+      },
+      "shared_azurequeues_1": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azurequeues"
+        }
+      },
+      "shared_azuretables": {
+        "runtimeSource": "embedded",
+        "connection": {},
+        "api": {
+          "name": "shared_azuretables"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {
+        "$connections": {
+          "defaultValue": {},
+          "type": "Object"
+        },
+        "$authentication": {
+          "defaultValue": {},
+          "type": "SecureObject"
+        }
+      },
+      "triggers": {
+        "When_a_ticket_is_created_or_updated": {
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "TicketEventSubscribe"
+            }
+          },
+          "type": "ApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+              }
+            },
+            "body": {
+              "url": "@{listCallbackUrl()}"
+            },
+            "path": "/api/TicketEventSubscribe",
+            "queries": {
+              "filter": "ticket.updated",
+              "name": "Ticket Updated"
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      },
+      "actions": {
+        "[Log][V1.2]_Initialize_Logging": {
+          "actions": {
+            "Initiate_Flow_Log_Record_": {
+              "runAfter": {
+                "WorkFlow": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "InsertMergeEntity"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_azuretables_3']['connectionId']"
+                  }
+                },
+                "method": "patch",
+                "body": {
+                  "actualStart": " @{utcNow()}",
+                  "Digest": "Init Flow Log",
+                  "logDigest0": "@{array(JSON('{\"Flag\":\"Init\"}'))}",
+                  "LogEntryCount": "@variables('logEntryCount')"
+                },
+                "path": "/Tables/@{encodeURIComponent('FlowHistory')}/entities(PartitionKey='@{encodeURIComponent(body('WorkFlow')?['Workflow ID'])}',RowKey='@{encodeURIComponent(body('WorkFlow')?['Workflow RunTime ID'])}')",
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              }
+            },
+            "WorkFlow": {
+              "runAfter": {},
+              "type": "ParseJson",
+              "inputs": {
+                "content": {
+                  "Workflow ID": "@{replace(concat(workflow()['tags']['flowDisplayName'], '_', workflow()['id']), '/', '_')}",
+                  "Workflow RunTime ID": "@{replace(concat(utcNow(), '_', workflow()['run']['id']), '/', '_')}",
+                  "WorkFlow": "@workflow()"
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Workflow ID": {
+                      "type": "string"
+                    },
+                    "Workflow RunTime ID": {
+                      "type": "string"
+                    },
+                    "WorkFlow": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "location": {
+                          "type": "string"
+                        },
+                        "tags": {
+                          "type": "object",
+                          "properties": {
+                            "flowDisplayName": {
+                              "type": "string"
+                            },
+                            "environmentName": {
+                              "type": "string"
+                            },
+                            "logicAppName": {
+                              "type": "string"
+                            },
+                            "environmentFlowSuspensionReason": {
+                              "type": "string"
+                            },
+                            "sharingType": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "run": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "type": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "FlowLog": {
+              "runAfter": {
+                "Initiate_Flow_Log_Record_": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": {
+                  "TurnoverLogMod": 100
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "TurnoverLogMod": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Throttle_early_updates": [
+              "Succeeded",
+              "Skipped",
+              "Failed"
+            ]
+          },
+          "type": "Scope"
+        },
+        "[Sanity][V1.2]_MSP_Sanity_Check_for_connection_consistency": {
+          "actions": {
+            "Connection_References": {
+              "runAfter": {
+                "List_My_Connections": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@body('Get_Flow')?['properties']?['connectionReferences']"
+            },
+            "This_Flows_DeskDirector_Connections": {
+              "runAfter": {
+                "Connection_References": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@outputs('Connection_References')",
+                "where": "@contains(item()['connectionName'], 'deskdirector')"
+              }
+            },
+            "DD_connection_names_from_this_Flow": {
+              "runAfter": {
+                "This_Flows_DeskDirector_Connections": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@body('This_Flows_DeskDirector_Connections')",
+                "select": "@item()['connectionName']"
+              }
+            },
+            "Get_all_the_DeskDirector_Connection_Definitions": {
+              "runAfter": {
+                "DD_connection_names_from_this_Flow": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('List_My_Connections')?['value']",
+                "where": "@contains(body('DD_connection_names_from_this_Flow'), item()['Name'])"
+              }
+            },
+            "The_DD_Connection_Display_Names_of_this_Flow": {
+              "runAfter": {
+                "Get_all_the_DeskDirector_Connection_Definitions": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Select",
+              "inputs": {
+                "from": "@body('Get_all_the_DeskDirector_Connection_Definitions')",
+                "select": "@item()['properties']['displayName']"
+              }
+            },
+            "Filter_Connection_Display_Names_for_with_no_MSP_Match": {
+              "runAfter": {
+                "The_DD_Connection_Display_Names_of_this_Flow": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('The_DD_Connection_Display_Names_of_this_Flow')",
+                "where": "@not(contains(item(), body('Config_Aggregator')?['msp']))"
+              }
+            },
+            "Fail_if_there_are_any_Foreign_MSP_Connections": {
+              "actions": {
+                "Terminate_2": {
+                  "runAfter": {
+                    "[Log]_Update_log_V1.1_2": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Terminate",
+                  "inputs": {
+                    "runStatus": "Failed",
+                    "runError": {
+                      "code": "100",
+                      "message": "MSP sanity Check Failed due t these connections\n@{string(body('The_DD_Connection_Display_Names_of_this_Flow'))}\n\n"
+                    }
+                  }
+                },
+                "[Log]_Update_log_V1.1_2": {
+                  "actions": {
+                    "Append_to_array_logDigest_2": {
+                      "runAfter": {},
+                      "type": "AppendToArrayVariable",
+                      "inputs": {
+                        "name": "logDigest",
+                        "value": {
+                          "logTime": "@{utcNow()}",
+                          "flag": "FAIL - MspSanityCheck",
+                          "logData": " @{join(body('Filter_Connection_Display_Names_for_with_no_MSP_Match'), ',')}"
+                        }
+                      }
+                    },
+                    "Update_Flow_History_2": {
+                      "runAfter": {
+                        "Append_to_array_logDigest_2": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "flowSystemMetadata": {
+                          "swaggerOperationId": "InsertMergeEntity"
+                        }
+                      },
+                      "type": "ApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connection": {
+                            "name": "@parameters('$connections')['shared_azuretables_5']['connectionId']"
+                          }
+                        },
+                        "method": "patch",
+                        "body": {
+                          "LastLog": "@{utcNow()}",
+                          "status": "Cancelled",
+                          "logDigest": "@{variables('logDigest')}"
+                        },
+                        "path": "/Tables/@{encodeURIComponent('FlowHistory')}/entities(PartitionKey='@{encodeURIComponent(body('WorkFlow')?['Workflow ID'])}',RowKey='@{encodeURIComponent(body('WorkFlow')?['Workflow RunTime ID'])}')",
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    }
+                  },
+                  "runAfter": {},
+                  "type": "Scope",
+                  "description": "Max size of a table entity is 1MiB"
+                }
+              },
+              "runAfter": {
+                "Filter_array_for_dd4dd": [
+                  "Succeeded"
+                ]
+              },
+              "else": {
+                "actions": {
+                  "[Log][v1.1]_Update_log__3": {
+                    "actions": {
+                      "Append_to_array_logDigest_3": {
+                        "runAfter": {},
+                        "type": "AppendToArrayVariable",
+                        "inputs": {
+                          "name": "logDigest",
+                          "value": {
+                            "logTime": "@{utcNow()}",
+                            "flag": "PASSED - MspSanityCheck",
+                            "logData": " @{join(body('The_DD_Connection_Display_Names_of_this_Flow'), ',')}"
+                          }
+                        }
+                      },
+                      "Update_Flow_History_3": {
+                        "runAfter": {
+                          "Append_to_array_logDigest_3": [
+                            "Succeeded"
+                          ]
+                        },
+                        "metadata": {
+                          "flowSystemMetadata": {
+                            "swaggerOperationId": "InsertMergeEntity"
+                          }
+                        },
+                        "type": "ApiConnection",
+                        "inputs": {
+                          "host": {
+                            "connection": {
+                              "name": "@parameters('$connections')['shared_azuretables_5']['connectionId']"
+                            }
+                          },
+                          "method": "patch",
+                          "body": {
+                            "LastLog": "@{utcNow()}",
+                            "status": "Running",
+                            "logDigest": "@{variables('logDigest')}"
+                          },
+                          "path": "/Tables/@{encodeURIComponent('FlowHistory')}/entities(PartitionKey='@{encodeURIComponent(body('WorkFlow')?['Workflow ID'])}',RowKey='@{encodeURIComponent(body('WorkFlow')?['Workflow RunTime ID'])}')",
+                          "authentication": "@parameters('$authentication')"
+                        }
+                      }
+                    },
+                    "runAfter": {},
+                    "type": "Scope",
+                    "description": "Max size of a table entity is 1MiB"
+                  }
+                }
+              },
+              "expression": {
+                "greater": [
+                  "@length(body('Filter_array_for_dd4dd'))",
+                  0
+                ]
+              },
+              "type": "If"
+            },
+            "List_My_Connections": {
+              "runAfter": {
+                "Get_Flow": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "ListConnections"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_flowmanagement']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/connections",
+                "queries": {
+                  "environmentName": "@{outputs('Get_Current_Flow_Info')['tags']['environmentName']}"
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              }
+            },
+            "Get_Flow": {
+              "runAfter": {
+                "[Log][V1.1]_Update_log": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "GetFlow"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_flowmanagement']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/environments/@{encodeURIComponent(outputs('Get_Current_Flow_Info')['tags']['environmentName'])}/flows/@{encodeURIComponent(outputs('Get_Current_Flow_Info')['tags']['logicAppName'])}",
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              }
+            },
+            "Get_Current_Flow_Info": {
+              "runAfter": {
+                "SanityCheck": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@workflow()"
+            },
+            "SanityCheck": {
+              "runAfter": {
+                "Handle_Button_Trigger": [
+                  "Succeeded"
+                ]
+              },
+              "type": "ParseJson",
+              "inputs": {
+                "content": {
+                  "msp": "@{coalesce(triggerBody()?['msp'], outputs('Button_Trigger_MSP'), 'NoMspInTriggerPayload')}"
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "msp": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "description": "NB: triggerBody()?['text'] is button payload in sample template"
+            },
+            "Handle_Button_Trigger": {
+              "actions": {
+                "Trigger_Properties": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@trigger()",
+                  "description": "toLower( coalesce( triggerBody()?['properties']?['text']?['title'],'NoMSP'))"
+                },
+                "Find_the_title_of_the_first_button_field": {
+                  "runAfter": {
+                    "Trigger_Properties": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@toLower(coalesce(trigger()?['inputs']?['schema']?['properties']?['text']?['title'], 'NoMSP'))"
+                },
+                "Button_Trigger_MSP": {
+                  "runAfter": {
+                    "Find_the_title_of_the_first_button_field": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@if(equals(outputs('Find_the_title_of_the_first_button_field'), 'msp'), triggerBody()?['text'], 'NoButtonMspPassedIn')",
+                  "description": "If field called 'text' called msp then we are using that value"
+                }
+              },
+              "runAfter": {},
+              "type": "Scope"
+            },
+            "[Log][V1.1]_Update_log": {
+              "actions": {
+                "Append_to_array_logDigest": {
+                  "runAfter": {},
+                  "type": "AppendToArrayVariable",
+                  "inputs": {
+                    "name": "logDigest",
+                    "value": {
+                      "logTime": "@{utcNow()}",
+                      "flag": "StartMspSanityCheck",
+                      "logData": " MSP passed into workflow is @{body('SanityCheck')?['msp']} "
+                    }
+                  }
+                },
+                "Update_Flow_History": {
+                  "runAfter": {
+                    "Append_to_array_logDigest": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "flowSystemMetadata": {
+                      "swaggerOperationId": "InsertMergeEntity"
+                    }
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['shared_azuretables_5']['connectionId']"
+                      }
+                    },
+                    "method": "patch",
+                    "body": {
+                      "LastLog": "@{utcNow()}",
+                      "status": "Running",
+                      "logDigest": "@{variables('logDigest')}"
+                    },
+                    "path": "/Tables/@{encodeURIComponent('FlowHistory')}/entities(PartitionKey='@{encodeURIComponent(body('WorkFlow')?['Workflow ID'])}',RowKey='@{encodeURIComponent(body('WorkFlow')?['Workflow RunTime ID'])}')",
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Get_Current_Flow_Info": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope",
+              "description": "Max size of a table entity is 1MiB"
+            },
+            "Filter_array_for_dd4dd": {
+              "runAfter": {
+                "Filter_array_for_deskdirector_utilities": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('Filter_array_for_deskdirector_utilities')",
+                "where": "@not(contains('support (dd4dd) dd4dd lancom', item()))"
+              }
+            },
+            "Filter_array_for_deskdirector_utilities": {
+              "runAfter": {
+                "Filter_Connection_Display_Names_for_with_no_MSP_Match": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('Filter_Connection_Display_Names_for_with_no_MSP_Match')",
+                "where": "@not(contains(item(), 'DeskDirector Utilities'))"
+              }
+            },
+            "Sanity_Check_Fail_Over": {
+              "runAfter": {
+                "Fail_if_there_are_any_Foreign_MSP_Connections": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "dd",
+              "description": "If Sanity Check has a bug and errors"
+            }
+          },
+          "runAfter": {
+            "[Log][V1.2]_Initialize_Logging": [
+              "Succeeded",
+              "Failed",
+              "Skipped"
+            ]
+          },
+          "type": "Scope",
+          "description": "V1.2 - Added Logging;  v1.1 - Button Trigger"
+        },
+        "[Log]_Init_var_logDigest": {
+          "runAfter": {
+            "Init_var_Ticket_Event": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "logDigest",
+                "type": "Array"
+              }
+            ]
+          }
+        },
+        "[Log]_Init_var_logEntryCount": {
+          "runAfter": {
+            "[Log]_Init_var_logDigest": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "logEntryCount",
+                "type": "Integer",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Init_var_emailQueue": {
+          "runAfter": {
+            "[Log]_Init_var_logEntryCount": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "emailQueue",
+                "type": "Array"
+              }
+            ]
+          }
+        },
+        "Init_activeTriggers": {
+          "runAfter": {
+            "Init_var_emailQueue": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "activeTriggers",
+                "type": "Array"
+              }
+            ]
+          }
+        },
+        "Init_liveActions": {
+          "runAfter": {
+            "Init_activeTriggers": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "liveActions",
+                "type": "Array"
+              }
+            ]
+          }
+        },
+        "Setup_-_DD_Custom_Connections": {
+          "actions": {
+            "Get_User_Info_(API)": {
+              "runAfter": {
+                "Call_a_DeskDirector_API_-_Notifications": [
+                  "Succeeded",
+                  "Skipped",
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "DdApiWrapper"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/api/DdApiWrapper",
+                "queries": {
+                  "x-dd-auth-parameter": "@body('Get_contact_access_token')?['userKey']",
+                  "x-flow-group": "Portal",
+                  "x-flow-operation-id": "Get|/api/v2/portal/user|Api2Portal_GetUser",
+                  "x-flow-raw-body": true
+                },
+                "authentication": "@parameters('$authentication')"
+              },
+              "description": "Previous Action might have failed"
+            },
+            "Get_Tech_Meta_": {
+              "runAfter": {
+                "Get_Email_Templates_V3": [
+                  "Succeeded",
+                  "Failed",
+                  "Skipped"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "DdApiWrapper"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/api/DdApiWrapper",
+                "queries": {
+                  "x-dd-auth-parameter": "@body('Get_member_access_token')?['userKey']",
+                  "x-flow-group": "Tech",
+                  "x-flow-operation-id": "Get|/api/v2/tech/meta|Api2DdTech_Meta",
+                  "x-flow-raw-body": true
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              }
+            },
+            "Get_User_Meta": {
+              "runAfter": {
+                "Get_Tech_Meta_": [
+                  "Succeeded",
+                  "Failed",
+                  "Skipped"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "DdApiWrapper"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/api/DdApiWrapper",
+                "queries": {
+                  "x-dd-auth-parameter": "@body('Get_contact_access_token')?['userKey']",
+                  "x-flow-group": "Portal",
+                  "x-flow-operation-id": "Get|/api/v2/portal/meta|Api2Portal_Meta",
+                  "x-flow-raw-body": true
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              }
+            },
+            "ddTriggerBody": {
+              "runAfter": {},
+              "type": "Compose",
+              "inputs": "@triggerBody()"
+            },
+            "Get_contact_access_token": {
+              "runAfter": {
+                "Collect_msp_information": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "ContactJwtById"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/api/ContactJwtById",
+                "queries": {
+                  "id": "@{triggerBody()?['contact']?['entityId']}"
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 30,
+                  "interval": "PT20S"
+                }
+              }
+            },
+            "Get_contact_details": {
+              "runAfter": {
+                "Get_User_Meta": [
+                  "Succeeded",
+                  "Skipped",
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "ContactGetById"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/api/ContactGetById",
+                "queries": {
+                  "id": "@{outputs('ddTriggerBody')?['contact']?['entityId']}"
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              }
+            },
+            "Ticket_Company_API": {
+              "runAfter": {
+                "Compose": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "DdApiWrapper"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "body": {
+                  "x-dd-path-parameters": {
+                    "companyId": "@coalesce(triggerBody()?['ticket']?['company']?['entityId'],0)"
+                  }
+                },
+                "path": "/api/DdApiWrapper",
+                "queries": {
+                  "x-dd-auth-parameter": "@body('Get_member_access_token')?['userKey']",
+                  "x-flow-group": "Member Company",
+                  "x-flow-operation-id": "Get|/api/v2/member/company/companies/{companyId}|Api2MemberCompany_GetCompany",
+                  "x-flow-raw-body": false
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              }
+            },
+            "Get_ticket_details": {
+              "runAfter": {
+                "Get_User_Info_(API)": [
+                  "Succeeded",
+                  "Skipped",
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "TicketGetById"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/api/TicketGetById",
+                "queries": {
+                  "id": "  @{outputs('ddTriggerBody')?['ticket']?['entityId']}"
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              },
+              "description": "Previous Action might have failed"
+            },
+            "Get_Meta": {
+              "runAfter": {
+                "Ticket_Company_API": [
+                  "Succeeded",
+                  "Skipped",
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "DdApiWrapper"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/api/DdApiWrapper",
+                "queries": {
+                  "x-dd-auth-parameter": "@body('Get_contact_access_token')?['userKey']",
+                  "x-flow-group": "Portal",
+                  "x-flow-operation-id": "Get|/api/v2/portal/meta|Api2Portal_Meta",
+                  "x-flow-raw-body": true
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              }
+            },
+            "Get_branding": {
+              "runAfter": {
+                "Get_Meta": [
+                  "Succeeded",
+                  "Failed",
+                  "Skipped"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "DdApiWrapper"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/api/DdApiWrapper",
+                "queries": {
+                  "x-dd-auth-parameter": "@body('Get_contact_access_token')?['userKey']",
+                  "x-flow-group": "Portal",
+                  "x-flow-operation-id": "Get|/api/v2/portal/branding|Api2Portal_GetBrandingAsync",
+                  "x-flow-raw-body": true
+                },
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 60,
+                  "interval": "PT30S"
+                }
+              }
+            },
+            "ddMember": {
+              "runAfter": {
+                "ddFlowTriggers": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@body('Config_Aggregator')?['ticketActionMemberId']",
+              "description": "This should come from a tagged member - tag = ticketActionMember"
+            },
+            "Collect_msp_information": {
+              "actions": {
+                "ddTriggerMSP": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@body('Config_Aggregator')?['msp']"
+                },
+                "Get_msp": {
+                  "runAfter": {
+                    "ddDemoDevMsp": [
+                      "Succeeded"
+                    ]
+                  },
+                  "metadata": {
+                    "flowSystemMetadata": {
+                      "swaggerOperationId": "GetEntity"
+                    }
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['shared_azuretables_4']['connectionId']"
+                      }
+                    },
+                    "method": "get",
+                    "path": "/Tables/@{encodeURIComponent('demomsps')}/entities(PartitionKey='@{encodeURIComponent('raven')}',RowKey='@{encodeURIComponent(outputs('ddTriggerMSP'))}')",
+                    "authentication": "@parameters('$authentication')",
+                    "retryPolicy": {
+                      "type": "fixed",
+                      "count": 90,
+                      "interval": "PT30S"
+                    }
+                  }
+                },
+                "ddMsp": {
+                  "runAfter": {
+                    "Get_msp": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@body('Get_msp')"
+                },
+                "ddData_Source_Msp": {
+                  "runAfter": {
+                    "ddMsp": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "odata.etag": "@{coalesce(outputs('ddMsp')['odata.etag'],' ')}",
+                      "PartitionKey": "@{coalesce(outputs('ddMsp')['PartitionKey'],' ')}",
+                      "RowKey": "@{coalesce(outputs('ddMsp')['RowKey'],' ')}",
+                      "Timestamp": "@{coalesce(outputs('ddMsp')['Timestamp'],' ')}",
+                      "allDomains": "@{coalesce(outputs('ddMsp')?['allDomains'],' ')}",
+                      "ddRegion": "@{coalesce(outputs('ddMsp')?['ddRegion'],' ')}",
+                      "ddVersion": "@{coalesce(outputs('ddMsp')?['ddVersion'],' ')}",
+                      "mainDomain": "@{coalesce(outputs('ddMsp')?['mainDomain'],' ')}",
+                      "msp": "@{coalesce(outputs('ddMsp')['msp'],' ')}",
+                      "psa": "@{coalesce(outputs('ddMsp')['psa'],' ')}",
+                      "server": "@{coalesce(outputs('ddMsp')['server'],' ')}",
+                      "subdomain": "@{coalesce(outputs('ddMsp')?['subdomain'],outputs('ddMsp')?['msp'],'XXXXXX')}",
+                      "version": "@{coalesce(outputs('ddMsp')?['version'],' ')}",
+                      "MspHostName": "@{concat('https://',trim(outputs('ddMsp')['subdomain']),'.','deskdirector.com')}"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "odata.etag": {
+                          "type": "string"
+                        },
+                        "PartitionKey": {
+                          "type": "string"
+                        },
+                        "RowKey": {
+                          "type": "string"
+                        },
+                        "Timestamp": {
+                          "type": "string"
+                        },
+                        "allDomains": {
+                          "type": "string"
+                        },
+                        "ddRegion": {
+                          "type": "string"
+                        },
+                        "ddVersion": {
+                          "type": "string"
+                        },
+                        "mainDomain": {
+                          "type": "string"
+                        },
+                        "msp": {
+                          "type": "string"
+                        },
+                        "psa": {
+                          "type": "string"
+                        },
+                        "server": {
+                          "type": "string"
+                        },
+                        "subdomain": {
+                          "type": "string"
+                        },
+                        "version": {
+                          "type": "string"
+                        },
+                        "MspHostName": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "MspHostName": {
+                  "runAfter": {
+                    "ddData_Source_Msp": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@concat('https://',body('ddData_Source_Msp')?['subdomain'],'.','deskdirector.com')",
+                  "description": "missing subdomain is cleaned up above by using msp"
+                },
+                "ddDemoDevMsp": {
+                  "runAfter": {
+                    "ddTriggerMSP": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": {
+                    "odata.metadata": "https://ddaccess.table.core.windows.net/$metadata#msps/@Element",
+                    "odata.etag": "W/\"datetime'2020-02-26T14%3A00%3A18.4183636Z'\"",
+                    "PartitionKey": "raven",
+                    "RowKey": "demodev",
+                    "Timestamp": "2020-02-26T14:00:18.4183636Z",
+                    "allDomains": "demodev.deskdirector.com",
+                    "ddRegion": "raven-au1",
+                    "ddVersion": "DdServer/18.111.1.0",
+                    "mainDomain": "demodev.deskdirector.com",
+                    "msp": "demodev",
+                    "psa": "ConnectWise",
+                    "server": "AU1",
+                    "subdomain": "demodev",
+                    "version": "18.111.1.0"
+                  },
+                  "description": "The demo servers need to be hard coded"
+                }
+              },
+              "runAfter": {
+                "ddMember": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope"
+            },
+            "ddFlowTriggers": {
+              "runAfter": {
+                "ddTriggerBody": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@outputs('ddTriggerBody')['filters']"
+            },
+            "Form_Details": {
+              "actions": {
+                "FormResult": {
+                  "runAfter": {},
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "entityId": "@coalesce(triggerBody()?['formResult']?['entityId'],0)",
+                      "form": {
+                        "entityId": "@coalesce(triggerBody()?['formResult']?['form']?['entityId'],0)",
+                        "name": "@{coalesce(triggerBody()?['formResult']?['name'],'')}"
+                      }
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "entityId": {
+                          "type": "integer"
+                        },
+                        "form": {
+                          "type": "object",
+                          "properties": {
+                            "entityId": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "Condition": {
+                  "actions": {
+                    "Get_Form_Definition": {
+                      "runAfter": {
+                        "Get_form_result": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "flowSystemMetadata": {
+                          "swaggerOperationId": "DdApiWrapper"
+                        }
+                      },
+                      "type": "ApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connection": {
+                            "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                          }
+                        },
+                        "method": "post",
+                        "body": {
+                          "x-dd-path-parameters": {
+                            "entityId": "@body('FormResult')?['form']?['entityId']"
+                          }
+                        },
+                        "path": "/api/DdApiWrapper",
+                        "queries": {
+                          "x-dd-auth-parameter": "@body('Get_contact_access_token')?['userKey']",
+                          "x-flow-group": "DD Forms",
+                          "x-flow-operation-id": "Get|/api/v2/ddform/forms/{entityId}|Api2Forms_GetFrom",
+                          "x-flow-raw-body": false
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    },
+                    "Get_form_answers": {
+                      "runAfter": {},
+                      "metadata": {
+                        "flowSystemMetadata": {
+                          "swaggerOperationId": "FormResults"
+                        }
+                      },
+                      "type": "ApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connection": {
+                            "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                          }
+                        },
+                        "method": "get",
+                        "path": "/api/FormResults",
+                        "queries": {
+                          "formId": "@{body('FormResult')?['form']?['entityId']}",
+                          "resultId": "@{body('FormResult')?['entityId']}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    },
+                    "Form_Questions": {
+                      "runAfter": {
+                        "Get_Form_Definition": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "Select",
+                      "inputs": {
+                        "from": "@body('Get_Form_Definition')?['form']['fields']",
+                        "select": {
+                          "formFieldName": "@item()['name']",
+                          "formFieldIdentifier": "@item()['identifier']"
+                        }
+                      }
+                    },
+                    "For_each_question": {
+                      "foreach": "@body('Form_Questions')",
+                      "actions": {
+                        "questionidentifier": {
+                          "runAfter": {},
+                          "type": "Compose",
+                          "inputs": "@concat('p', items('For_each_question')['formFieldIdentifier'])"
+                        },
+                        "QNA": {
+                          "runAfter": {
+                            "questionidentifier": [
+                              "Succeeded"
+                            ]
+                          },
+                          "type": "Compose",
+                          "inputs": {
+                            "Question": "@items('For_each_question')['formFieldName']",
+                            "Answer": "@coalesce(body('Get_form_answers')?[outputs('questionidentifier')],'-')",
+                            "id": "@{outputs('questionidentifier')}"
+                          }
+                        },
+                        "Append_to_array_formQnA": {
+                          "runAfter": {
+                            "QNA": [
+                              "Succeeded"
+                            ]
+                          },
+                          "type": "AppendToArrayVariable",
+                          "inputs": {
+                            "name": "formQnA",
+                            "value": "@outputs('QNA')"
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Form_Questions": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "Foreach",
+                      "runtimeConfiguration": {
+                        "concurrency": {
+                          "repetitions": 1
+                        }
+                      }
+                    },
+                    "AnswerSet": {
+                      "runAfter": {
+                        "AnswerSetX": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@variables('formQnA')",
+                        "where": "@not(equals(item()['Answer'], 'NULL'))"
+                      }
+                    },
+                    "AnswerSetX": {
+                      "runAfter": {
+                        "For_each_question": [
+                          "Succeeded"
+                        ]
+                      },
+                      "type": "Compose",
+                      "inputs": "@variables('formQnA')"
+                    },
+                    "Get_form_result": {
+                      "runAfter": {
+                        "Get_form_answers": [
+                          "Succeeded"
+                        ]
+                      },
+                      "metadata": {
+                        "flowSystemMetadata": {
+                          "swaggerOperationId": "FormResults"
+                        }
+                      },
+                      "type": "ApiConnection",
+                      "inputs": {
+                        "host": {
+                          "connection": {
+                            "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                          }
+                        },
+                        "method": "get",
+                        "path": "/api/FormResults",
+                        "queries": {
+                          "formId": "@{body('FormResult')?['form']?['entityId']}",
+                          "resultId": "@{body('FormResult')?['entityId']}"
+                        },
+                        "authentication": "@parameters('$authentication')"
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "FormResult": [
+                      "Succeeded"
+                    ]
+                  },
+                  "expression": {
+                    "greater": [
+                      "@body('FormResult')?['entityId']",
+                      0
+                    ]
+                  },
+                  "type": "If"
+                },
+                "FormQnA": {
+                  "runAfter": {
+                    "Condition": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@variables('formQnA')"
+                }
+              },
+              "runAfter": {
+                "List_Forms_API_2": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope"
+            },
+            "Get_Email_Templates_V3": {
+              "runAfter": {
+                "Form_Details": [
+                  "Succeeded",
+                  "Skipped",
+                  "Failed"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "@{concat( body('ddData_Source_Msp')?['MspHostName'] ,'/api/v3/email/templates/find')}",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json",
+                  "Authorization": "@{concat('DdApi ',  body('Config_Aggregator')?['ddAPIkey'])}"
+                },
+                "body": {
+                  "Take": 100,
+                  "Skip": 0
+                }
+              }
+            },
+            "AssignedMembers": {
+              "runAfter": {
+                "List_Forms_API": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@coalesce(triggerBody()?['ticket']?['assigned'], json('[]'))"
+            },
+            "Call_a_DeskDirector_API_-_Notifications": {
+              "runAfter": {
+                "AssignedMembers": [
+                  "Succeeded",
+                  "Skipped",
+                  "Failed"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "DdApiWrapper"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "path": "/api/DdApiWrapper",
+                "queries": {
+                  "x-dd-auth-parameter": "@body('Get_contact_access_token')?['userKey']",
+                  "x-flow-group": "Portal Notification",
+                  "x-flow-operation-id": "Get|/api/v2/portal/notifications|Api2PortalNotifications_GetAsync",
+                  "x-flow-raw-body": false
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Catchall": {
+              "runAfter": {
+                "Get_ticket_details": [
+                  "Succeeded",
+                  "TimedOut",
+                  "Skipped",
+                  "Failed"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "Catchall"
+            },
+            "Compose": {
+              "runAfter": {
+                "Get_contact_details": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "@triggerBody()?['ticket']?['company']?['entityId']"
+            },
+            "List_Forms_API": {
+              "runAfter": {
+                "Contact_All_Open_and_Closed__Tickets_API": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "@{concat('https://','demomsp9','.deskdirector.com/api/v2/ddform/forms/find')}",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json"
+                },
+                "queries": {
+                  "access_token": "@body('Get_member_access_token')?['userKey']"
+                },
+                "body": {
+                  "Take": 30
+                }
+              }
+            },
+            "List_Forms_API_2": {
+              "runAfter": {
+                "HTTP": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "@{concat('https://','demomsp9','.deskdirector.com/api/v2/ddform/forms/find')}",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json"
+                },
+                "queries": {
+                  "access_token": "@body('Get_member_access_token')?['userKey']"
+                },
+                "body": {
+                  "Take": 30
+                }
+              }
+            },
+            "HTTP": {
+              "runAfter": {
+                "TicketsRequestURL": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "@{outputs('FindRequest')}",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json",
+                  "Authorization": "DdApi testmST6h3ixvYXnCDmRNVerJJ4aWVRywPhDoc7NE1FeeCEmk2reyOyEQZn70s5dT3lGPwETX6Bv4HQR7E7Ne2CPjBPNtHx2K2ya"
+                },
+                "body": {
+                  "Take": 30
+                }
+              }
+            },
+            "Get_member_access_token": {
+              "runAfter": {
+                "Get_contact_access_token": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "MemberJwtById"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_deskdirector.20v2.5fb970a9aa5b84647b.5fdad0bb8f51644b59']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/api/MemberJwtById",
+                "queries": {
+                  "id": "@{outputs('ddMember')}"
+                },
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "FindRequest": {
+              "runAfter": {
+                "Get_member_access_token": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "https://demomsp9.deskdirector.com/api/v2/ddform/forms/find"
+            },
+            "TicketsRequestURL": {
+              "runAfter": {
+                "FindRequest": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": "https://demomsp9.deskdirector.com/api/v2/contact/tickets/find"
+            },
+            "Contact_All_Open_and_Closed__Tickets_API": {
+              "runAfter": {
+                "Contact_All_Open_Tickets_API": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "@{outputs('TicketsRequestURL')}",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json"
+                },
+                "queries": {
+                  "access_token": "@body('Get_contact_access_token')?['userKey']"
+                },
+                "body": {
+                  "skip": 0,
+                  "take": 100
+                }
+              }
+            },
+            "Contact_All_Open_Tickets_API": {
+              "runAfter": {
+                "Contact_My_Open_Tickets_API": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "@{outputs('TicketsRequestURL')}",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json"
+                },
+                "queries": {
+                  "access_token": "@body('Get_contact_access_token')?['userKey']"
+                },
+                "body": {
+                  "skip": 0,
+                  "take": 100,
+                  "filterDefinition": {
+                    "state": "Open"
+                  }
+                }
+              }
+            },
+            "Contact_My_Open_Tickets_API": {
+              "runAfter": {
+                "Get_branding": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Http",
+              "inputs": {
+                "method": "POST",
+                "uri": "@{outputs('TicketsRequestURL')}",
+                "headers": {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json"
+                },
+                "queries": {
+                  "access_token": "@body('Get_contact_access_token')?['userKey']"
+                },
+                "body": {
+                  "skip": 0,
+                  "take": 20,
+                  "filterDefinition": {
+                    "category": "own",
+                    "state": "Open"
+                  }
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "[Sanity][V1.2]_MSP_Sanity_Check_for_connection_consistency": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "Setup_-_Email_Template_": {
+          "actions": {
+            "DeepLinks": {
+              "actions": {
+                "ddData_Source_Tech_Links": {
+                  "runAfter": {
+                    "ddData_Source_Portal_Links": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "msp": "@{outputs('ddTriggerMSP')}",
+                      "ticket": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber']),' ')}",
+                      "reOpen": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=reopen'),' ')}",
+                      "chat": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=chat'),' ')}",
+                      "close": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=close'),' ')}",
+                      "approve": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=approve'),' ')}",
+                      "flag": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=flag'),' ')}",
+                      "fastTrack": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=fasttrack'),' ')}",
+                      "ticketListAll": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket_list'),' ')}",
+                      "ticketListOpen": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket_list&state=open'),' ')}",
+                      "ticketListClosed": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket_list&state=closed'),' ')}",
+                      "ticketListApproval": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=ticket_list&state=approval'),' ')}",
+                      "supportOptions": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=support_options'),' ')}",
+                      "preTicketChat": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=pre_ticket_chat'),' ')}",
+                      "requestTypel": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=request_types'),' ')}",
+                      "requestTypeTypeId": "DeepLinkTechRequestTypeTypeId",
+                      "Notifications": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=notifications'),' ')}",
+                      "contentPagePageId": "DeepLinkTechContentPagePageId",
+                      "invoiceList": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=invoices'),' ')}",
+                      "invoiceInvoiceId": "DeepLinkTechInvoiceInvoiceId",
+                      "quoteList": "@{coalesce(concat(outputs('MspHostName'), '/tech/deeplink?', 'name=quotes'),' ')}",
+                      "quoteQuoteId": "DeepLinkTechQuoteQuoteId"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "msp": {
+                          "type": "string"
+                        },
+                        "ticket": {
+                          "type": "string"
+                        },
+                        "reOpen": {
+                          "type": "string"
+                        },
+                        "chat": {
+                          "type": "string"
+                        },
+                        "close": {
+                          "type": "string"
+                        },
+                        "approve": {
+                          "type": "string"
+                        },
+                        "flag": {
+                          "type": "string"
+                        },
+                        "fastTrack": {
+                          "type": "string"
+                        },
+                        "ticketListAll": {
+                          "type": "string"
+                        },
+                        "ticketListOpen": {
+                          "type": "string"
+                        },
+                        "ticketListClosed": {
+                          "type": "string"
+                        },
+                        "ticketListApproval": {
+                          "type": "string"
+                        },
+                        "supportOptions": {
+                          "type": "string"
+                        },
+                        "preTicketChat": {
+                          "type": "string"
+                        },
+                        "requestTypel": {
+                          "type": "string"
+                        },
+                        "requestTypeTypeId": {
+                          "type": "string"
+                        },
+                        "Notifications": {
+                          "type": "string"
+                        },
+                        "contentPagePageId": {
+                          "type": "string"
+                        },
+                        "invoiceList": {
+                          "type": "string"
+                        },
+                        "invoiceInvoiceId": {
+                          "type": "string"
+                        },
+                        "quoteList": {
+                          "type": "string"
+                        },
+                        "quoteQuoteId": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "ddData_Source_Portal_Links": {
+                  "runAfter": {},
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "msp": "@{outputs('ddTriggerMSP')}",
+                      "ticket": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber']),' ')}",
+                      "reOpen": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=reopen'),' ')}",
+                      "forms": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=forms'),' ')}",
+                      "chat": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=chat'),' ')}",
+                      "close": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=close'),' ')}",
+                      "approve": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=approve'),' ')}",
+                      "flag": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=flag'),' ')}",
+                      "fastTrack": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket&ticket_id=', body('ddData_Source_Ticket')?['TicketNumber'],'&action=fasttrack'),' ')}",
+                      "ticketListAll": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket_list'),' ')}",
+                      "ticketListOpen": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket_list&state=open'),' ')}",
+                      "ticketListClosed": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket_list&state=closed'),' ')}",
+                      "ticketListApproval": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=ticket_list&state=approval'),' ')}",
+                      "supportOptions": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=support_options'),' ')}",
+                      "preTicketChat": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=pre_ticket_chat'),' ')}",
+                      "requestTypel": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=request_types'),' ')}",
+                      "requestTypeTypeId": "DeepLinkPortalRequestTypeTypeId",
+                      "notifications": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=notifications'),' ')}",
+                      "contentPagePageId": "DeepLinkPortalContentPagePageId",
+                      "invoiceList": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=invoices'),' ')}",
+                      "invoiceInvoiceId": "DeepLinkPortalInvoiceInvoiceId",
+                      "quoteList": "@{coalesce(concat(outputs('MspHostName'), '/portal/deeplink?', 'name=quotes'),' ')}",
+                      "quoteQuoteId": "DeepLinkPortalQuoteQuoteId",
+                      "tokenExt24": "@{coalesce(outputs('ContactUserTokenExtension'),' ')}"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "msp": {
+                          "type": "string"
+                        },
+                        "ticket": {
+                          "type": "string"
+                        },
+                        "reOpen": {
+                          "type": "string"
+                        },
+                        "forms": {
+                          "type": "string"
+                        },
+                        "chat": {
+                          "type": "string"
+                        },
+                        "close": {
+                          "type": "string"
+                        },
+                        "approve": {
+                          "type": "string"
+                        },
+                        "flag": {
+                          "type": "string"
+                        },
+                        "fastTrack": {
+                          "type": "string"
+                        },
+                        "ticketListAll": {
+                          "type": "string"
+                        },
+                        "ticketListOpen": {
+                          "type": "string"
+                        },
+                        "ticketListClosed": {
+                          "type": "string"
+                        },
+                        "ticketListApproval": {
+                          "type": "string"
+                        },
+                        "supportOptions": {
+                          "type": "string"
+                        },
+                        "preTicketChat": {
+                          "type": "string"
+                        },
+                        "requestTypel": {
+                          "type": "string"
+                        },
+                        "requestTypeTypeId": {
+                          "type": "string"
+                        },
+                        "notifications": {
+                          "type": "string"
+                        },
+                        "contentPagePageId": {
+                          "type": "string"
+                        },
+                        "invoiceList": {
+                          "type": "string"
+                        },
+                        "invoiceInvoiceId": {
+                          "type": "string"
+                        },
+                        "quoteList": {
+                          "type": "string"
+                        },
+                        "quoteQuoteId": {
+                          "type": "string"
+                        },
+                        "tokenExt24": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "Deep_Link_to_Forms": {
+                  "actions": {
+                    "FormsList": {
+                      "runAfter": {},
+                      "type": "Select",
+                      "inputs": {
+                        "from": "@json('[]')",
+                        "select": {
+                          "Id": "@item()['entityId']",
+                          "name": "@coalesce(item()?['name'],'?')"
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "ddData_Source_Tech_Links": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Scope"
+                }
+              },
+              "runAfter": {
+                "Tickets": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope"
+            },
+            "Contacts": {
+              "actions": {
+                "ddContact": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@body('Get_contact_details')",
+                  "description": "Parsing from a composed object for robustness"
+                },
+                "ddData_Source_Contact": {
+                  "runAfter": {
+                    "ddContactTags": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "msp": "@{coalesce(outputs('ddTriggerMSP'),' ')}",
+                      "Name": "@{coalesce(body('ddContact')?['Profile']?['name'],' ')}",
+                      "FirstName": "@{coalesce(body('ddContact')?['Profile']?['name'],' ')}",
+                      "Id": "@{coalesce(body('ddContact')?['Profile']?['entityId'],' ')}",
+                      "Email": "@{coalesce(body('ddContact')?['Profile']?['email'],' ')}",
+                      "title": "@{coalesce(body('ddContact')?['Profile']?['title'],' ')}",
+                      "ddUserId": "@{coalesce(body('ddContact')?['Profile']?['userId'],' ')}",
+                      "isCompanyDefault": "@{coalesce(body('ddContact')?['Profile']?['isCompanyDefault'],' ')}",
+                      "Phone": " "
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "msp": {
+                          "type": "string"
+                        },
+                        "Name": {
+                          "type": "string"
+                        },
+                        "FirstName": {
+                          "type": "string"
+                        },
+                        "Id": {
+                          "type": "string"
+                        },
+                        "Email": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "ddUserId": {
+                          "type": "string"
+                        },
+                        "isCompanyDefault": {
+                          "type": "string"
+                        },
+                        "Phone": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "ddContactTags": {
+                  "runAfter": {
+                    "ddContact": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@coalesce(outputs('ddContact')?['tags'],createArray())"
+                }
+              },
+              "runAfter": {
+                "Email_Address": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope"
+            },
+            "Tickets": {
+              "actions": {
+                "ddTicket": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@body('Get_ticket_details')"
+                },
+                "ddData_Source_Ticket": {
+                  "runAfter": {
+                    "HeadShotLink": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "msp": "@{coalesce(outputs('ddTriggerMSP'),' ')}",
+                      "ticketNumber": "@{coalesce(outputs('ddTicket')?['entityId'],' ')}",
+                      "ticketTitle": "@{coalesce(outputs('ddTicket')['name'],' ')}",
+                      "techFirstName": "@{coalesce(outputs('ddTriggerBody')?['ticket']?['owner']?['name'],' ')}",
+                      "techHeadShotLink": "@{coalesce(outputs('HeadShotLink'),' ')}",
+                      "firstName": " @{coalesce(outputs('ddTriggerBody')?['contact']?['firstName'],' ')}",
+                      "lastName": "@{coalesce(outputs('ddTriggerBody')?['contact']?['lastName'],' ')}",
+                      "contactName": "@{coalesce(outputs('ddTicket')?['contact']?['name'],' ')}",
+                      "ticketDescription": "@{coalesce(outputs('ddTriggerBody')?['serviceNote']?['note'],' ')}",
+                      "ticketStatus": "@{coalesce(outputs('ddTicket')?['status']?['name'],' ')}",
+                      "ticketBoard": "@{coalesce(outputs('ddTicket')?['board']?['name'],' ')}",
+                      "ticketPriority": "@{coalesce(outputs('ddTicket')?['priority']?['name'],' ')}",
+                      "companyName": "@{coalesce(outputs('ddTriggerBody')?['ticket']?['company']?['name'],' ')}"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "msp": {
+                          "type": "string"
+                        },
+                        "ticketNumber": {
+                          "type": "string"
+                        },
+                        "ticketTitle": {
+                          "type": "string"
+                        },
+                        "techFirstName": {
+                          "type": "string"
+                        },
+                        "techHeadShotLink": {
+                          "type": "string"
+                        },
+                        "firstName": {
+                          "type": "string"
+                        },
+                        "lastName": {
+                          "type": "string"
+                        },
+                        "contactName": {
+                          "type": "string"
+                        },
+                        "ticketDescription": {
+                          "type": "string"
+                        },
+                        "ticketStatus": {
+                          "type": "string"
+                        },
+                        "ticketBoard": {
+                          "type": "string"
+                        },
+                        "ticketPriority": {
+                          "type": "string"
+                        },
+                        "companyName": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "HeadShotLink": {
+                  "runAfter": {
+                    "ddTicketTags": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "https://ddaccess.blob.core.windows.net/media-public/demo/Sample%20HeadShots/HeadShot@{rand(1,10)}.png"
+                },
+                "ddTicketTimeline": {
+                  "runAfter": {
+                    "ddTicket": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@coalesce(outputs('ddTicket')?['timeline'],json('[]'))"
+                },
+                "ddTicketTags": {
+                  "runAfter": {
+                    "ddKeyTicketNotes": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@coalesce(outputs('ddTicket')?['tags'],createArray())"
+                },
+                "Filter_for_internal_notes": {
+                  "runAfter": {
+                    "ddTicketTimeline": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Query",
+                  "inputs": {
+                    "from": "@outputs('ddTicketTimeline')",
+                    "where": "@equals(item()['isInternal'], true)"
+                  }
+                },
+                "Filter_for_external_notes": {
+                  "runAfter": {
+                    "Filter_for_internal_notes": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Query",
+                  "inputs": {
+                    "from": "@outputs('ddTicketTimeline')",
+                    "where": "@equals(item()['isInternal'], true)"
+                  }
+                },
+                "ddKeyTicketNotes": {
+                  "runAfter": {
+                    "Filter_for_external_notes": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "firstInternalNote": "@{coalesce(first( body('Filter_for_internal_notes'))?['note'],'')}",
+                      "lastInternalNote": "@{coalesce(first( body('Filter_for_internal_notes'))?['note'],'')}",
+                      "firstExternalNote": "@{coalesce(first( body('Filter_for_external_notes'))?['note'],'')}",
+                      "lastExternalNote": "@{coalesce(last( body('Filter_for_external_notes'))?['note'],'')}"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "firstInternalNote": {
+                          "type": "string"
+                        },
+                        "lastInternalNote": {
+                          "type": "string"
+                        },
+                        "firstExternalNote": {
+                          "type": "string"
+                        },
+                        "lastExternalNote": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "runAfter": {
+                "Company": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope"
+            },
+            "Company": {
+              "actions": {
+                "ddCompany": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "@body('Ticket_Company_API')"
+                },
+                "ddCompanyTags": {
+                  "runAfter": {
+                    "ddCompany": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@coalesce(outputs('ddCompany')?['tags'],json('[]'))"
+                }
+              },
+              "runAfter": {
+                "Contacts": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope"
+            },
+            "Tags_and_Meta_and_Branding": {
+              "actions": {
+                "ddTags": {
+                  "runAfter": {},
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "Company": "@outputs('ddCompanyTags')",
+                      "Contact": "@outputs('ddContactTags')",
+                      "Ticket": "@outputs('ddTicketTags')"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "Company": {
+                          "type": "array"
+                        },
+                        "Contact": {
+                          "type": "array"
+                        },
+                        "Ticket": {
+                          "type": "array"
+                        }
+                      }
+                    }
+                  }
+                },
+                "Meta": {
+                  "runAfter": {
+                    "ddTags": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@body('Get_Meta')"
+                },
+                "ddBranding": {
+                  "runAfter": {
+                    "Meta": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "@body('Get_branding')"
+                }
+              },
+              "runAfter": {
+                "DeepLinks": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Scope"
+            },
+            "Email_Address": {
+              "actions": {
+                "To_Addresses": {
+                  "runAfter": {},
+                  "type": "Compose",
+                  "inputs": "kenny@ddportal.com;warwick@deskdirector.com",
+                  "description": "separate by semicolons like someone@contoso.com;someone2@contoso.com"
+                },
+                "Cc_Addresses": {
+                  "runAfter": {
+                    "To_Addresses": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": "  ",
+                  "description": "separate by semicolons like someone@contoso.com;someone2@contoso.com"
+                },
+                "Bcc_addresses": {
+                  "runAfter": {
+                    "Cc_Addresses": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "Compose",
+                  "inputs": " warwicke@lancom.co.nz"
+                },
+                "ddData_Source_Email": {
+                  "runAfter": {
+                    "Bcc_addresses": [
+                      "Succeeded"
+                    ]
+                  },
+                  "type": "ParseJson",
+                  "inputs": {
+                    "content": {
+                      "To": "@{ coalesce(outputs('To_Addresses'), ' ')}",
+                      "cc": "@{coalesce(outputs('Cc_Addresses'),' ')}",
+                      "bcc": "@{coalesce(outputs('Bcc_addresses'),' ')}",
+                      "Importance": "X"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "To": {
+                          "type": "string"
+                        },
+                        "cc": {
+                          "type": "string"
+                        },
+                        "bcc": {
+                          "type": "string"
+                        },
+                        "Importance": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "runAfter": {},
+              "type": "Scope"
+            }
+          },
+          "runAfter": {
+            "Email_Templates": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope"
+        },
+        "init_var_formQnA": {
+          "runAfter": {
+            "Init_liveActions": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "formQnA",
+                "type": "array",
+                "value": []
+              }
+            ]
+          }
+        },
+        "Iniy_var_iFrameContent": {
+          "runAfter": {
+            "init_var_formQnA": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "iFrameContent",
+                "type": "string",
+                "value": "https://deskdirector.typeform.com/to/TYOpnX?email=xxxxx&psa=xxxxx"
+              }
+            ]
+          }
+        },
+        "Terminate": {
+          "runAfter": {
+            "Terminate_New_Ticket_Success": [
+              "Succeeded"
+            ]
+          },
+          "type": "Terminate",
+          "inputs": {
+            "runStatus": "Succeeded"
+          }
+        },
+        "ddStandard_Objects": {
+          "runAfter": {
+            "tixTime": [
+              "Succeeded"
+            ]
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "msp": "@{body('ddData_Source_Msp')?['msp']}",
+              "ticketId": "@{body('Debug')?['ticketID']}",
+              "event": "@{if(contains(body('Debug')?['filters'], 'ticket.new'), 'NEW', 'UPDATE')}",
+              "ticket": "@outputs('ddTicket')",
+              "company": "@outputs('ddCompany')",
+              "contact": "@outputs('ddContact')",
+              "workFlow": "@body('WorkFlow')",
+              "ticketTimeline": "@outputs('ddTicketTimeline')",
+              "meta": "@outputs('Meta')",
+              "deepLinksPortal": "@body('ddData_Source_Portal_Links')",
+              "deepLinksTech": "@body('ddData_Source_Tech_Links')",
+              "tags": "@body('ddTags')",
+              "branding": "@outputs('ddBranding')",
+              "forms": "@body('FormsList')",
+              "keyTicketNotes": "@body('ddKeyTicketNotes')",
+              "triggerBody": "@outputs('ddTriggerBody')",
+              "formQnA": "@outputs('formQnA')",
+              "filters": "@coalesce(body('Debug')?['filters'], json('[]'))",
+              "assignedMembers": "@coalesce(triggerBody()?['members'], json('[]'))",
+              "globalNotifications": "@coalesce(body('Call_a_DeskDirector_API_-_Notifications')?['globals'], json('[]'))",
+              "CallingFlowRunTime": "@{outputs('FlowRunTime')}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Ticket": {
+                  "type": "object"
+                },
+                "company": {
+                  "type": "object"
+                },
+                "contact": {
+                  "type": "object"
+                },
+                "msp": {
+                  "type": "string"
+                },
+                "workFlow": {
+                  "type": "object"
+                },
+                "ticketTimeline": {
+                  "type": "array"
+                },
+                "meta": {
+                  "type": "object"
+                },
+                "deepLinksPortal": {
+                  "type": "object"
+                },
+                "deepLinksTech": {
+                  "type": "object"
+                },
+                "ddTags": {
+                  "type": "object"
+                },
+                "branding": {
+                  "type": "object"
+                },
+                "formsList": {
+                  "type": "array"
+                },
+                "keyTicketNotes": {
+                  "type": "object"
+                },
+                "formQnA": {
+                  "type": "array"
+                },
+                "triggerBody": {
+                  "type": "object"
+                },
+                "assignedMembers": {
+                  "type": "array"
+                },
+                "globalNotifications": {
+                  "type": "array"
+                },
+                "event": {
+                  "type": "string"
+                },
+                "ticketId": {
+                  "type": "string"
+                },
+                "filters": {
+                  "type": "array"
+                },
+                "CallingFlowRunTime": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "adding triggerBody is pretty ugly. There in case missing properties later. TODO - Remove in a week or two "
+        },
+        "End_Update_Rule_Loop": {
+          "runAfter": {
+            "Iniy_var_iFrameContent": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "End Update Rule Loop",
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          }
+        },
+        "Callback_Completed": {
+          "runAfter": {
+            "End_Update_Rule_Loop": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Callback Completed",
+                "type": "boolean"
+              }
+            ]
+          }
+        },
+        "Debug": {
+          "runAfter": {},
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "msp": "demomsp9",
+              "ticketID": "@{triggerBody()?['ticket']?['entityId']}",
+              "status": "@{triggerBody()?['ticket']?['status']}",
+              "filters": "@coalesce(triggerBody()?['filters'], json('[]'))",
+              "tags": "@coalesce(triggerBody()?['tags'], json('[]'))"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ticketID": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "filters": {
+                  "type": "array"
+                },
+                "msp": {
+                  "type": "string"
+                },
+                "tags": {
+                  "type": "array"
+                }
+              }
+            }
+          },
+          "description": "msp is hard coded for safety. Everything else is collected at runtime "
+        },
+        "FlowRunTime": {
+          "runAfter": {
+            "Debug": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@concat('https://australia.flow.microsoft.com/manage/environments/',workflow()['tags']['environmentName'],'/flows/',workflow()['name'],'/runs/', workflow()['run']['name'])"
+        },
+        "ShortFlowRunTime": {
+          "runAfter": {
+            "Config_Aggregator": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@substring(outputs('FlowRunTime') , sub(length(outputs('FlowRunTime')),12),12)"
+        },
+        "Throttle_early_updates": {
+          "actions": {
+            "If_not_lt_3_minutes_old_and_not_new_-_wait_3_UP_TO_minutes": {
+              "actions": {
+                "Delay_up_to_Xminutes_depending": {
+                  "runAfter": {},
+                  "type": "Wait",
+                  "inputs": {
+                    "interval": {
+                      "count": "@sub(2, body('TicketStats')?['minutesAlive'])",
+                      "unit": "Minute"
+                    }
+                  },
+                  "description": "TODO - expand 30x gaps between multiple updates so the 2 seconds becomes 40 "
+                }
+              },
+              "runAfter": {},
+              "expression": {
+                "and": [
+                  {
+                    "less": [
+                      "@body('TicketStats')?['minutesAlive']",
+                      3
+                    ]
+                  },
+                  {
+                    "not": {
+                      "contains": [
+                        "@body('Debug')?['filters']",
+                        "ticket.new"
+                      ]
+                    }
+                  },
+                  {
+                    "equals": [
+                      1,
+                      1
+                    ]
+                  }
+                ]
+              },
+              "type": "If"
+            }
+          },
+          "runAfter": {
+            "TicketStats2": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope",
+          "description": "sometime ticket.new is followed immediately by update event. So we will delay update by 3 mins"
+        },
+        "TicketStats": {
+          "runAfter": {
+            "Callback_Completed": [
+              "Succeeded"
+            ]
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "msp": "@{body('Config_Aggregator')?['msp']}",
+              "ticketID": "@{triggerBody()?['ticket']?['entityId']}",
+              "status": "@{triggerBody()?['ticket']?['status']}",
+              "closedDate": "@{coalesce(triggerBody()?['ticket']?['closedDate'], utcNow())}",
+              "lastUpdated": "@{coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow())}",
+              "dateEntered": "@{coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow())}",
+              "closedDateTicks": "@ticks(coalesce(triggerBody()?['ticket']?['closedDate'], utcNow()))",
+              "lastUpdatedTicks": "@ticks(coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow()))",
+              "dateEnteredTicks": "@ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))",
+              "ticksAlive": "@sub(ticks(coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow())), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow())))",
+              "secondsAlive": "@div(add(sub(ticks(utcNow()), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))), 1), 10000000)",
+              "minutesAlive": "@div(add(sub(ticks(utcNow()), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))), 1), 600000000)",
+              "secondsAge": "@div(add(sub(ticks(coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow())), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))), 1), 10000000)",
+              "minutesAge": "@div(add(sub(ticks(coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow())), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))), 1), 600000000)",
+              "filters": "@coalesce(triggerBody()?['filters'], json('[]'))"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msp": {
+                  "type": "string"
+                },
+                "ticketID": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "closedDate": {
+                  "type": "string"
+                },
+                "lastUpdated": {
+                  "type": "string"
+                },
+                "dateEntered": {
+                  "type": "string"
+                },
+                "closedDateTicks": {
+                  "type": "integer"
+                },
+                "lastUpdatedTicks": {
+                  "type": "integer"
+                },
+                "dateEnteredTicks": {
+                  "type": "integer"
+                },
+                "ticksAlive": {
+                  "type": "integer"
+                },
+                "secondsAge": {
+                  "type": "integer"
+                },
+                "minutesAge": {
+                  "type": "integer"
+                },
+                "secondsAlive": {
+                  "type": "integer"
+                },
+                "minutesAlive": {
+                  "type": "integer"
+                },
+                "filters": {
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "Config_Aggregator": {
+          "runAfter": {
+            "Check_for_errors": [
+              "Succeeded"
+            ]
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "msp": "@{body('Debug')?['msp']}",
+              "ticketActionMemberId": "@int(coalesce( outputs('MspMeta')?['ticketActionMemberId'], '0'))",
+              "ticketActionMemberName": "@{coalesce( outputs('MspMeta')?['ticketActionMemberName'],'')}",
+              "ddApikey": "@{trim(replace(coalesce( outputs('MspMeta')?['ApiKey'], 'XXXXXX'), 'DdAPI' ,''))}",
+              "extraMspName": "@{coalesce(outputs('MspMeta')?['extraMspName'], '')}"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msp": {
+                  "type": "string"
+                },
+                "ticketActionMemberId": {
+                  "type": "integer"
+                },
+                "ticketActionMemberName": {
+                  "type": "string"
+                },
+                "ddApikey": {
+                  "type": "string"
+                },
+                "extraMspName": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "description": "This should come from a tagged member - tag = ticketActionMember"
+        },
+        "TicketGraphMeta": {
+          "runAfter": {
+            "ddStandard_Objects": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@addProperty(body('ddStandard_Objects'), 'TicketStats', outputs('TicketStats'))"
+        },
+        "Debug_Filters": {
+          "runAfter": {
+            "ShortFlowRunTime": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@triggerBody()?['filters']"
+        },
+        "Event_Agg_Log_Entry_-_New_Event": {
+          "runAfter": {
+            "Debug_Filters": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "InsertMergeEntity"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azuretables_1']['connectionId']"
+              }
+            },
+            "method": "patch",
+            "body": {
+              "ticketID": "@{triggerBody()?['ticket']?['entityId']}",
+              "ticketStatus": "@{triggerBody()?['ticket']?['status']}",
+              "ticketLastUpdate": "@{triggerBody()?['ticket']?['lastUpdated']}",
+              "filters": "@{join(coalesce(triggerBody()?['filters'], json('[]')), ',')}",
+              "flowName": "@{concat(workflow()?['tags']?['flowDisplayName'], ' ')}",
+              "eventSource": "EventAgg  Processpr Initiated",
+              "shortRunTime": "@{outputs('ShortFlowRunTime')}",
+              "loopIndex": 0,
+              "flowRunTime": "@{outputs('FlowRunTime')}"
+            },
+            "path": "/Tables/@{encodeURIComponent('ticketActionsLog')}/entities(PartitionKey='@{encodeURIComponent(body('Config_Aggregator')?['msp'])}',RowKey='@{encodeURIComponent(utcNow())}')",
+            "authentication": "@parameters('$authentication')",
+            "retryPolicy": {
+              "type": "fixed",
+              "count": 30,
+              "interval": "PT20S"
+            }
+          }
+        },
+        "Init_var_Ticket_Event": {
+          "runAfter": {
+            "Event_Agg_Log_Entry_-_New_Event": [
+              "Succeeded"
+            ]
+          },
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ticketEvent",
+                "type": "string",
+                "value": "new"
+              }
+            ]
+          }
+        },
+        "ContactUserTokenExtension": {
+          "runAfter": {
+            "Setup_-_DD_Custom_Connections": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@coalesce(concat('&access_token=',body('Get_contact_access_token')?['userKey']),' ')"
+        },
+        "Email_Templates": {
+          "runAfter": {
+            "Get_Email_Templates": [
+              "Succeeded"
+            ]
+          },
+          "type": "Select",
+          "inputs": {
+            "from": "@coalesce(body('Get_Email_Templates')?['results'],json('[]'))",
+            "select": {
+              "Id": "@item()['entityId']",
+              "name": "@item()['name']",
+              "type": "@item()['type']",
+              "state": "@item()['state']"
+            }
+          }
+        },
+        "Get_Email_Templates": {
+          "runAfter": {
+            "ContactUserTokenExtension": [
+              "Succeeded"
+            ]
+          },
+          "type": "Http",
+          "inputs": {
+            "method": "POST",
+            "uri": "@{concat(  outputs('MspHostName')    ,'/api/v3/email/templates/find')}",
+            "headers": {
+              "Authorization": "@{concat('DdApi ',  body('Config_Aggregator')?['ddAPIkey'])}"
+            },
+            "body": {
+              "Take": 100,
+              "Skip": 0,
+              "IsDeleted": false
+            }
+          }
+        },
+        "TicketStats2": {
+          "runAfter": {
+            "TicketStats": [
+              "Succeeded"
+            ]
+          },
+          "type": "ParseJson",
+          "inputs": {
+            "content": {
+              "msp": "@{body('Config_Aggregator')?['msp']}",
+              "ticketID": "@{triggerBody()?['ticket']?['entityId']}",
+              "status": "@{triggerBody()?['ticket']?['status']}",
+              "closedDate": "@{coalesce(triggerBody()?['ticket']?['closedDate'], utcNow())}",
+              "lastUpdated": "@{coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow())}",
+              "dateEntered": "@{coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow())}",
+              "closedDateTicks": "@ticks(coalesce(triggerBody()?['ticket']?['closedDate'], utcNow()))",
+              "lastUpdatedTicks": "@ticks(coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow()))",
+              "dateEnteredTicks": "@ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))",
+              "ticksAlive": "@sub(ticks(coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow())), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow())))",
+              "secondsAlive": "@div(add(sub(ticks(utcNow()), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))), 1), 10000000)",
+              "minutesAlive": "@div(add(sub(ticks(utcNow()), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))), 1), 600000000)",
+              "secondsAge": "@div(add(sub(ticks(coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow())), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))), 1), 10000000)",
+              "minutesAge": "@div(add(sub(ticks(coalesce(triggerBody()?['ticket']?['lastUpdated'], utcNow())), ticks(coalesce(triggerBody()?['ticket']?['dateEntered'], utcNow()))), 1), 600000000)",
+              "filters": "@coalesce(triggerBody()?['filters'], json('[]'))"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msp": {
+                  "type": "string"
+                },
+                "ticketID": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "closedDate": {
+                  "type": "string"
+                },
+                "lastUpdated": {
+                  "type": "string"
+                },
+                "dateEntered": {
+                  "type": "string"
+                },
+                "closedDateTicks": {
+                  "type": "integer"
+                },
+                "lastUpdatedTicks": {
+                  "type": "integer"
+                },
+                "dateEnteredTicks": {
+                  "type": "integer"
+                },
+                "ticksAlive": {
+                  "type": "integer"
+                },
+                "secondsAge": {
+                  "type": "integer"
+                },
+                "minutesAge": {
+                  "type": "integer"
+                },
+                "secondsAlive": {
+                  "type": "integer"
+                },
+                "minutesAlive": {
+                  "type": "integer"
+                },
+                "filters": {
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "Serialize_Ticket_Graph_to_Blob_Storage_New": {
+          "runAfter": {
+            "TicketGraphMeta": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "CreateFile"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_1']['connectionId']"
+              }
+            },
+            "method": "post",
+            "body": "@concat(string(outputs('TicketGraphMeta')), '')",
+            "headers": {
+              "Content-Type": "text/plain"
+            },
+            "path": "/datasets/default/files",
+            "queries": {
+              "folderPath": "@{concat('/ticketgraph/', body('Config_Aggregator')?['msp'])}",
+              "name": "@{concat(body('Debug')['ticketID'], '.json')}",
+              "queryParametersSingleEncoded": true
+            },
+            "authentication": "@parameters('$authentication')"
+          },
+          "description": "If ticketIDS is Null, we should fail",
+          "runtimeConfiguration": {
+            "contentTransfer": {
+              "transferMode": "Chunked"
+            }
+          }
+        },
+        "Make_a_copy_with_the_": {
+          "runAfter": {
+            "Serialize_Ticket_Graph_to_Blob_Storage_New": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "CopyFile"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_1']['connectionId']"
+              }
+            },
+            "method": "post",
+            "path": "/datasets/default/copyFile",
+            "queries": {
+              "source": "@body('Serialize_Ticket_Graph_to_Blob_Storage_New')?['Path']",
+              "destination": "@{concat('/ticketgraph/', body('Config_Aggregator')?['msp'],'/archive/', body('Debug')['ticketID'],'_TIX',outputs('tixTime'),'_',variables('ticketEvent') , '.json')}",
+              "overwrite": true,
+              "queryParametersSingleEncoded": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Event_Agg_Log_Entry_-_New_Ticket__2_in_blob_stortage": {
+          "runAfter": {
+            "Make_a_copy_with_the_": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "InsertMergeEntity"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azuretables_1']['connectionId']"
+              }
+            },
+            "method": "patch",
+            "body": {
+              "ticketID": "@{triggerBody()?['ticket']?['entityId']}",
+              "ticketStatus": "@{triggerBody()?['ticket']?['status']}",
+              "ticketLastUpdate": "@{triggerBody()?['ticket']?['lastUpdated']}",
+              "filters": "@{join(coalesce(triggerBody()?['filters'], json('[]')), ',')}",
+              "flowName": "@{concat(workflow()?['tags']?['flowDisplayName'], ' ')}",
+              "eventSource": "EventAgg New Ticket BLOB CREATED",
+              "shortRunTime": "@{outputs('ShortFlowRunTime')}",
+              "loopIndex": 0,
+              "flowRunTime": "@{outputs('FlowRunTime')}"
+            },
+            "path": "/Tables/@{encodeURIComponent('ticketActionsLog')}/entities(PartitionKey='@{encodeURIComponent(body('Config_Aggregator')?['msp'])}',RowKey='@{encodeURIComponent(utcNow())}')",
+            "authentication": "@parameters('$authentication')",
+            "retryPolicy": {
+              "type": "fixed",
+              "count": 30,
+              "interval": "PT20S"
+            }
+          }
+        },
+        "TODO_-_Maybe_Register_callback": {
+          "runAfter": {
+            "Event_Agg_Log_Entry_-_New_Ticket__2_in_blob_stortage": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "xxx"
+        },
+        "TODO_-_Log_successful_launch_fro_queu_": {
+          "runAfter": {
+            "TODO_-_Maybe_Register_callback": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "xxxx"
+        },
+        "Queue_this_ticket": {
+          "actions": {
+            "List_queues": {
+              "runAfter": {},
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "ListQueues"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_azurequeues']['connectionId']"
+                  }
+                },
+                "method": "get",
+                "path": "/list",
+                "authentication": "@parameters('$authentication')"
+              }
+            },
+            "Check_if_MSP_Queue_exists": {
+              "runAfter": {
+                "List_queues": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Query",
+              "inputs": {
+                "from": "@body('List_queues')",
+                "where": "@equals(item()?['Name'], body('Config_Aggregator')?['msp'])"
+              }
+            },
+            "Create_Queue_if_necessary": {
+              "actions": {
+                "Create_a_new_queue_for_this_MSP": {
+                  "runAfter": {},
+                  "metadata": {
+                    "flowSystemMetadata": {
+                      "swaggerOperationId": "PutQueue"
+                    }
+                  },
+                  "type": "ApiConnection",
+                  "inputs": {
+                    "host": {
+                      "connection": {
+                        "name": "@parameters('$connections')['shared_azurequeues']['connectionId']"
+                      }
+                    },
+                    "method": "put",
+                    "path": "/putQueue",
+                    "queries": {
+                      "queueName": "@body('Config_Aggregator')?['msp']"
+                    },
+                    "authentication": "@parameters('$authentication')"
+                  }
+                }
+              },
+              "runAfter": {
+                "Check_if_MSP_Queue_exists": [
+                  "Succeeded"
+                ]
+              },
+              "expression": {
+                "equals": [
+                  "@length(body('Check_if_MSP_Queue_exists'))",
+                  0
+                ]
+              },
+              "type": "If"
+            },
+            "QueueMessage": {
+              "runAfter": {
+                "ticketAgentMeta": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": {
+                "msp": "@{body('Config_Aggregator')?['msp']}",
+                "ticketID": "@{body('Debug')?['ticketID']}",
+                "ticketAgentMeta": "@outputs('ticketAgentMeta')",
+                "blobPath": "@{body('Make_a_copy_with_the_')?['Path']}",
+                "event": "@{variables('ticketEvent')}",
+                "tixTime": "@{outputs('tixTime')}"
+              }
+            },
+            "Put_a_message_on_a_queue": {
+              "runAfter": {
+                "QueueMessage": [
+                  "Succeeded"
+                ]
+              },
+              "metadata": {
+                "flowSystemMetadata": {
+                  "swaggerOperationId": "PutMessage"
+                }
+              },
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connection": {
+                    "name": "@parameters('$connections')['shared_azurequeues_1']['connectionId']"
+                  }
+                },
+                "method": "post",
+                "body": "@{outputs('QueueMessage')}",
+                "path": "/@{encodeURIComponent(body('Config_Aggregator')?['msp'])}/messages",
+                "authentication": "@parameters('$authentication')",
+                "retryPolicy": {
+                  "type": "fixed",
+                  "count": 30,
+                  "interval": "PT20S"
+                }
+              }
+            },
+            "ticketAgentMeta": {
+              "runAfter": {
+                "Create_Queue_if_necessary": [
+                  "Succeeded"
+                ]
+              },
+              "type": "Compose",
+              "inputs": {
+                "msp": "@{body('Config_Aggregator')?['msp']}",
+                "ticketId": "@{body('Debug')?['ticketID']}",
+                "isClosed": "@false",
+                "ageInMinutes": "@body('TicketStats')?['minutesAlive']",
+                "ticketAgentDataMode": "BLOB",
+                "serialisedTicketGrapBlobId": "",
+                "ticketStats": "@coalesce(body('TicketStats'), json('{}'))"
+              }
+            }
+          },
+          "runAfter": {
+            "Start_First_Briefing": [
+              "Succeeded"
+            ]
+          },
+          "type": "Scope",
+          "description": "We are queuing for backup and replay. TA is triggered by Blob update"
+        },
+        "Event_Agg_Log_Entry_-_New_Ticket_": {
+          "runAfter": {
+            "Queue_this_ticket": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "InsertMergeEntity"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azuretables_1']['connectionId']"
+              }
+            },
+            "method": "patch",
+            "body": {
+              "ticketID": "@{triggerBody()?['ticket']?['entityId']}",
+              "ticketStatus": "@{triggerBody()?['ticket']?['status']}",
+              "ticketLastUpdate": "@{triggerBody()?['ticket']?['lastUpdated']}",
+              "filters": "@{join(coalesce(triggerBody()?['filters'], json('[]')), ',')}",
+              "flowName": "@{concat(workflow()?['tags']?['flowDisplayName'], ' ')}",
+              "eventSource": "EventAgg New Ticket QUEUED",
+              "shortRunTime": "@{outputs('ShortFlowRunTime')}",
+              "loopIndex": 0,
+              "flowRunTime": "@{outputs('FlowRunTime')}"
+            },
+            "path": "/Tables/@{encodeURIComponent('ticketActionsLog')}/entities(PartitionKey='@{encodeURIComponent(body('Config_Aggregator')?['msp'])}',RowKey='@{encodeURIComponent(utcNow())}')",
+            "authentication": "@parameters('$authentication')",
+            "retryPolicy": {
+              "type": "fixed",
+              "count": 30,
+              "interval": "PT20S"
+            }
+          }
+        },
+        "Get_Blob_Metadata_-_New": {
+          "runAfter": {
+            "Event_Agg_Log_Entry_-_New_Ticket_": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "GetFileMetadata"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_1']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/datasets/default/files/@{encodeURIComponent(encodeURIComponent(body('Serialize_Ticket_Graph_to_Blob_Storage_New')?['Path']))}",
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Copy_blob_to_Archive_after_success_-_New": {
+          "runAfter": {
+            "Get_Blob_Metadata_-_New": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "CopyFile"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_1']['connectionId']"
+              }
+            },
+            "method": "post",
+            "path": "/datasets/default/copyFile",
+            "queries": {
+              "source": "@{body('Serialize_Ticket_Graph_to_Blob_Storage_New')?['Path']}",
+              "destination": "@{concat('/ticketgraph/', body('Config_Aggregator')?['msp'],'/archive/', concat(coalesce( outputs('TicketGraphMeta')?['ticket']?['entityId'], concat('XXXXXX', ticks(utcNow())))), '_', ticks(utcNow())   , '.json')}",
+              "overwrite": true,
+              "queryParametersSingleEncoded": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        },
+        "Terminate_New_Ticket_Success": {
+          "runAfter": {
+            "Copy_blob_to_Archive_after_success_-_New": [
+              "Succeeded"
+            ]
+          },
+          "type": "Terminate",
+          "inputs": {
+            "runStatus": "Succeeded"
+          }
+        },
+        "tixTime": {
+          "runAfter": {
+            "Setup_-_Email_Template_": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@ticks(utcNow())"
+        },
+        "Get_msp_meta": {
+          "runAfter": {
+            "FlowRunTime": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "GetEntity"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azuretables']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/Tables/@{encodeURIComponent('ddApiKey')}/entities(PartitionKey='@{encodeURIComponent('apikey')}',RowKey='@{encodeURIComponent(body('Debug')?['msp'])}')",
+            "authentication": "@parameters('$authentication')",
+            "retryPolicy": {
+              "type": "fixed",
+              "count": 20,
+              "interval": "PT20S"
+            }
+          }
+        },
+        "MspMeta": {
+          "runAfter": {
+            "Get_msp_meta": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@body('Get_msp_meta')"
+        },
+        "Check_for_errors": {
+          "actions": {},
+          "runAfter": {
+            "Error": [
+              "Succeeded"
+            ]
+          },
+          "else": {
+            "actions": {
+              "Terminate_3": {
+                "runAfter": {},
+                "type": "Terminate",
+                "inputs": {
+                  "runStatus": "Failed",
+                  "runError": {
+                    "code": "NOMSP",
+                    "message": "Could not find MSP record"
+                  }
+                }
+              }
+            }
+          },
+          "expression": {
+            "contains": [
+              "@outputs('Error')",
+              "XXXXXX"
+            ]
+          },
+          "type": "If"
+        },
+        "Error": {
+          "runAfter": {
+            "MspMeta": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@coalesce( outputs('MspMeta')?['odata.error']?['code'], 'XXXXXX')"
+        },
+        "BlobId": {
+          "runAfter": {
+            "Copy_blob_to_Ticket_First_Briefing": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@body('Copy_blob_to_Ticket_First_Briefing')?['Id']"
+        },
+        "Start_First_Briefing": {
+          "runAfter": {
+            "BlobId": [
+              "Succeeded"
+            ]
+          },
+          "type": "Http",
+          "inputs": {
+            "method": "POST",
+            "uri": "https://prod-148.westus.logic.azure.com:443/workflows/952fb660f2e74174953fd3c97b5a1538/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=7goIxbCnd3LAGd_g9QJPGNvVu1GADh3JInE2_Q-7LvA",
+            "headers": {
+              "Content-Type": "application/json",
+              "Accept": "application/json"
+            },
+            "body": {
+              "BlobId": "@{outputs('BlobId')}"
+            }
+          }
+        },
+        "Copy_blob_to_Ticket_First_Briefing": {
+          "runAfter": {
+            "TODO_-_Log_successful_launch_fro_queu_": [
+              "Succeeded"
+            ]
+          },
+          "metadata": {
+            "flowSystemMetadata": {
+              "swaggerOperationId": "CopyFile"
+            }
+          },
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['shared_azureblob_1']['connectionId']"
+              }
+            },
+            "method": "post",
+            "path": "/datasets/default/copyFile",
+            "queries": {
+              "source": "@{body('Serialize_Ticket_Graph_to_Blob_Storage_New')?['Path']}",
+              "destination": "@{concat('/ticketgraph/', body('Config_Aggregator')?['msp'], '/ticketfirstbriefing/', concat(coalesce(outputs('TicketGraphMeta')?['ticket']?['entityId'],'xxx'), '.json'))}",
+              "overwrite": true,
+              "queryParametersSingleEncoded": true
+            },
+            "authentication": "@parameters('$authentication')"
+          }
+        }
+      }
+    }
+  },
+  "schemaVersion": "1.0.0.0"
+}
