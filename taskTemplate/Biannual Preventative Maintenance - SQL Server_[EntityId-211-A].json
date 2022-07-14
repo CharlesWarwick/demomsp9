@@ -1,0 +1,31 @@
+{
+  "entityId": "211-A",
+  "name": "Biannual Preventative Maintenance - SQL Server",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Review size of database(s) and offer recommendations if required",
+      "description": null
+    },
+    {
+      "instruction": "Evaluate growth of databases",
+      "description": null
+    },
+    {
+      "instruction": "Review and Install applicable SQL Updates",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.788643Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
