@@ -1,0 +1,37 @@
+{
+  "entityId": "1-A",
+  "name": "Sales question",
+  "enabled": true,
+  "items": [
+    {
+      "entityId": "66-A",
+      "question": "How well are we doing in meeting your purchasing needs",
+      "allowComment": true,
+      "type": "csat"
+    },
+    {
+      "entityId": "67-A",
+      "question": "Overall how likely are you to recommend us to a colleague or friend",
+      "allowComment": true,
+      "type": "nps"
+    },
+    {
+      "entityId": "68-A",
+      "question": "Are our invoices clear and understandable",
+      "allowComment": true,
+      "type": "csat"
+    }
+  ],
+  "deletedItems": [],
+  "alerts": {
+    "onNegative": {
+      "emails": [
+        "warwick@deskdirector.com"
+      ]
+    }
+  },
+  "meta": {
+    "updatedAt": "0001-01-01T00:00:00",
+    "updatedBy": null
+  }
+}
