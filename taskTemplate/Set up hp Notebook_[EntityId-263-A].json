@@ -1,0 +1,27 @@
+{
+  "entityId": "263-A",
+  "name": "Set up hp Notebook",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Register Warranty",
+      "description": null
+    },
+    {
+      "instruction": "Remove Wolf security",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  },
+  "lastModifiedAt": "2022-03-10T11:20:02.2174197Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
