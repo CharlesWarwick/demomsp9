@@ -1,0 +1,61 @@
+{
+  "entityId": "207-A",
+  "name": "DeskDirector - SSL Certificate update - AWS - ACM",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Check LB for N.Virginia",
+      "description": {
+        "content": "https://lancom.itglue.com/5596/docs/6089710#documentMode=edit&version=draft\n- Log into AWS - assume DD role.\n- View the certificate currently used by the load balancer\n- note down the arn details",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Check ACM for N.Virginia",
+      "description": {
+        "content": "- Check certificates in this region ACM\n- view status of the cert use arn to confirm, which you got from the last step : https://docs.aws.amazon.com/acm/latest/userguide/check-certificate-renewal-status.html",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Check LB for Sydney",
+      "description": {
+        "content": "- View the certificate currently used by the load balancer\n- note down the arn details",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Check ACM for Sydney",
+      "description": {
+        "content": "- Check certificates in this region ACM\n- view status of the cert use arn to confirm, which you got from the last step : https://docs.aws.amazon.com/acm/latest/userguide/check-certificate-renewal-status.html",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Confirm both Certificates are renewed",
+      "description": {
+        "content": "based on the status of them both - ensure they're either in-progress renewing and you can re-schedule to check later OR already renewed.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Update the Connect Wise configuration",
+      "description": {
+        "content": "Update the CW configuration for both Certificates under their corresponding regions and LB's",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.8716416Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
