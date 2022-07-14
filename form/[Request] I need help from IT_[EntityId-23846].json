@@ -1,0 +1,174 @@
+{
+  "form": {
+    "entityId": 23846,
+    "name": "[Request] I need help from IT",
+    "description": null,
+    "titleFormat": {
+      "format": "Logged by helpdesk buttons: {1}",
+      "arguments": [
+        "w3a88s"
+      ]
+    },
+    "tags": [],
+    "fields": [
+      {
+        "type": "single_choice",
+        "name": "Did you log the ticket using HelpDesk Buttons",
+        "identifier": "w3a88s",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "kyzxyd",
+            "selected": true
+          },
+          {
+            "name": "No",
+            "identifier": "dtd07c",
+            "selected": false
+          }
+        ]
+      },
+      {
+        "type": "short_text",
+        "name": "Name of Application",
+        "identifier": "jdi60v",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "w3a88s",
+          "operator": "not_in",
+          "identifiers": [
+            "kyzxyd"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Current Behavior",
+        "identifier": "bthb29",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "w3a88s",
+          "operator": "not_in",
+          "identifiers": [
+            "kyzxyd"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Expected Behavior",
+        "identifier": "tifb0m",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "w3a88s",
+          "operator": "not_in",
+          "identifiers": [
+            "kyzxyd"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Are you able to reproduce this issue?",
+        "identifier": "on65oi",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "pvekox"
+          },
+          {
+            "name": "No",
+            "identifier": "onx9ks"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "w3a88s",
+          "operator": "not_in",
+          "identifiers": [
+            "kyzxyd"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide detailed steps to reproduce this issue",
+        "identifier": "3yxhn5",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "w3a88s",
+          "operator": "not_in",
+          "identifiers": [
+            "kyzxyd"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "As best as you can, please describe the tasks performed that produced this issue",
+        "identifier": "czkxzi",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "on65oi",
+          "operator": "in",
+          "identifiers": [
+            "onx9ks"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Has another user reported a similar issue?",
+        "identifier": "z6stng",
+        "required": true,
+        "choices": [
+          {
+            "name": "Just me",
+            "identifier": "40b6mc"
+          },
+          {
+            "name": "All users",
+            "identifier": "0egp53"
+          },
+          {
+            "name": "Unsure",
+            "identifier": "3mf2p8"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "w3a88s",
+          "operator": "not_in",
+          "identifiers": [
+            "kyzxyd"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide any additional information that will help",
+        "description": "Supporting screenshots can be attached using the Paperclip icon.",
+        "identifier": "ochkqz",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "w3a88s",
+          "operator": "not_in",
+          "identifiers": [
+            "kyzxyd"
+          ]
+        }
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003D0E"
+  }
+}
