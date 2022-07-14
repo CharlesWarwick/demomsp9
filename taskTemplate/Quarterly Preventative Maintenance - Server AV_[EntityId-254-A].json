@@ -1,0 +1,35 @@
+{
+  "entityId": "254-A",
+  "name": "Quarterly Preventative Maintenance - Server AV",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Review AV status (updating, subscription)",
+      "description": null
+    },
+    {
+      "instruction": "Review AV errors",
+      "description": null
+    },
+    {
+      "instruction": "Review AV scans for any infections",
+      "description": null
+    },
+    {
+      "instruction": "Document any errors/viruses",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.5015892Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
