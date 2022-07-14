@@ -1,0 +1,329 @@
+{
+  "entityId": "1-A",
+  "name": "Usercentric",
+  "items": [
+    {
+      "entityId": 41,
+      "parentName": "[ITIL-Style] Communication (Email and calendars, Phone Systems)",
+      "name": "Import mailbox",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "unset",
+      "filterRootFlag": true,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 94,
+      "parentName": "0: The Most Common Tickets",
+      "name": "Email - How to add a signature to my Outlook email",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 100,
+        "name": "Incidents"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 95,
+      "parentName": "0: The Most Common Tickets",
+      "name": "Email - Please set up automatic replies in Outlook",
+      "tags": [
+        "pwdreset"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 100,
+        "name": "Incidents"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 88,
+      "parentName": "1. Self Service Area",
+      "name": "Email - Learn how to add a signature to my Outlook email",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 100,
+        "name": "Incidents"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 89,
+      "parentName": "1. Self Service Area",
+      "name": "Email - Learn how to set up automatic replies in Outlook",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 100,
+        "name": "Incidents"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 90,
+      "parentName": "1. Self Service Area",
+      "name": "Microsoft Teams - Quick Start Guide",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 82,
+      "parentName": "3. Email",
+      "name": "I can't receive emails",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 39,
+        "name": "New (portal)"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 83,
+      "parentName": "3. Email",
+      "name": "I can't send emails",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 39,
+        "name": "New (portal)"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 81,
+      "parentName": "3. Email",
+      "name": "I need a shared mailbox modified",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 39,
+        "name": "New (portal)"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 86,
+      "parentName": "4. Software and Apps",
+      "name": "An application on my computer is not working",
+      "tags": [
+        "webinar"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 2,
+        "name": "In Progress"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 85,
+      "parentName": "4. Software and Apps",
+      "name": "I need a new software installed on my computer",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 39,
+        "name": "New (portal)"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 87,
+      "parentName": "4. Software and Apps",
+      "name": "I need to remove a software application from my computer",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 39,
+        "name": "New (portal)"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 79,
+      "parentName": "Sales/Procurement",
+      "name": "Purchase Request",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "unset",
+      "filterRootFlag": true,
+      "filterHasException": true,
+      "board": {
+        "entityId": 37,
+        "name": "Procurement"
+      },
+      "status": {
+        "entityId": 529,
+        "name": "Approval Required"
+      },
+      "priority": null,
+      "langs": []
+    }
+  ],
+  "meta": {
+    "updatedAt": "2021-05-12T22:23:19.1607358Z",
+    "updatedBy": {
+      "entityId": "m~187",
+      "name": "mrwhite"
+    },
+    "companyCount": 0,
+    "contactCount": 1,
+    "teamCount": 0
+  }
+}
