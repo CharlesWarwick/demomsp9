@@ -1,0 +1,55 @@
+{
+  "entityId": "242-A",
+  "name": "P1 Ticket Checklist",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "P1 Response Chat Group Created",
+      "description": {
+        "content": "Name the chat \"P1 - <client name> - Issue/Ticket#\n\nCreate with the following members:\nSDM\nDispatch\nCSM\nGeneral Manager (Priscila)\nAssigned Engineer (The engineer who first responded to the issue, or the engineer who this P1 ticket is assigned to)\nPrimary Technical Engineer (Ideally the Primary Senior engineer (T3) for the client. If unavailable, a T3 available, familiar with the issue and able to support)\n\nPost this process link: https://lancom.itglue.com/5537/docs/2515250",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Customer Liaison Advised of issue and communication strategy",
+      "description": {
+        "content": "Reach out to the primary customer contact, or the person who logged the ticket to ensure they are aware:\n- We are working on the issue\n- What our communication timeline will be\n- Gather if any other contacts need to be included in comms",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Engineer workload cleared",
+      "description": {
+        "content": "The assigned engineer will need his workload cleared to ensure they are able to focus on this issue.  Dispatch should review their schedule and either move the tickets to another engineer, reschedule the tasks or advise SDM that the assigned engineer may not be the best resource to work this P1.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "[Completion] Impacted users have been contacted and confirmed working OK.",
+      "description": null
+    },
+    {
+      "instruction": "[Completion] Incident report has been filled out and checked off by Account Management.",
+      "description": {
+        "content": "Once the issue is resolved, an incident report is created, detailing the following\nWhat went wrong\nRoot cause analysis\nWhat learnings to ensure it doesn't happen again\nWhat services/product recommendations\nWhat changes are required\nHow could we minimize this in the future\nThe incident report must be submitted within 24 hours after the incident\n\nTemplates and further instruction can be found here: https://lancom.itglue.com/5537/docs/2515250",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "[Completion] Any relevant preventative tickets have been logged.",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.8966173Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
