@@ -1,0 +1,49 @@
+{
+  "form": {
+    "entityId": 22210,
+    "name": "[Request] I need software removed on my computer",
+    "description": null,
+    "titleFormat": null,
+    "tags": [],
+    "fields": [
+      {
+        "type": "short_text",
+        "name": "Name of the software:",
+        "identifier": "1o0t35",
+        "required": true
+      },
+      {
+        "type": "single_choice",
+        "name": "Is the software required on the PC you're logging this ticket from?",
+        "identifier": "ff8ej6",
+        "required": true,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "h55r4z"
+          },
+          {
+            "name": "No",
+            "identifier": "u7edjc"
+          }
+        ]
+      },
+      {
+        "type": "long_text",
+        "name": "Reason for uninstalling this software?",
+        "description": "i.e. Software No Longer Required / Low Disk Space",
+        "identifier": "hage0z",
+        "required": true
+      },
+      {
+        "type": "long_text",
+        "name": "Any additional information to assist with your request?",
+        "identifier": "jk916h",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003D0F"
+  }
+}
