@@ -1,0 +1,42 @@
+{
+  "entityId": "161-A",
+  "name": "Implementation",
+  "items": [
+    {
+      "entityId": 106,
+      "parentName": "Implementation",
+      "name": "New  implementation Ticket",
+      "tags": [
+        "implementation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "unset",
+      "filterRootFlag": false,
+      "filterHasException": false,
+      "board": {
+        "entityId": 239,
+        "name": "Implementation"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    }
+  ],
+  "meta": {
+    "updatedAt": "2021-09-22T08:32:41.6270463Z",
+    "updatedBy": {
+      "entityId": "ddadmin~-1",
+      "name": "warwick"
+    },
+    "companyCount": 0,
+    "contactCount": 0,
+    "teamCount": 2
+  }
+}
