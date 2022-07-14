@@ -1,0 +1,90 @@
+{
+  "entityId": "97-A",
+  "name": "HR",
+  "items": [
+    {
+      "entityId": 84,
+      "parentName": "2. User Account",
+      "name": "Offboarding",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 39,
+        "name": "New (portal)"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 80,
+      "parentName": "2. User Account",
+      "name": "Onboarding",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 7,
+        "name": "Approval Required"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    },
+    {
+      "entityId": 91,
+      "parentName": "Staff Onboarding and offboarding",
+      "name": "Onboarding New Employee",
+      "tags": [
+        "onboarding"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": false,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 7,
+        "name": "Approval Required"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    }
+  ],
+  "meta": {
+    "updatedAt": "2021-06-01T03:20:38.8337005Z",
+    "updatedBy": {
+      "entityId": "ddadmin~-1",
+      "name": "warwick"
+    },
+    "companyCount": 0,
+    "contactCount": 0,
+    "teamCount": 3
+  }
+}
