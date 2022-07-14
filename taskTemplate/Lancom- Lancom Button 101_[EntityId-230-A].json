@@ -1,0 +1,69 @@
+{
+  "entityId": "230-A",
+  "name": "Lancom: Lancom Button 101",
+  "tags": [
+    "demo",
+    "lancom"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "1.1 How to login to Lancom Button (Email Token)",
+      "description": {
+        "content": "**Log in using Email Token**\n[IT Glue Guide](https://lancom.itglue.com/5537/docs/7711866)\n[Video Guide](https://web.microsoftstream.com/video/10e9bab6-1205-47f0-8dc4-49806c2029eb)\n**Log in using Microsoft Account**\n[IT Glue Guide](https://lancom.itglue.com/5537/docs/7796762)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "1.2 How to log your first ticket in Lancom Button",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7565168)\n[Video Guide](https://web.microsoftstream.com/video/8df8721a-12cb-42ff-8ef4-6e09e65df90f)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "1.2.1 How to log your second ticket in Lancom Button",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7712237)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "1.3 How to start a Ticket Chat",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7565218)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "1.4 How to start a Ticketless Chat",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7565182)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "1.5 Tickets Module",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7565795)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "1.6 Learning Centre and Bigger Brains Office",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/7578782)",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.3936129Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
