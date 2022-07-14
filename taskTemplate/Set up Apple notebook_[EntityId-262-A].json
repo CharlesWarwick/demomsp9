@@ -1,0 +1,34 @@
+{
+  "entityId": "262-A",
+  "name": "Set up Apple notebook",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Get Apple ID from customer",
+      "description": {
+        "content": "[Find Apple ID here](https://www.apple.com)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Install Office iOS",
+      "description": null
+    },
+    {
+      "instruction": "Register AppleCare",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  },
+  "lastModifiedAt": "2022-03-10T11:19:24.2172706Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
