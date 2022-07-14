@@ -1,0 +1,72 @@
+{
+  "form": {
+    "entityId": 26637,
+    "name": "[HR] DD Forms Showcase - Onboarding: Re-use equipment",
+    "description": null,
+    "titleFormat": null,
+    "tags": [
+      "hr"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "Re use and existing computer",
+        "description": "We are going to re-allocate an existing PC/Notebook to the new user",
+        "identifier": "itobr1",
+        "required": false
+      },
+      {
+        "type": "short_text",
+        "name": "Whose existing computer will this user get.",
+        "description": "What are the details:",
+        "identifier": "49ig91",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "Is data to be archived from the existing PC/Notebook",
+        "description": "Note that we backup the entire existing PC/Notebook using imaging if required. Imaging will back up *everything* but will require IT support to recover. If this is not necessary you may request some data/programs or all data/programs be maintained.",
+        "identifier": "7dfjl1",
+        "required": false,
+        "choices": [
+          {
+            "name": "Backup Everything",
+            "identifier": "kut641"
+          },
+          {
+            "name": "Backup Some Files (you can describe these later)",
+            "identifier": "rtne24"
+          }
+        ]
+      },
+      {
+        "type": "multiple_choice",
+        "name": "What files should be backed up?",
+        "identifier": "ilwjyy",
+        "required": false,
+        "choices": [
+          {
+            "name": "All Office files",
+            "identifier": "c670iw"
+          },
+          {
+            "name": "Local Profile",
+            "identifier": "gxo26n"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "7dfjl1",
+          "operator": "in",
+          "identifiers": [
+            "kut641",
+            "rtne24"
+          ]
+        }
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CC2"
+  }
+}
