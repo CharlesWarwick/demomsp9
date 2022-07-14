@@ -1,0 +1,35 @@
+{
+  "entityId": "214-A",
+  "name": "Cloudcheckr Checklist",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Check if there are known recent changes that caused the increase. Adjust alerts as required to match the new budget.",
+      "description": null
+    },
+    {
+      "instruction": "If there is a temporary spike or unintentional change, identify what caused the increase and identify resources",
+      "description": null
+    },
+    {
+      "instruction": "Let CSMs know to communicate with the customer and/or communicate with the customer WITH CSM looped in",
+      "description": null
+    },
+    {
+      "instruction": "Apply remediation",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.7856404Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
