@@ -1,0 +1,95 @@
+{
+  "entityId": "220-A",
+  "name": "Attwoods: Staff Onboarding",
+  "tags": [
+    "demo",
+    "newusersetup",
+    "attwoods"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Create user with FirstName.FirstLetterSurname@attwoods.co.nz (ATW-DC01)",
+      "description": null
+    },
+    {
+      "instruction": "Set UPN for the user to @attwoods.co.nz",
+      "description": null
+    },
+    {
+      "instruction": "Add users to relevant security groups for the requested printers and mapped drives. Refer to relevant security groups below.",
+      "description": {
+        "content": "Security Groups of Note\n\nAccounts Group - Access to Accounts folder and maps drive. Confidential info - must be requested by Steve or Paul\nCreditors Group - Access to Accounts Receivable and Creditors drive - must be requested by Steve or Paul\nATWgOutfiles - Drop folder for data Quanta to process / intergrations\nHR Group / HR Group Restricted - Maps HR drive\nShipping - Maps Shipping Drive\nSato Powerforms Users - Access to the Sato share, for accessing labels. Generally used in warehouse.\nThere are many other security groups under the \"Attwoods Groups\" OU.\n\nAll printer security groups are under the OU Attwoods Groups\\Printers. Please add users to the relevant groups as requested in the user setup document.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Sync user to O365 (Run this command in powershell) - Start-AdSyncSyncCycle -PolicyType Delta",
+      "description": null
+    },
+    {
+      "instruction": "Increase Office 365 license count unless user is replacing a staff member that has left.",
+      "description": {
+        "content": "Increase the license from CSP Portal https://app.cspportal.cloud/licenses",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "User will need to setup 2FA on their 365 account as this is required for all Attwoods Users.",
+      "description": {
+        "content": "Login as Attwoods 365 admin to this address - https://account.activedirectory.windowsazure.com/UserManagement/MultifactorVerification.aspx to enable 2FA for a given user\nAdd to ECAttwoods@attwoods.co.nz distribution group\nLog a ticket in CW under the new user and schedule yourself for 1 day after the new user's start date to confirm they have enabled 2FA\n2FA Setup documentation can be found here. One day after the user starts (using the above logged ticket as a reminder), confirm whether they have setup 2FA by logging into https://account.activedirectory.windowsazure.com/UserManagement/MultifactorVerification.aspx. If they have configured 2FA, their account will be 'Enforced' instead of 'Enabled'.\nIf not, please send them the user documentation to setup 2FA on their account and follow up to confirm this happens.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Grant user full access and send as permissions to any relevant shared mailboxes if requested in user setup form",
+      "description": null
+    },
+    {
+      "instruction": "Add user to distribution groups if requested",
+      "description": {
+        "content": "Should be part of relevant branch group and all staff by default",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Assign Advanced Protection license to the user email account",
+      "description": null
+    },
+    {
+      "instruction": "LOG INTO CITRIX",
+      "description": {
+        "content": "https://connect.attwoods.co.nz/",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "SETUP OUTLOOK PROFILE",
+      "description": null
+    },
+    {
+      "instruction": "LOG INTO SKYPE FOR BUSINESS",
+      "description": null
+    },
+    {
+      "instruction": "TEST MAPPED DRIVES AND PRINTERS",
+      "description": {
+        "content": "If user needs secure print, send them instructions on how to set a 4 digit code under their printer preferences\nInstructions attached on right (Attwoods-SecurePrint.pdf)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "For QM(Quanta) - Follow up with paul@attwoods.co.nz",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.8096421Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
