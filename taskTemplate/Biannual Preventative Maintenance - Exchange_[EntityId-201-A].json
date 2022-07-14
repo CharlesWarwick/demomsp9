@@ -1,0 +1,43 @@
+{
+  "entityId": "201-A",
+  "name": "Biannual Preventative Maintenance - Exchange",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Review and Install applicable Exchange updates",
+      "description": null
+    },
+    {
+      "instruction": "Check DB circular logging and adjust as necessary",
+      "description": null
+    },
+    {
+      "instruction": "Review Exchange health with 'Test-ExchangeServerHealth'",
+      "description": null
+    },
+    {
+      "instruction": "Check all automatic Exchange services are started",
+      "description": null
+    },
+    {
+      "instruction": "Test autodiscover/Exchange RCA",
+      "description": null
+    },
+    {
+      "instruction": "Compare mailbox sizes to limits",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.708642Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
