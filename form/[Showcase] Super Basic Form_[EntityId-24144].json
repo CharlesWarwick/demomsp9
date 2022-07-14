@@ -1,0 +1,34 @@
+{
+  "form": {
+    "entityId": 24144,
+    "name": "[Showcase] Super Basic Form",
+    "description": "Testing Adaptive Cards",
+    "titleFormat": {
+      "format": "{1} {2}",
+      "arguments": [
+        "lolxbx",
+        "g3lfan"
+      ]
+    },
+    "tags": [
+      "demo"
+    ],
+    "fields": [
+      {
+        "type": "short_text",
+        "name": "First Name",
+        "identifier": "lolxbx",
+        "required": false
+      },
+      {
+        "type": "short_text",
+        "name": "Second Name",
+        "identifier": "g3lfan",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003D1D"
+  }
+}
