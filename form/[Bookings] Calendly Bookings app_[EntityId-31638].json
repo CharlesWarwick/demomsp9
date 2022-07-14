@@ -1,0 +1,23 @@
+{
+  "form": {
+    "entityId": 31638,
+    "name": "[Bookings] Calendly Bookings app",
+    "description": "This form uses Microsoft Bookings",
+    "titleFormat": null,
+    "tags": [
+      "bookings"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "Click on the link to create a booking using Calendly",
+        "description": "[Reserve your CALENDLY appointment](https://calendly.com/stevepink/30min) with Steve by clicking [here](https://calendly.com/stevepink/30min)",
+        "identifier": "dd8zfp",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CC4"
+  }
+}
