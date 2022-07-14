@@ -1,0 +1,90 @@
+{
+  "entityId": "246-A",
+  "name": "Salt Search: Staff Onboarding",
+  "tags": [
+    "demo",
+    "saltsearch",
+    "newusersetup"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Provision Microsoft Business Standard licence from CSP portal",
+      "description": {
+        "content": "[Access CSP Portal](https://app.cspportal.cloud/licenses)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Create O365 account for the user and assign user O365 licence",
+      "description": {
+        "content": "Username format : firstnameInitialLastname@welovesalt.com  (eg: jwilkinson@welovesalt.com forJoe Wilkinson)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Add user to the requested distribution groups",
+      "description": {
+        "content": "Note: There should be no individual users added to the Salt Global distribution list; it should only include office distribution lists.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Add user to the correct signature distribution group on O365 based on location (Signature Location – replace Location with the user’s location i.e. Signature SG)",
+      "description": null
+    },
+    {
+      "instruction": "Send the member a Dropbox invitation from admin console",
+      "description": null
+    },
+    {
+      "instruction": "Add the user to the Dropbox group based on the user’s location",
+      "description": null
+    },
+    {
+      "instruction": "Create Job Science account (unless Hayley has already created one)",
+      "description": null
+    },
+    {
+      "instruction": "Send manager the login details for the user",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Sign in using user’s O365 account (Outlook, Teams)",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Sign into Dropbox",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Sign into Job Science",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Make Chrome the default browser and Outlook the default mail app",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Add the Salesforce extension",
+      "description": null
+    },
+    {
+      "instruction": "Add contact to Connect Wise",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Set up MFA for the user",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.0266188Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
