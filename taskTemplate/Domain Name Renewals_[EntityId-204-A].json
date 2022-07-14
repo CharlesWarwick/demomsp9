@@ -1,0 +1,40 @@
+{
+  "entityId": "204-A",
+  "name": "Domain Name Renewals",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Check if renewal account",
+      "description": {
+        "content": "Check if the domain name being renewed is on a customer owned account paid by the customer or on Lancom Route53.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Check Renewal in ConnectWise",
+      "description": {
+        "content": "If the renewal is on a Lancom account, login to ConnectWise and check the agreement under the client to see if a Domain Name renewal agreement exists, the domain name is listed in the agreement and set to charge annually.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "If Renewal Doesnt Exist",
+      "description": {
+        "content": "Log a ticket with Finance to setup a renewal agreement to charge the customer.",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.880642Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
