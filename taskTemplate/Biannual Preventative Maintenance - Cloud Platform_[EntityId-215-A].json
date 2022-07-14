@@ -1,0 +1,35 @@
+{
+  "entityId": "215-A",
+  "name": "Biannual Preventative Maintenance - Cloud Platform",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Update infrastructure diagrams",
+      "description": null
+    },
+    {
+      "instruction": "Review cloud recommendations",
+      "description": null
+    },
+    {
+      "instruction": "Document recommendations and pass onto CSMs",
+      "description": null
+    },
+    {
+      "instruction": "Review consumption costs/make recommendations",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.8746427Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
