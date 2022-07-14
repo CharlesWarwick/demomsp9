@@ -1,0 +1,27 @@
+{
+  "entityId": "239-A",
+  "name": "Quarterly Preventative Maintenance - Server Backups",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Verify server backup inclusion",
+      "description": null
+    },
+    {
+      "instruction": "Verify restore ability",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.8796158Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
