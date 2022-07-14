@@ -1,0 +1,192 @@
+{
+  "form": {
+    "entityId": 24581,
+    "name": "[Request] Generic: Computer | I need a new software installed",
+    "description": null,
+    "titleFormat": {
+      "format": "I need {1} installed on my machine.",
+      "arguments": [
+        "md2yo5"
+      ]
+    },
+    "tags": [],
+    "fields": [
+      {
+        "type": "short_text",
+        "name": "Name of the software:",
+        "identifier": "md2yo5",
+        "required": true
+      },
+      {
+        "type": "single_choice",
+        "name": "Pick the best option:",
+        "identifier": "ct3x05",
+        "required": true,
+        "choices": [
+          {
+            "name": "I have the installer, but don't have admin rights.",
+            "identifier": "f4zz0g"
+          },
+          {
+            "name": "I don't have the installer.",
+            "identifier": "1fvqki"
+          },
+          {
+            "name": "Other.",
+            "identifier": "l9ml64"
+          }
+        ],
+        "meta": {
+          "render": "radio"
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Please provide any additional information:",
+        "description": "Recommended:  An example user who has this software / the website this software is available from.",
+        "identifier": "iw73h5",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "ct3x05",
+          "operator": "in",
+          "identifiers": [
+            "l9ml64"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Is the software required on the PC you're logging this ticket from?",
+        "identifier": "tfr2nr",
+        "required": true,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "1hm398"
+          },
+          {
+            "name": "No",
+            "identifier": "xhvs04"
+          }
+        ],
+        "meta": {
+          "render": "radio"
+        }
+      },
+      {
+        "type": "statement",
+        "name": "How to find your PC ID:",
+        "description": "![This is my GIF](https://media.giphy.com/media/TDM2g2f9g2iaSPEvr0/giphy.gif)",
+        "identifier": "velooc",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "tfr2nr",
+          "operator": "in",
+          "identifiers": [
+            "xhvs04"
+          ]
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Please provide the PC Name, PC ID or User who needs this software installed.",
+        "identifier": "985v8o",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "tfr2nr",
+          "operator": "in",
+          "identifiers": [
+            "xhvs04"
+          ]
+        }
+      },
+      {
+        "type": "api_single_select",
+        "name": "Best Contact Number:",
+        "description": "This list is automatically generated from our Ticketing System",
+        "identifier": "fh5b1r",
+        "required": false,
+        "api": {
+          "method": "GET",
+          "url": "https://prod-07.australiasoutheast.logic.azure.com:443/workflows/272a42239a564f9f877cce859dffc5eb/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ayr6wl5y2vVdlURZIXbpPwZHQ6x9mgoJ9saFIxzT7Yw",
+          "queryParams": null
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "My Contact Number is not available",
+        "identifier": "zmncxy",
+        "required": false,
+        "choices": [
+          {
+            "name": "My Contact Number is not available",
+            "identifier": "vxyrnc"
+          }
+        ]
+      },
+      {
+        "type": "short_text",
+        "name": "Please provide your best Contact Number:",
+        "description": "We will update our Ticketing System to include this for future requests",
+        "identifier": "n63sa8",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "zmncxy",
+          "operator": "in",
+          "identifiers": [
+            "vxyrnc"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Please select your current location:",
+        "description": "This will be used to schedule your ticket in the appropriate time zone.",
+        "identifier": "thbrgr",
+        "required": true,
+        "choices": [
+          {
+            "name": "New Zealand",
+            "identifier": "5wg2pk"
+          },
+          {
+            "name": "Australia",
+            "identifier": "5qjapg"
+          },
+          {
+            "name": "Somewhere Else",
+            "identifier": "4ch0zt"
+          }
+        ]
+      },
+      {
+        "type": "short_text",
+        "name": "Let us know your current time zone and preferred contact times:",
+        "identifier": "ki8x4i",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "thbrgr",
+          "operator": "in",
+          "identifiers": [
+            "4ch0zt"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Have we missed something? Use this field for additional notes:",
+        "description": "* Additional information to help your service request\n* Supporting screenshots can be attached using the Paperclip icon.\n* Suggestions on improving this form",
+        "identifier": "35prka",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003D08"
+  }
+}
