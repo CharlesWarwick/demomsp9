@@ -1,0 +1,40 @@
+{
+  "entityId": "33-A",
+  "name": "Test",
+  "items": [
+    {
+      "entityId": 77,
+      "parentName": "[ITIL-Style] User Accounts",
+      "name": "User Offboarding",
+      "tags": [],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": true,
+      "board": {
+        "entityId": 101,
+        "name": "Managed Services"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "langs": []
+    }
+  ],
+  "meta": {
+    "updatedAt": "2021-05-11T03:46:59.0102638Z",
+    "updatedBy": {
+      "entityId": "m~20037",
+      "name": "charleschat@ddportal.com"
+    },
+    "companyCount": 0,
+    "contactCount": 0,
+    "teamCount": 0
+  }
+}
