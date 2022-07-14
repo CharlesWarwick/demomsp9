@@ -1,0 +1,73 @@
+{
+  "entityId": "224-A",
+  "name": "Mailbox Breach",
+  "tags": [
+    "demo",
+    "lancom"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Inform CSM and advise of the incident in the first instance",
+      "description": null
+    },
+    {
+      "instruction": "Verify that the mailbox has been used without it's owner's knowledge",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/4037729)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Reset the password for the mailbox",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/4037729)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Log into the mailbox and check the inbox rules for anything suspicious",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/4037729)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Get on the phone with the user and help them log back in on the devices where they have their emails set up",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/4037729)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Run an ESET scan on their machine",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/4037729)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Investigate if there were any dodgy emails that the user could have received recently that had links in them",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/4037729)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Advise the users to forward anything that looks even slightly suspicious to us so that we can look into",
+      "description": {
+        "content": "[IT Glue Guide](https://lancom.itglue.com/5537/docs/4037729)",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.3456475Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
