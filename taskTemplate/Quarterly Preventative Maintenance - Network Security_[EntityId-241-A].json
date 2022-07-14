@@ -1,0 +1,35 @@
+{
+  "entityId": "241-A",
+  "name": "Quarterly Preventative Maintenance - Network Security",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Review inbound NAT rules",
+      "description": null
+    },
+    {
+      "instruction": "Disable inbound NATs which are no longer required",
+      "description": null
+    },
+    {
+      "instruction": "Hacker Target External IP Scan",
+      "description": null
+    },
+    {
+      "instruction": "Check the Public IP if listed in Spamhaus or any RBL sites",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.9036182Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
