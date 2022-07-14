@@ -1,0 +1,103 @@
+{
+  "form": {
+    "entityId": 22202,
+    "name": "[HR] DD Forms Showcase - New Employee (copy)",
+    "description": null,
+    "titleFormat": null,
+    "tags": [
+      "hr"
+    ],
+    "fields": [
+      {
+        "type": "short_text",
+        "name": "New employee's name",
+        "identifier": "gilzcx",
+        "required": true
+      },
+      {
+        "type": "short_text",
+        "name": "Title/Position:",
+        "identifier": "rkczx3",
+        "required": true
+      },
+      {
+        "type": "email",
+        "name": "Desired Email Address",
+        "identifier": "g99ee8",
+        "required": true
+      },
+      {
+        "type": "number",
+        "name": "Phone Number",
+        "identifier": "c9vgt8",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "PC Requirements",
+        "description": "If you need to use an existing PC, please specify the PC in the next question after clicking the \"Use Existing PC\" option.",
+        "identifier": "0rlqi6",
+        "required": true,
+        "choices": [
+          {
+            "name": "They need a new PC",
+            "identifier": "r0ex9x"
+          },
+          {
+            "name": "Use Existing PC",
+            "identifier": "njn965"
+          }
+        ],
+        "meta": {
+          "render": "radio"
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Please specify the name of the existing PC to be used",
+        "identifier": "e95u87",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "0rlqi6",
+          "operator": "in",
+          "identifiers": [
+            "njn965"
+          ]
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Any other information that would be useful to know:",
+        "identifier": "vbwt7a",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [
+      {
+        "name": "New Section",
+        "identifier": "9ebw05",
+        "fields": [
+          {
+            "type": "short_text",
+            "name": "If existing PC please name or describe:",
+            "identifier": "r14otj",
+            "required": true
+          }
+        ],
+        "conditions": [
+          {
+            "parentId": "base_section",
+            "parentFieldId": "0rlqi6",
+            "operator": "in",
+            "identifiers": [
+              "njn965"
+            ]
+          }
+        ]
+      }
+    ],
+    "etag": "01000000-0000-1DE6-0000-000000003CBF"
+  }
+}
