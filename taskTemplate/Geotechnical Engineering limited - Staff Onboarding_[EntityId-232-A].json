@@ -1,0 +1,99 @@
+{
+  "entityId": "232-A",
+  "name": "Geotechnical Engineering limited : Staff Onboarding",
+  "tags": [
+    "demo",
+    "newusersetup",
+    "soilrock"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Set up user in Active Directory",
+      "description": {
+        "content": "[Soilandrock.local --> My Business ---> Users --> SBSUsers --> Auckland/CHCH --> Office365].",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "The user logonname should be firstname.lastname",
+      "description": {
+        "content": "Example: chris.davy",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Create personal drive for User",
+      "description": {
+        "content": "H:     -->  \\\\SRAKLDA1\\Users$\\",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Add Licences From Office365 portal",
+      "description": {
+        "content": "Assign Business Premium/Exchange Online (Plan1) license.  \nAdd license for O365 Advanced Threat Protection (Plan 1). \n\n NOTE:  Business Standard replaced Business Premium.  To purchase in CSP license MS365 Business Standard with Exhange Online Advanced Threat Protection, and then in Office 365 portal to assign license to the user.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Update Asset Register (on Sharepoint).",
+      "description": {
+        "content": "[Asset Register](https://soilandrock.sharepoint.com/:x:/g/Information%20Technology/EdfLMXV0VopMov2jssg9yc8BjKmr7AiO5I5bwmnxJCs8nw?e=42ur4s)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Setup VPN for Laptop Users:  Add to restricted VPN group",
+      "description": {
+        "content": "[SSL VPN](https://lancom.itglue.com/3914504/assets/165350-remote-access/records/12138734?first_record=1)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Ensure the default primary email address is in the correct format",
+      "description": {
+        "content": "example: firstname.lastname@soilandrock.co.nz \n\n(not @soilandrock.onmicrosoft.com) - to correct this you will need follow the steps below (Proceed with caution - escalate if necessary)\n\nGo to ADSIedit, browse to OU where user resides, go to properties, go to attribute proxyAddress and add attribute SMTP:firstname.lastname@soilandrock.co.nz & smtp:firstname@soilandrock.co.nz, initiate directory sync again to apply change.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Add User to the distribution group: ALL AKL",
+      "description": null
+    },
+    {
+      "instruction": "Shared/Group Calendar Setup",
+      "description": {
+        "content": "AUCKLAND Users ONLY - add new staff members to the Meeting rooms: Puketoka and Rangitoto\n\n(From Office365, Open puketoka@soilandrock.co.nz as \"Open as a new mailbox\" and then Share calendar)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Add New user to Connectwise",
+      "description": {
+        "content": "Go to Companies, Type the company name and select Contacts. \nClick the + sign to add the new contact.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Email the credentials to Jocelyn",
+      "description": {
+        "content": "(who would then create Deltek account for the new user). Provide the username in format: soilandrock\\username",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Test send/receiveing emails and  ENFORCE 2FA for the user.",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.5086159Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
