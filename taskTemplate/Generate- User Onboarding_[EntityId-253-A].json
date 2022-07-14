@@ -1,0 +1,123 @@
+{
+  "entityId": "253-A",
+  "name": "Generate: User Onboarding",
+  "tags": [
+    "demo",
+    "newusersetup",
+    "generate"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Request Received",
+      "description": {
+        "content": "[User Setup IT Glue Guide](https://lancom.itglue.com/5519061/docs/8132810)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Attach Tasks checklist",
+      "description": null
+    },
+    {
+      "instruction": "Change ticket contact",
+      "description": {
+        "content": "In the ticket, change the Contact of the ticket to the person who submitted the request",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Confirm and assign user device",
+      "description": null
+    },
+    {
+      "instruction": "Create user in 365",
+      "description": null
+    },
+    {
+      "instruction": "Exchange: Manager Setting",
+      "description": null
+    },
+    {
+      "instruction": "Copy groups from existing user (If specified)",
+      "description": {
+        "content": "URL: portal.azure.com\nResource: GEN-Automation\nRunbook: On-boarding_CopyUserGroups",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Manually add user to groups (If copy user not specified)",
+      "description": null
+    },
+    {
+      "instruction": "Confirm AvePoint Backup enabled",
+      "description": null
+    },
+    {
+      "instruction": "Confirm user in Zscaler Portal",
+      "description": null
+    },
+    {
+      "instruction": "Federate user in Lastpass",
+      "description": null
+    },
+    {
+      "instruction": "Setup user in Aircall",
+      "description": null
+    },
+    {
+      "instruction": "License user in Nitro Pro (if required)",
+      "description": null
+    },
+    {
+      "instruction": "Confirm/Configure Teams and Groups",
+      "description": null
+    },
+    {
+      "instruction": "Install missing apps",
+      "description": null
+    },
+    {
+      "instruction": "Configure secure print",
+      "description": null
+    },
+    {
+      "instruction": "License Nitro Pro app (If required)",
+      "description": null
+    },
+    {
+      "instruction": "User added to CW and Onboarding Track",
+      "description": null
+    },
+    {
+      "instruction": "Distribute login to Line manager",
+      "description": {
+        "content": "Add manager as a CC on ticket and send them OneTimeSecret link.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Inform contact of ticket completion and user details",
+      "description": {
+        "content": "Pass user details to the original submitter of the ticket.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Generate: Approve checklist",
+      "description": {
+        "content": "Get Cameron Kay or Rhys Donovan to go over checklist and confirm everything was done\n\nInform Jason, Asya or Peter the ticket is complete. They will review this checklist and close ticket when they are happy with the setup.",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:12.4225873Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
