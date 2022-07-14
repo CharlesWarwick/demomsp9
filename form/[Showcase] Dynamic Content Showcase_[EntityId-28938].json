@@ -1,0 +1,28 @@
+{
+  "form": {
+    "entityId": 28938,
+    "name": "[Showcase] Dynamic Content Showcase",
+    "description": null,
+    "titleFormat": null,
+    "tags": [
+      "dynamic-content"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "Dynamic Content Example",
+        "description": "POST",
+        "identifier": "majtas",
+        "required": false,
+        "content": {
+          "method": "POST",
+          "url": "https://prod-79.westus.logic.azure.com:443/workflows/68241680b68a4faaa71dcbe3680fd277/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=6Up9H0QTjJh-V4ILQryls0JVs2Z1BqaDsuu_ITAsdNs",
+          "queryParams": null
+        }
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CDE"
+  }
+}
