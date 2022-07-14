@@ -1,0 +1,48 @@
+{
+  "entityId": "217-A",
+  "name": "Auto Advance Finance: Staff Offboarding",
+  "tags": [
+    "demo",
+    "offboarding",
+    "autoadvance"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Login to Exchange365 admin and convert the user mailbox to shared mail box",
+      "description": null
+    },
+    {
+      "instruction": "Give delegation access of the mailbox and also set the forwarding email address of the account",
+      "description": null
+    },
+    {
+      "instruction": "Hide from Address list",
+      "description": null
+    },
+    {
+      "instruction": "Revoked the license on O365 Admin and reduce the license count on CSP portal",
+      "description": null
+    },
+    {
+      "instruction": "Block the sign in of the account in O365",
+      "description": null
+    },
+    {
+      "instruction": "Active Directory",
+      "description": {
+        "content": "Disable the user account and change the password\n\nRemove from all security groups\n\nMove the profile to disabled accounts OU\n\nProvide access of RDS profile data to the user requested on the ticket.\n\nUser decommissioning process completed",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:10.8796433Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
