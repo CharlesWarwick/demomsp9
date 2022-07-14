@@ -1,0 +1,187 @@
+{
+  "entityId": "226-A",
+  "name": "Service Catalogue - General",
+  "items": [
+    {
+      "entityId": 117,
+      "parentName": "Account/Access",
+      "name": "Multi-factor Authentication",
+      "tags": [
+        "account",
+        "sc-general",
+        "flow-automation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": null,
+      "status": null,
+      "priority": null,
+      "langs": []
+    },
+    {
+      "entityId": 112,
+      "parentName": "Hardware",
+      "name": "General",
+      "tags": [
+        "hardware",
+        "sc-general",
+        "flow-automation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": null,
+      "status": null,
+      "priority": null,
+      "langs": []
+    },
+    {
+      "entityId": 109,
+      "parentName": "Hardware",
+      "name": "Printer/Scanner",
+      "tags": [
+        "hardware",
+        "sc-general",
+        "flow-automation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": null,
+      "status": null,
+      "priority": null,
+      "langs": []
+    },
+    {
+      "entityId": 111,
+      "parentName": "Hardware",
+      "name": "Server",
+      "tags": [
+        "hardware",
+        "sc-general",
+        "flow-automation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": null,
+      "status": null,
+      "priority": null,
+      "langs": []
+    },
+    {
+      "entityId": 110,
+      "parentName": "Hardware",
+      "name": "WiFi",
+      "tags": [
+        "hardware",
+        "sc-general",
+        "flow-automation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": null,
+      "status": null,
+      "priority": null,
+      "langs": []
+    },
+    {
+      "entityId": 114,
+      "parentName": "Microsoft Office 365",
+      "name": "Microsoft Outlook",
+      "tags": [
+        "software",
+        "sc-general",
+        "flow-automation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": null,
+      "status": null,
+      "priority": null,
+      "langs": []
+    },
+    {
+      "entityId": 115,
+      "parentName": "Microsoft Office 365",
+      "name": "Microsoft Sharepoint",
+      "tags": [
+        "software",
+        "sc-general",
+        "flow-automation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": null,
+      "status": null,
+      "priority": null,
+      "langs": []
+    },
+    {
+      "entityId": 116,
+      "parentName": "Microsoft Office 365",
+      "name": "Microsoft Teams",
+      "tags": [
+        "software",
+        "sc-general",
+        "flow-automation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": null,
+      "status": null,
+      "priority": null,
+      "langs": []
+    },
+    {
+      "entityId": 113,
+      "parentName": "Software",
+      "name": "Request a new install",
+      "tags": [
+        "software",
+        "sc-general",
+        "flow-automation"
+      ],
+      "enabled": true,
+      "useFormUrl": false,
+      "formType": "native",
+      "filterRootFlag": true,
+      "filterHasException": false,
+      "board": null,
+      "status": null,
+      "priority": null,
+      "langs": []
+    }
+  ],
+  "meta": {
+    "updatedAt": "2022-01-14T04:24:34.070093Z",
+    "updatedBy": {
+      "entityId": "l_api_key.static",
+      "name": "API Key"
+    },
+    "companyCount": 1,
+    "contactCount": 0,
+    "teamCount": 0
+  }
+}
