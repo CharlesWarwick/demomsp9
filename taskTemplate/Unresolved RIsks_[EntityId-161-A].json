@@ -1,0 +1,37 @@
+{
+  "entityId": "161-A",
+  "name": "Unresolved RIsks",
+  "tags": [
+    "hse"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Has the assessment been reviewed",
+      "description": {
+        "content": "You must go through and properly assess",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Do you interview the person",
+      "description": {
+        "content": "You should interview in these conditions, if conditions are not met then just state why you think an interview was not necessary and move on",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Have you considered a notiifcation",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  },
+  "lastModifiedAt": "2021-10-31T08:15:24.7755703Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
