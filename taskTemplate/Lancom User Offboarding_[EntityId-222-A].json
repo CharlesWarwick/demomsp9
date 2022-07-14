@@ -1,0 +1,138 @@
+{
+  "entityId": "222-A",
+  "name": "Lancom User Offboarding",
+  "tags": [
+    "demo",
+    "lancom",
+    "offboarding"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Obtain keys and keyfob from staff member",
+      "description": null
+    },
+    {
+      "instruction": "Block Signin in Azure",
+      "description": {
+        "content": "https://admin.microsoft.com > active users > pull up the user > Block Sign in (next to reset password)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Set Mailbox to Shared & Removed from any Cloud Groups in Azure",
+      "description": null
+    },
+    {
+      "instruction": "Remove the User from AD Groups and Disable Account in AD",
+      "description": {
+        "content": "[IT Glue Available here](https://lancom.itglue.com/5537/docs/1907290)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Hide From Global Adress List",
+      "description": null
+    },
+    {
+      "instruction": "Change any direct reporting users to new manager, Clear leaving users manager",
+      "description": {
+        "content": "Pull up the user in Active Directory Users and Groups > Organization Tab > Manager",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Revoke access to ConnectWise",
+      "description": {
+        "content": "[IT Glue available here](https://lancom.itglue.com/5537/docs/1907290)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Remove Labtech",
+      "description": {
+        "content": "Remove from MSP Accounts.  Tools > MSP Accounts. Ticket account and click Delete Selected. \nNOTE: You need to log into any domains that used a MSP account and remove the user inside the AD. If all the locations were set to use MSP account as \"default\" locations, deleting from MSP would also delete from AD, but since MMC requires permissions to get an account set up we cant use the \"Default\" locations in MSP account setup area. It sucks, but it has to be done to properly offboard, otherwise the account might just stay there with the last set password and a Lancom user that has left could still have access.\nSpecifically verify and delete that the AD account is deleted from MMC AD after deleting the MSP account. (then move onto verifying in other customer domains)\nSystem > Users and Contacts > Users > Locate User > Delete",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Remove access to ITGlue",
+      "description": {
+        "content": "IT glue: Account > Users > Locate User > Delete",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Remove access to Screenconnect",
+      "description": {
+        "content": "ScreenConnect: Admin > Security > Internal > Show User Table > Locate User > Delete.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "3CX",
+      "description": {
+        "content": "Remove extension from any call groups/queues\nDelete extension",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "AWS",
+      "description": {
+        "content": "Ensure user has no active keypairs/recently used incase they are in use by any software (they shouldn't be - just in case)\nTake a screenshot of the permissions user has\nDelete account\nIf we want to retain account \nDisable existing keypairs\nRemove MFA\nReset password\nEnable MFA again and setup\nSet a reminder to delete after X days",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Delete CloudChecker account",
+      "description": {
+        "content": "Needs to be done by someone with CloudCheckr admin\nLogin -> Go to User Accounts -> Select user -> Delete Account",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Delete PagerDuty account",
+      "description": {
+        "content": "Needs to be done by someone with PagerDuty manager/admin permissions\nRemove from all on-call schedules\nDelete user account",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "SonicWALL",
+      "description": {
+        "content": "Check to see if any local accounts (non-radius/AD) accounts exist on SonicWALL for SSLVPN\nKill any active sessions from the user",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Remove Exclaimer Signature Access",
+      "description": {
+        "content": "[IT glue available here](https://lancom.itglue.com/5537/docs/6144389)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Software Developer Offboarding",
+      "description": {
+        "content": "1. Make sure all projects on local machine are checked in to their relevant repos\n2. Remove Access to GitHub\n3. Remove Access to Jira and all other Atlassian Modules\n4. Remove Visual Studio License\n5. Remove Access to AWS Accounts via IAM and Azure Cloud\n6. Remove access to any other dev specific tools (e.g. ReSharper, etc)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Remove MSP accounts & Customer Azure Accounts",
+      "description": {
+        "content": "This needs to be done on a per client basis because none are set to automatically create anymore (otherwise users would incorrectly get an MMC account) some customers to check:\nRemove from MMC (MSP Account) (log time entry in CW at the exact time you do)\nRemove from NZHH (MSP Account)\nRemove from Generate Azure.",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.3496478Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
