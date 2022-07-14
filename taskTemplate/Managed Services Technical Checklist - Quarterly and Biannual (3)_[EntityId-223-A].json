@@ -1,0 +1,194 @@
+{
+  "entityId": "223-A",
+  "name": "Managed Services Technical Checklist - Quarterly and Biannual (3)",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "On-Prem Infrastructure: Check fabric switch firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: Yes\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Infrastructure: Ensure all connections are securely seated",
+      "description": {
+        "content": "On-Site: Yes\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Infrastructure: Update server diagrams",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Infrastructure: \"Take a 2 minutes video of the servers and devices, that  will show the LED, and cable connection. Good to  review later if there are any issues.\"",
+      "description": {
+        "content": "On-Site: Yes\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Check status of all hardware LED indicators",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Check router firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Check switch firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Check access point firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Check UPS firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Test UPS load and operation by unplugging power",
+      "description": {
+        "content": "On-Site: Yes\nAfter Hours: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Ensure all connections are securely seated",
+      "description": {
+        "content": "On-Site: Yes\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Update network diagrams",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Update physical host/hardware firmware",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: Yes\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Check ILO/DRAC - Disk/RAID health",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "On-Prem Network: Check firewall firmware and apply updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server AV: Review AV status (updating, subscription)",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server AV: Review AV errors",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server AV: Review AV scans for any infections",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server AV: Document any errors/viruses",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server Backups: Verify server backup inclusion",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server Backups: Verify restore ability",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server General: Review Microsoft updates are installing",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server General: Ensure all services set to automatic are running",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server General: Check Event Logs (Directory Service, DNS, Replication, System)",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server General: Review Critical Errors",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.3426486Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
