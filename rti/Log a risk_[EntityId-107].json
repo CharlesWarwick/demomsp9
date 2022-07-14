@@ -1,0 +1,80 @@
+{
+  "general": {
+    "entityId": 107,
+    "enabled": true,
+    "parentName": "Risks",
+    "name": "Log a risk",
+    "tags": [
+      "hse"
+    ],
+    "parentOptions": [
+      "[ITIL-Style] Communication (Email and calendars, Phone Systems)",
+      "[ITIL-Style] Networks and Servers",
+      "[ITIL-Style] Printing and Scanning",
+      "[ITIL-Style] Security",
+      "[ITIL-Style] Software and Application",
+      "[ITIL-Style] User Accounts",
+      "[ITIL-Style] Workstation (OS, Hardware and Peripherals)",
+      "0: The Most Common Tickets",
+      "1. Self Service Area",
+      "1. Showcase",
+      "1: Computer",
+      "2. User Account",
+      "3. Email",
+      "4. Software and Apps",
+      "Account/Access",
+      "Competition",
+      "Hardware",
+      "Implementation",
+      "Microsoft Office 365",
+      "Risks",
+      "Sales/Procurement",
+      "Software",
+      "Staff Onboarding and offboarding",
+      "Webinar"
+    ],
+    "titleTemplate": null,
+    "bodyTemplate": null,
+    "formUrl": null,
+    "formRedirect": null,
+    "ddForm": {
+      "entityId": 27136,
+      "name": "Risks/Good Job"
+    },
+    "taskTemplates": [
+      {
+        "entityId": "161-A",
+        "name": "Unresolved RIsks"
+      }
+    ]
+  },
+  "ticket": {
+    "connectWise": {
+      "board": {
+        "entityId": 100,
+        "name": "Incidents"
+      },
+      "status": {
+        "entityId": 1,
+        "name": "New"
+      },
+      "priority": {
+        "entityId": 4,
+        "name": "Priority 3 - Normal Response"
+      },
+      "type": null,
+      "subType": null,
+      "subTypeItem": null,
+      "source": {
+        "entityId": 1,
+        "name": "Email"
+      }
+    }
+  },
+  "filter": {
+    "entityId": 107,
+    "name": "Log a risk",
+    "rootFlag": true,
+    "inverseFlagTargets": []
+  }
+}
