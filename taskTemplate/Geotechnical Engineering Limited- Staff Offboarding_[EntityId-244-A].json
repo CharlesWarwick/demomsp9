@@ -1,0 +1,86 @@
+{
+  "entityId": "244-A",
+  "name": "Geotechnical Engineering Limited: Staff Offboarding",
+  "tags": [
+    "demo",
+    "offboarding",
+    "soilrock"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Disable AD account",
+      "description": {
+        "content": "Reset user AD password \nAfterwards, run ADConnect delta sync\nPowershell: Start-ADSyncSyncCycle -PolicyType Delta\n\n(this will change Office 365 password, and block user login to Office 365)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Archive mailbox to PST",
+      "description": {
+        "content": "[using Office 365 eDiscovery](https://lancom.itglue.com/3914498/docs/4783074#version=published&documentMode=view)\n\nExport to folder path:\nZ:\\2015\\Archived Staff\\2020",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Convert mailbox to shared mailbox",
+      "description": {
+        "content": "(Take note of the proxyaddresses in  AD User properties. If the original email address needs to be transferred to another user, take note of this email address. Remove proxy address in AD User properties.)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Remove user membership from Security and Distribution groups, in AD.",
+      "description": null
+    },
+    {
+      "instruction": "Move the object to Disabled OU first, to break the sync",
+      "description": {
+        "content": "Run sync from Power Shell\nMailbox will be deleted in O365.  Restore it from \"Deleted users\"\nManually set to \"Hide from address lists\"",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Unassign Office 365 license from user and deduct Office 365 license",
+      "description": null
+    },
+    {
+      "instruction": "Add email forwarding in shared mailbox if required.",
+      "description": null
+    },
+    {
+      "instruction": "Grant user access to the \"archived mailbox\" in Office 365 if required",
+      "description": {
+        "content": "[Using auto-disable mapping script](https://lancom.itglue.com/3914504/docs/4783158#version=published&documentMode=view)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Perform backup of user data as required",
+      "description": {
+        "content": "To copy the user Files from SRAKLDA1 go to \\\\Computer Name\\\\C$\\Users\\username\n\nDrop the user files l (Deskop, Documents, Pictures etc.) on Z:\\2015\\Archived Staff\\Create folder located in SRAKLDA1 for the user",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Mark the contact in Connectwise as Inactive",
+      "description": null
+    },
+    {
+      "instruction": "Update user list",
+      "description": {
+        "content": "[spreadsheet on Sharepoint](https://soilandrock.sharepoint.com/:x:/g/Information%20Technology/EdfLMXV0VopMov2jssg9yc8BjKmr7AiO5I5bwmnxJCs8nw?e=42ur4s)\nChange status to Ex-Staff",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.9676354Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
