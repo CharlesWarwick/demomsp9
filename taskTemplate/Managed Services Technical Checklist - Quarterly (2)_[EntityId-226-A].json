@@ -1,0 +1,68 @@
+{
+  "entityId": "226-A",
+  "name": "Managed Services Technical Checklist - Quarterly (2)",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Server AV: Review AV status (updating, subscription)",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server AV: Review AV errors",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server AV: Review AV scans for any infections",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server AV: Document any errors/viruses",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server Backups: Verify server backup inclusion",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Server Backups: Verify restore ability",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "SQL Server: Verify SQL backup is functioning",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.3646484Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
