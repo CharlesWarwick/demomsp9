@@ -1,0 +1,24 @@
+{
+  "entityId": "129-A",
+  "name": "Connectwise Basics",
+  "tags": [],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Here's one",
+      "description": {
+        "content": "And the descriptions",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  },
+  "lastModifiedAt": "2021-09-22T10:45:59.6220334Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
