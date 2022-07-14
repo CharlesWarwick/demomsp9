@@ -1,0 +1,67 @@
+{
+  "entityId": "199-A",
+  "name": "Generate - Staff Offboarding",
+  "tags": [
+    "generate"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Change ticket contact and attach task list",
+      "description": null
+    },
+    {
+      "instruction": "Reset O365 password and remove groups",
+      "description": null
+    },
+    {
+      "instruction": "Run off-boarding script",
+      "description": null
+    },
+    {
+      "instruction": "Disable user in Aircall (If applicable)",
+      "description": null
+    },
+    {
+      "instruction": "Delete User in Nitro PDF (If applicable)",
+      "description": null
+    },
+    {
+      "instruction": "Set Automatic Replies / Out of Office",
+      "description": null
+    },
+    {
+      "instruction": "Transfer OneDrive files (If requested)",
+      "description": null
+    },
+    {
+      "instruction": "Check for power automate flows and share with a new owner",
+      "description": null
+    },
+    {
+      "instruction": "Archive the M365 user",
+      "description": null
+    },
+    {
+      "instruction": "Check for personal forms and move to a new account",
+      "description": null
+    },
+    {
+      "instruction": "Send Communication upon completion",
+      "description": null
+    },
+    {
+      "instruction": "Disable user in ConnectWise",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:08:00.0422918Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
