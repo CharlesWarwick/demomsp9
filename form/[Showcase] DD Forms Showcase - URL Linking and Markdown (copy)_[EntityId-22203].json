@@ -1,0 +1,48 @@
+{
+  "form": {
+    "entityId": 22203,
+    "name": "[Showcase] DD Forms Showcase - URL Linking and Markdown (copy)",
+    "description": null,
+    "titleFormat": null,
+    "tags": [
+      "showcase"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "This is a \"Statement\" field.",
+        "description": "URL Linking and Markdown will only work for Statements.\n\n[This is a URL Link using Mark Down](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)",
+        "identifier": "au8cpg",
+        "required": false
+      },
+      {
+        "type": "statement",
+        "name": "Here's an example Static Image within a Statement:",
+        "description": "![This is my image](https://www.deskdirector.com/hubfs/deskdirector-glyf-256px-1.png \"Desk Director Logo\")",
+        "identifier": "ixh0jy",
+        "required": false
+      },
+      {
+        "type": "statement",
+        "name": "Here's an example of a GIF within a Statement:",
+        "description": "![This is my GIF](https://media.giphy.com/media/P7PmvHY6kzAqY/giphy.gif)",
+        "identifier": "uhnbq4",
+        "required": false
+      },
+      {
+        "type": "api_single_select",
+        "name": "Choose your contacts",
+        "identifier": "s8uioq",
+        "required": false,
+        "api": {
+          "method": "GET",
+          "url": "/api/v2/ddform/dynamic/contacts",
+          "queryParams": null
+        }
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CC3"
+  }
+}
