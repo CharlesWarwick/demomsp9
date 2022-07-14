@@ -1,0 +1,96 @@
+{
+  "entityId": "225-A",
+  "name": "Lancom Change Request",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Understand The Purpose of Change Control",
+      "description": {
+        "content": "The purpose of change control is to \"control\" the initiation, planning, approval and execution of required changes to existing systems. This includes assessing required steps to make a change, assess risks, have a rollback plan should the change not go as planned and to get sign off both internally and from the customer.\n\nThe primary goal of change control process is to create a documented record of required changes to ensure each change is implemented in a correct, well thought-out manner with minimal impact or disruption to BAU.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Understand When to use Change Control",
+      "description": {
+        "content": "A change control **MUST** be completed for any change where:\n\n- Changes are risky in a sense that they could impact BAU for a customer should they not go according to plan\n- Changes are being made to a production servers, software, storage, hyper-visors or networks\n- While generally exempt, desktop machines may require change approve if they run critical software or controllers. For example, the Extrusion machine controller for TC CHC Factory",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Understand When **NOT** to use Change Control",
+      "description": {
+        "content": "These changes are exempt from the normal change control process where:\n- Change being made is in response to an urgent issue or incident where BAU is impacted and a change is required to resolve the issue where the change required cannot wait\n- An urgent request has been pushed through from a customer but there is no time to get a change request written up and approved. In these cases, please get confirmation in writing that the customer wants to bypass the change control process before proceeding with the change.\n- It is a new deployment which will have no impact on any existing systems of infrastructure",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Confirm Correct Security Permissions/Access",
+      "description": {
+        "content": "Please verify that you have  the level of security permissions required to complete the change successfully. If you do not, please submit a request to gain the relevant permissions ahead of the scheduled change.\n\ne.g. Ensuring you have required access to VMs, AWS or Azure etc",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Complete Change Control Request Form and Process",
+      "description": {
+        "content": "[Change Control IT Glue](https://lancom.itglue.com/5537/docs/2890538)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Risks Identified",
+      "description": {
+        "content": "- Identified risks, if any, associated with this change",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Roll Back Plan In Place",
+      "description": {
+        "content": "If the change does not go to plan, a roll back plan has been identified and recorded",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Change Control has been peer reviewed and approved Internally",
+      "description": {
+        "content": "- Change control has been peer reviewed by a senior engineer or manager\n- Change control has been accepted\n- Record in an internal note who has approved the change",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Change Control has been approved by customer",
+      "description": {
+        "content": "- Customer has approved change control\n- Customer has been notified of the outage window and has agreed\n- We are aware of who to contact post the change and how to update them if its after-hours",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Engineer has the ability to carry out Change Control",
+      "description": {
+        "content": "Do you have the security rights, roles and technical requirements to complete the change control proposed during the outage window.\n\nIf you do not, please contact team leaders and senior engineering to gain rights and required access controls.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Change Control Implemented",
+      "description": {
+        "content": "- Customer contacted post change and confirmed BAU\n- Service team notified of successful change or roll back\n- Documentation has been updated to reflect change\n- Ticket has been updated with real-time time entry and closed.",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.3616483Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
