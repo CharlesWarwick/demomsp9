@@ -1,0 +1,91 @@
+{
+  "entityId": "260-A",
+  "name": "Deed and Viper Services: Staff Offboarding",
+  "tags": [
+    "demo",
+    "offboarding",
+    "dandv"
+  ],
+  "filter": {
+    "companies": [
+      {
+        "entityId": 27,
+        "name": "Deed and Viper"
+      }
+    ]
+  },
+  "items": [
+    {
+      "instruction": "Disable user in AD",
+      "description": {
+        "content": "Log in to one of the DC Servers for Mondiale(MONDDC6, MONDDC7, MONDDC8)\n-Locate User and Disable Account, this can be done by right-clicking and pressing Disable Account\n-Change the password\n-Click and Drag the User to the _Staff - Ex-Employee's OU. If the user is from Mondiale warehousing (MWD),move to [Mondiale.co.nz>]( Mondiale.co.nz) _Mondiale Warehousing> MWD EX Employees OU.\n-Remove the User from all Distribution and Security Groups",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Hide from Address List",
+      "description": {
+        "content": "-Open up properties for users AD Object.\n-Open up Attribute Editor\n-Find the attribute msExchHideFromAddressLists and change the value to True",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Deleting Mailbox/ Setup Forwarding and Accesses in Local (On-Prem) Exchange",
+      "description": {
+        "content": "**This is for On-prem mailbox only. If the mailbox is on O365 follow the next step**\n-Log into the Exchange Admin [here](https://webmail.deev.co.nz/owa/auth/logon.aspx?replaceCurrent=1&url=https%3a%2f%2fwebmail.mondiale.co.nz%2fecp%2f%3fExchClientVer%3d15), using the Domain Admin credentials.\n-IMPORTANT: Since they are on local exchange it is important that storage is not being taken up by decommissioned mailboxes, if the users mailbox information is not required please delete the mailbox from exchange Admin.\n-If Specified in the ticket add forwarding to the user/s specified.\n-If Specified in the ticket add Full Access/Send As to the user/s specified",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "If the user has Exchange Online mailbox on O365",
+      "description": {
+        "content": "**Follow this only if the user has O365 mailbox.**\n- Login to O365 account \n- Convert the user mailbox to a shared mailbox\n- Configure mailbox delegation and forwarding as requested in the ticket.\n- Un-assign the License from O365 account and remove the license from the CSP portal.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Delete/Rename User in Zeacom",
+      "description": {
+        "content": "-Log into Zeacom Administrator using [these](https://lancom.itglue.com/529117/) credentials, this is most easily accessed from MONDIT2. run \\\\mondzcti\\CTI look for \n-Rename User to \"SPARE\" if no replacement if taking over immediately\n-If replacement is already known delete the current Zeacom Contact and Create new one on the extension for the new user using the add wizard.",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Disable CAFs Account",
+      "description": {
+        "content": "-Open CAFs launcher on MONDIT2, login using [these](https://lancom.itglue.com/529117/passwords/3117096#partial=&sortBy=name:asc&filters=%5B%5D) credentials. \n-Open the Accounts module\n-Select Staff Maintenance and navigate to user\n-Click Inactive checkbox",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Remove Licenses on Office 365",
+      "description": {
+        "content": "-Log in 365 admin by logging into portal.office.com with your Lancom account and access Mondiales 365 admin via the Partner Portal. \n-Check if the user has a Windows 10 E3 license assigned. Check with person who logged the ticket if a new user will be using this PC:\n    -if YES remove the license for the user and assign the E3 license to the new user\n    -if NO remove the license for the user and make sure that the quantity is decreased in Dicker Data.\n-For ALL other licenses assigned to the user you need to remove and make sure that quantity is decreased in Dicker Data( If you do not have access message on Teams for someone to decrease)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Deleting Local Profile",
+      "description": {
+        "content": "-Log into the computer that the user was using any admin account.\n-Delete the user's profile from C:\\Users\\*Username*",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Giving another user access to User Data (If Required)",
+      "description": {
+        "content": "-The users profiles are synced to the server. \n-If they have local files that someone else needs access to, this info should be on either their roaming profile:\n\n    For Windows 7:\\\\deev.co.nz\\Shares\\Profiles\\*Username*.v2\n    For Windows 10: \\\\deev.co.nz\\Shares\\Profiles\\*Username*.v6 \n\nor their H drive\n\n    \\\\deev.co.nz\\Shares\\Users\\*Username*",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T09:09:47.6888634Z",
+  "lastModifiedBy": {
+    "entityId": "m~20007",
+    "name": "jurgen@ddportal.com"
+  }
+}
