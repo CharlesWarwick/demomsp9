@@ -1,0 +1,374 @@
+{
+  "form": {
+    "entityId": 22217,
+    "name": "[HR] [Showcase] DD Forms for - Onboard New Employee",
+    "description": "A user can request a new user be set up for Oncall",
+    "titleFormat": {
+      "format": "New Employee requested by {1} Position: . Starting Date: {2}",
+      "arguments": [
+        "contact_name",
+        "cp8u9t"
+      ]
+    },
+    "tags": [
+      "hr",
+      "demo"
+    ],
+    "fields": [
+      {
+        "type": "single_choice",
+        "name": "Would you like to check on  other new employee onboardings in progress",
+        "description": "> We will list all the active onboarding tickets\n\n`NB. This employee might already have a ticket running`",
+        "identifier": "2v2ho5",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "5yrsbq"
+          },
+          {
+            "name": "No",
+            "identifier": "hz8cjv"
+          }
+        ]
+      },
+      {
+        "type": "statement",
+        "name": "Dynamic",
+        "identifier": "wx4din",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "2v2ho5",
+          "operator": "in",
+          "identifiers": [
+            "5yrsbq"
+          ]
+        },
+        "content": {
+          "method": "POST",
+          "url": "https://prod-12.australiasoutheast.logic.azure.com:443/workflows/2b535179b0d2401db399257ec777a83a/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=qT_c390aQAukQ_fbAlAMQ_-YSOvsPX_nk7r5DLaH_3Q",
+          "queryParams": null
+        }
+      },
+      {
+        "type": "api_single_select",
+        "name": "This will post",
+        "identifier": "y49ura",
+        "required": false,
+        "api": {
+          "method": "POST",
+          "url": "https://prod-22.australiasoutheast.logic.azure.com:443/workflows/ff43b80b3b074685b978c1730b9aaf6f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=LFg2Hdi1v4f0sYbspEBaqwlKiogt7ZAH4iWM4VwcqeY",
+          "queryParams": null
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Introduction to the on-boarding process",
+        "description": ">If this is your first time, or you need a refresher\n>we have a short introduction video\n\n`This is a great way to get started quickly.`\n`There's a lot more help on the way through`",
+        "identifier": "4cp122",
+        "required": true,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "qrkbls"
+          },
+          {
+            "name": "No",
+            "identifier": "ffmige"
+          }
+        ]
+      },
+      {
+        "type": "statement",
+        "name": "Introduction to the on-boarding process",
+        "description": "![](https://vimeo.com/645095644)",
+        "identifier": "04v0ci",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "4cp122",
+          "operator": "in",
+          "identifiers": [
+            "qrkbls"
+          ]
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "First Name",
+        "identifier": "06ayxr",
+        "required": true
+      },
+      {
+        "type": "short_text",
+        "name": "Last Name",
+        "identifier": "q6itif",
+        "required": true
+      },
+      {
+        "type": "email",
+        "name": "Desired Email Address",
+        "identifier": "p0thf8",
+        "required": true
+      },
+      {
+        "type": "date",
+        "name": "Starting Date",
+        "description": "What is the date that the candidate will be starting the position.",
+        "identifier": "cp8u9t",
+        "required": true,
+        "meta": {
+          "render": "date"
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Manager",
+        "description": "Who does this person report to",
+        "identifier": "mkyys1",
+        "required": false,
+        "choices": [
+          {
+            "name": "Mary Jones",
+            "identifier": "qoiq1u"
+          },
+          {
+            "name": "Bob Smith",
+            "identifier": "jiz7hi"
+          },
+          {
+            "name": "Other",
+            "identifier": "c29mta"
+          }
+        ],
+        "meta": {
+          "render": "dropdown"
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Other Manager",
+        "identifier": "6oyney",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "mkyys1",
+          "operator": "in",
+          "identifiers": [
+            "c29mta"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Personal Computer",
+        "description": "What are the Personal Computer requirements?\nChoose between these options: \n> Purchase new equipment\n> Repurpose existing equipment  \n\nYou can choose brand and mode later in the form",
+        "identifier": "6e3lqr",
+        "required": true,
+        "choices": [
+          {
+            "name": "Purchase new equipment",
+            "identifier": "2ixdb8"
+          },
+          {
+            "name": "Repurpose existing equipment",
+            "identifier": "ydaj6h"
+          }
+        ],
+        "meta": {
+          "render": "radio"
+        }
+      },
+      {
+        "type": "multiple_choice",
+        "name": "What new equipment does this hire require?",
+        "description": "A desktop PC is preferable for users who will only work at their desks in the office.\nIf the users wants to work at remote locations or from home then a notebook is a better option\nThere are recommended models for both but we will give you the opportunity to request specific specifications and requirements later",
+        "identifier": "igs7jm",
+        "required": true,
+        "choices": [
+          {
+            "name": "Desktop Computer",
+            "identifier": "w5rlhi"
+          },
+          {
+            "name": "Notebook Computer",
+            "identifier": "ryz2zy"
+          },
+          {
+            "name": "Phone",
+            "identifier": "quiezk"
+          },
+          {
+            "name": "Desk",
+            "identifier": "amtelm"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "6e3lqr",
+          "operator": "in",
+          "identifiers": [
+            "2ixdb8"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Will the user be licensed for Office365",
+        "identifier": "us7z14",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "7regzt"
+          },
+          {
+            "name": "No",
+            "identifier": "4z3ii7"
+          }
+        ],
+        "meta": {
+          "render": "radio"
+        }
+      }
+    ],
+    "readonly": false,
+    "sections": [
+      {
+        "name": "Choose your notebook",
+        "identifier": "fvxtkg",
+        "fields": [
+          {
+            "type": "api_single_select",
+            "name": "Notebook brand",
+            "description": "### Your Company has pre-selected some models for you \n\n>Choose your preferred brand",
+            "identifier": "ueyv3f",
+            "required": false,
+            "api": {
+              "method": "GET",
+              "url": "https://prod-154.westus.logic.azure.com:443/workflows/b9d5db69a43749c7b1e04fb3342ce2fc/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B-QeMW9UaXYld97wz6tggzbxbzTDyQmrKO9b8dmB8Ko&lookupTableName=Brand",
+              "queryParams": null
+            }
+          },
+          {
+            "type": "api_single_select",
+            "name": "Pick your notebook",
+            "description": "Here is the models available for that brand\n>Choose your preferred model",
+            "identifier": "1djabi",
+            "required": false,
+            "api": {
+              "method": "GET",
+              "url": "https://prod-154.westus.logic.azure.com:443/workflows/b9d5db69a43749c7b1e04fb3342ce2fc/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=B-QeMW9UaXYld97wz6tggzbxbzTDyQmrKO9b8dmB8Ko&lookupTableName=Model&filterFieldName=ueyv3f&ueyv3f",
+              "queryParams": null
+            }
+          },
+          {
+            "type": "single_choice",
+            "name": "What license do you want for this use",
+            "description": "Let us know what license you would like us to organise for this user",
+            "identifier": "dk2w4i",
+            "required": false,
+            "choices": [
+              {
+                "name": "Business Essentials",
+                "identifier": "ckuma7"
+              },
+              {
+                "name": "Microsoft 365",
+                "identifier": "1o4ajs"
+              },
+              {
+                "name": "E3",
+                "identifier": "yuh2un"
+              },
+              {
+                "name": "E5",
+                "identifier": "ijdujp"
+              },
+              {
+                "name": "Not sure",
+                "identifier": "1gptdh"
+              }
+            ],
+            "meta": {
+              "render": "dropdown"
+            }
+          },
+          {
+            "type": "api_multi_select",
+            "name": "Office Elements",
+            "identifier": "68s1ob",
+            "required": false,
+            "api": {
+              "method": "GET",
+              "url": "https://ddutilityworkers.azurewebsites.net/api/flow/proxy?code=ehPEa5YfIG6ihkHUxmDGaheGYgPuRUAiQaymFmD9G6eIav7erAKllg==&url=https%3A%2F%2Fprod-13.australiasoutheast.logic.azure.com%3A443%2Fworkflows%2F04ecc2c63d7344fcbd346c6a78594e2a%2Ftriggers%2Fmanual%2Fpaths%2Finvoke%3Fapi-version%3D2016-06-01%26sp%3D%252Ftriggers%252Fmanual%252Frun%26sv%3D1.0%26sig%3DyPXEue2wqbs1FzppOrYhhnZWIw9aFxYo5WQ2WJ0OK1U&lookupTableName=OfficeProduct",
+              "queryParams": null
+            }
+          }
+        ],
+        "conditions": []
+      },
+      {
+        "name": "Urgency",
+        "identifier": "qkz7of",
+        "fields": [
+          {
+            "type": "statement",
+            "name": "New computer wrap up",
+            "description": "Some extra information to make sure we deliver exactly what you want",
+            "identifier": "d216qw",
+            "required": false
+          },
+          {
+            "type": "single_choice",
+            "name": "What is the time frame for delivery of the new equipment",
+            "description": "Let us know the urgency of the request",
+            "identifier": "r8d5xh",
+            "required": false,
+            "choices": [
+              {
+                "name": "in the next few days",
+                "identifier": "g8b2im"
+              },
+              {
+                "name": "in the next few weeks",
+                "identifier": "3vcl3o"
+              },
+              {
+                "name": "something else",
+                "identifier": "hrk1gu"
+              }
+            ],
+            "meta": {
+              "render": "radio"
+            }
+          },
+          {
+            "type": "long_text",
+            "name": "What is the delivery timeframe requirements",
+            "identifier": "w6pfv3",
+            "required": false,
+            "condition": {
+              "parentId": "qkz7of",
+              "parentFieldId": "r8d5xh",
+              "operator": "in",
+              "identifiers": [
+                "hrk1gu"
+              ]
+            }
+          },
+          {
+            "type": "long_text",
+            "name": "Is there any other requirements for the new equipment",
+            "description": "Let us know anything that comes to mind or any questions you have",
+            "identifier": "zhwaee",
+            "required": false
+          }
+        ],
+        "conditions": []
+      }
+    ],
+    "etag": "01000000-0000-1DE6-0000-000000008F8B"
+  }
+}
