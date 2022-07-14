@@ -1,0 +1,194 @@
+{
+  "entityId": "237-A",
+  "name": "Managed Services Technical Checklist - Quarterly and Biannual (1)",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Active Directory: Review Domain Admin accounts",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Active Directory: Review Enterprise Admin accounts",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Active Directory: Review Administrators accounts",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Active Directory: Rotate domain admin passwords",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Autopilot: Update Applications in Endpoint Manager with Newer Versions",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Autopilot: Update Configuration Items for Existing Endpoint Manager Applications",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Update infrastructure diagrams",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Review cloud recommendations",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Document recommendations and pass onto CSMs",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Review consumption costs/make recommendations",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Review admin accounts",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Ensure alerting is enabled on inactive admin accounts",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Review admin account MFA",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Rotate admin passwords",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: IAM/RBAC permissions review",
+      "description": {
+        "content": "On-SIte: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Ensure alerting is enabled on S3 buckets/blobs being made public",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Enable Cloud Trail",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Cloud Platform: Review backup platform functionality",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Exchange: Review and Install applicable Exchange updates",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: Yes\nSecurity: Yes",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Exchange: Check DB circular logging and adjust as necessary",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Exchange: Review Exchange health with 'Test-ExchangeServerHealth'",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Exchange: Check all automatic Exchange services are started",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Exchange: Test autodiscover/Exchange RCA",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Exchange: Compare mailbox sizes to limits",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "(ANNUAL) Network Security: Review Internal IT Policies",
+      "description": {
+        "content": "On-Site: No\nAfter Hours: No\nSecurity: Yes",
+        "type": "markdown"
+      }
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:11.8506156Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
