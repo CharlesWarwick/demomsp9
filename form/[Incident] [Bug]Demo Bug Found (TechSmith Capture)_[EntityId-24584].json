@@ -1,0 +1,253 @@
+{
+  "form": {
+    "entityId": 24584,
+    "name": "[Incident] [Bug]Demo Bug Found (TechSmith Capture)",
+    "description": null,
+    "titleFormat": {
+      "format": "Bug Found | {1}",
+      "arguments": [
+        "dlcxht"
+      ]
+    },
+    "tags": [
+      "barwon"
+    ],
+    "fields": [
+      {
+        "type": "short_text",
+        "name": "Bug Summary:",
+        "description": "This will be used in Lancom's ticket summary.\n\"Bug Found | Bug Summary\"",
+        "identifier": "dlcxht",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "Are you able to reproduce this bug?",
+        "identifier": "k097hh",
+        "required": true,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "vpkok8"
+          },
+          {
+            "name": "No",
+            "identifier": "rgi0kw"
+          }
+        ],
+        "meta": {
+          "render": "radio"
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Is another user able to reproduce the identified bug?",
+        "identifier": "xh18be",
+        "required": true,
+        "choices": [
+          {
+            "name": "Just me",
+            "identifier": "pjvi3i"
+          },
+          {
+            "name": "All users",
+            "identifier": "j0a6hq"
+          },
+          {
+            "name": "Unsure",
+            "identifier": "2d17ny"
+          }
+        ],
+        "meta": {
+          "render": "radio"
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Please provide the time/date this bug occurred",
+        "description": "This can be an estimate.",
+        "identifier": "j4908v",
+        "required": true
+      },
+      {
+        "type": "multiple_choice",
+        "name": "How would you like to provide information for this support request?",
+        "identifier": "g9n6ct",
+        "required": true,
+        "choices": [
+          {
+            "name": "I would like to provide a screen recording of this issue",
+            "identifier": "0fw1pm"
+          },
+          {
+            "name": "I would like to provide a screen recording of this issue, and I already have Techsmith Capture.",
+            "identifier": "emgeaz"
+          },
+          {
+            "name": "I would like to describe this issue",
+            "identifier": "rx4c6j"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "k097hh",
+          "operator": "in",
+          "identifiers": [
+            "vpkok8"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "How to Install TechSmith Screen Capture",
+        "description": "![video](https://www.youtube.com/embed/wMd6Sw5cCFM)",
+        "identifier": "db0pze",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "g9n6ct",
+          "operator": "contains_all",
+          "identifiers": [
+            "0fw1pm"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "TechSmith Capture Download Link",
+        "description": "* [Download and run the following software](https://assets.techsmith.com/techsmithcapture/win/x64/Setup.exe)",
+        "identifier": "vp92q8",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "g9n6ct",
+          "operator": "contains_any",
+          "identifiers": [
+            "0fw1pm"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "How to Screen Record with TechSmith Capture",
+        "description": "![video](https://www.youtube.com/embed/pSLIv7C8rmU)",
+        "identifier": "7jlzb9",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "g9n6ct",
+          "operator": "contains_all",
+          "identifiers": [
+            "0fw1pm"
+          ]
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Please paste your ScreenCast URL here:",
+        "description": "Example Format: https://www.screencast.com/t/ABC123DEF456",
+        "identifier": "yw5re1",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "g9n6ct",
+          "operator": "contains_any",
+          "identifiers": [
+            "0fw1pm",
+            "emgeaz"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "I received an \"Upload Failed\" error",
+        "description": "\"There was an error uploading the capture. Please try uploading again or save the file to your computer to manually upload later\"",
+        "identifier": "on3fma",
+        "required": false,
+        "choices": [
+          {
+            "name": "I received this error message",
+            "identifier": "zls6b1"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "g9n6ct",
+          "operator": "contains_any",
+          "identifiers": [
+            "0fw1pm",
+            "emgeaz"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "How to save and attach a video that failed upload:",
+        "description": "* Select the **SAVE AS** option and save this recording to your PC:\n\n![Error Message](https://i.imgur.com/t01DqHS.png)",
+        "identifier": "t3298h",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "on3fma",
+          "operator": "in",
+          "identifiers": [
+            "zls6b1"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "Upload your file using ShareFile",
+        "description": "**[Use this link to upload your Video](https://lancom.sharefile.com/r-r11a210a4da3c4864a166b2ff6b920773)**",
+        "identifier": "mtc8k6",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "on3fma",
+          "operator": "in",
+          "identifiers": [
+            "zls6b1"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide detailed steps to reproduce this bug",
+        "identifier": "yfjews",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "g9n6ct",
+          "operator": "contains_any",
+          "identifiers": [
+            "rx4c6j"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "As best as you can, please describe the tasks performed to produce this bug",
+        "identifier": "z5ejl8",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "k097hh",
+          "operator": "in",
+          "identifiers": [
+            "rgi0kw"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide any additional information that will help",
+        "description": "Supporting screenshots can be attached using the Paperclip icon.",
+        "identifier": "orzr2p",
+        "required": false
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003D27"
+  }
+}
