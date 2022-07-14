@@ -1,0 +1,180 @@
+{
+  "form": {
+    "entityId": 22206,
+    "name": "[incident] Email - I need a shared mailbox modified",
+    "description": null,
+    "titleFormat": null,
+    "tags": [],
+    "fields": [
+      {
+        "type": "single_choice",
+        "name": "I would like to:",
+        "identifier": "ehtm18",
+        "required": true,
+        "choices": [
+          {
+            "name": "Create a new shared mailbox",
+            "identifier": "vugm51"
+          },
+          {
+            "name": "Add someone to an existing shared mailbox",
+            "identifier": "u5vn2e"
+          },
+          {
+            "name": "Remove someone from an existing shared mailbox",
+            "identifier": "r7g8h9"
+          }
+        ]
+      },
+      {
+        "type": "short_text",
+        "name": "Name of the shared mailbox:",
+        "identifier": "02l0qk",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "ehtm18",
+          "operator": "in",
+          "identifiers": [
+            "vugm51",
+            "u5vn2e",
+            "r7g8h9"
+          ]
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Email address of the mailbox:",
+        "identifier": "jt6gr3",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "ehtm18",
+          "operator": "in",
+          "identifiers": [
+            "vugm51"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Please list all users you would like added to this mailbox:",
+        "identifier": "p8hzn0",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "ehtm18",
+          "operator": "in",
+          "identifiers": [
+            "vugm51",
+            "u5vn2e"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Please list all users you would like removed from this mailbox:",
+        "identifier": "2dj5hk",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "ehtm18",
+          "operator": "in",
+          "identifiers": [
+            "r7g8h9"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Would you like this shared mailbox forwarded to any email addresses?",
+        "identifier": "t2iq7x",
+        "required": false,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "2lcm9e"
+          },
+          {
+            "name": "No",
+            "identifier": "4tvsfg"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "ehtm18",
+          "operator": "in",
+          "identifiers": [
+            "vugm51"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Please list all users you would like this mailbox forwarded to:",
+        "identifier": "bua3ix",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "t2iq7x",
+          "operator": "in",
+          "identifiers": [
+            "2lcm9e"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Would you like these changes as soon as possible or at a later date?",
+        "identifier": "l3ht0q",
+        "required": true,
+        "choices": [
+          {
+            "name": "ASAP",
+            "identifier": "jzc2oy"
+          },
+          {
+            "name": "Specific date",
+            "identifier": "r2v26d"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "ehtm18",
+          "operator": "in",
+          "identifiers": [
+            "vugm51",
+            "u5vn2e",
+            "r7g8h9"
+          ]
+        }
+      },
+      {
+        "type": "date",
+        "name": "When would you like these changes made?",
+        "identifier": "ofu2r3",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "l3ht0q",
+          "operator": "in",
+          "identifiers": [
+            "r2v26d"
+          ]
+        },
+        "meta": {
+          "render": "date"
+        }
+      },
+      {
+        "type": "short_text",
+        "name": "Any additional information to assist with your request?",
+        "identifier": "g2gvv3",
+        "required": true
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CE6"
+  }
+}
