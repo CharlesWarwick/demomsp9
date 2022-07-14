@@ -1,0 +1,62 @@
+{
+  "entityId": "97-A",
+  "name": "New Employee Preparation",
+  "tags": [
+    "onboarding"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Provision Microsoft Business Standard licence from CSP portal",
+      "description": {
+        "content": "[Access CSP Portal](https://app.cspportal.cloud/licenses)",
+        "type": "markdown"
+      }
+    },
+    {
+      "instruction": "Add user to the requested distribution groups",
+      "description": null
+    },
+    {
+      "instruction": "Add user to the correct signature distribution group on O365 based on location (Signature Location – replace Location with the user’s location i.e. Signature SG)",
+      "description": null
+    },
+    {
+      "instruction": "Send the member a Dropbox invitation from admin console",
+      "description": null
+    },
+    {
+      "instruction": "Add the user to the Dropbox group based on the user’s location",
+      "description": null
+    },
+    {
+      "instruction": "Send manager the login details for the user",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Sign into Dropbox",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Make Edge Chrome the default browser and Outlook the default mail app",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Add the Salesforce extension",
+      "description": null
+    },
+    {
+      "instruction": "PC Setup: Set up MFA for the user",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  },
+  "lastModifiedAt": "2021-11-12T07:48:25.1954161Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
