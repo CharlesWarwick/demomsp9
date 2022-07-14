@@ -1,0 +1,122 @@
+{
+  "form": {
+    "entityId": 22204,
+    "name": "[Incident] Email - Can't receive emails",
+    "description": null,
+    "titleFormat": null,
+    "tags": [
+      "ttr-test"
+    ],
+    "fields": [
+      {
+        "type": "statement",
+        "name": "Microsoft's Supporting Documentation:",
+        "description": "Review the \"I didn't receive an email someone sent to my Outlook.com account\" section.\n\n[![button](https://cdn2.hubspot.net/hubfs/429075/2020%20IMAGES%20General/click-here-button.png)](https://support.microsoft.com/en-us/office/fix-outlook-com-email-sync-issues-d39e3341-8d79-4bf1-b3c7-ded602233642)",
+        "identifier": "6jjozl",
+        "required": false
+      },
+      {
+        "type": "single_choice",
+        "name": "I've reviewed the documentation require some help.",
+        "identifier": "1wl5cp",
+        "required": true,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "7epj3g"
+          },
+          {
+            "name": "No",
+            "identifier": "iwgr1p"
+          }
+        ]
+      },
+      {
+        "type": "statement",
+        "name": "Describe you issue to Microsoft's Virtual Agent:",
+        "description": "[![button](https://cdn2.hubspot.net/hubfs/429075/2020%20IMAGES%20General/click-here-button.png)](https://go.microsoft.com/fwlink/?linkid=2112774)",
+        "identifier": "phcsxo",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "1wl5cp",
+          "operator": "in",
+          "identifiers": [
+            "7epj3g"
+          ]
+        }
+      },
+      {
+        "type": "single_choice",
+        "name": "Did Microsoft's Virtual Agent resolve your issue?",
+        "identifier": "dm49x2",
+        "required": true,
+        "choices": [
+          {
+            "name": "Yes",
+            "identifier": "352n53"
+          },
+          {
+            "name": "No",
+            "identifier": "g5uqur"
+          }
+        ],
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "1wl5cp",
+          "operator": "in",
+          "identifiers": [
+            "7epj3g"
+          ]
+        }
+      },
+      {
+        "type": "long_text",
+        "name": "Please provide more information that will help us resolve your support request.",
+        "identifier": "dekghq",
+        "required": true,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "dm49x2",
+          "operator": "in",
+          "identifiers": [
+            "g5uqur"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "All done!",
+        "description": "No need to log a ticket with us - great work 😁👍",
+        "identifier": "ufcldl",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "dm49x2",
+          "operator": "in",
+          "identifiers": [
+            "352n53"
+          ]
+        }
+      },
+      {
+        "type": "statement",
+        "name": "All done!",
+        "description": "No need to log a ticket with us - great work 😁👍",
+        "identifier": "7g4o9f",
+        "required": false,
+        "condition": {
+          "parentId": "base_section",
+          "parentFieldId": "1wl5cp",
+          "operator": "in",
+          "identifiers": [
+            "iwgr1p"
+          ]
+        }
+      }
+    ],
+    "readonly": false,
+    "sections": [],
+    "etag": "01000000-0000-1DE6-0000-000000003CE1"
+  }
+}
