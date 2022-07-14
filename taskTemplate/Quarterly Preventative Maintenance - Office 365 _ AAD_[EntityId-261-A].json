@@ -1,0 +1,51 @@
+{
+  "entityId": "261-A",
+  "name": "Quarterly Preventative Maintenance - Office 365 / AAD",
+  "tags": [
+    "demo"
+  ],
+  "filter": null,
+  "items": [
+    {
+      "instruction": "Review backups",
+      "description": null
+    },
+    {
+      "instruction": "Review admin accounts",
+      "description": null
+    },
+    {
+      "instruction": "Review MFA compliance (if enabled)",
+      "description": null
+    },
+    {
+      "instruction": "Enable Auditing",
+      "description": null
+    },
+    {
+      "instruction": "Ensure alerting is enabled when Exchange email forwarding is configured",
+      "description": null
+    },
+    {
+      "instruction": "Microsoft Secure Score review",
+      "description": null
+    },
+    {
+      "instruction": "Check for company Litigation hold policy, and verify against the account especially for the new employee.",
+      "description": null
+    },
+    {
+      "instruction": "Check for user’s Rules if there are some unwanted rules that are forwarding to external emails. Maybe we can create a PS script to automate this.",
+      "description": null
+    }
+  ],
+  "creator": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  },
+  "lastModifiedAt": "2022-03-10T08:13:13.4375899Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "API Key"
+  }
+}
