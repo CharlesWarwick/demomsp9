@@ -1,0 +1,85 @@
+{
+  "entityId": "322-A",
+  "name": "Service Catalogue - General",
+  "type": "tickets",
+  "state": "enabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.new"
+    ],
+    "conditions": [
+      {
+        "field": "ticket_form_id",
+        "operator": "equals_to_any_of",
+        "options": {
+          "integerEntities": [
+            {
+              "entityId": 28685,
+              "name": "[Hardware] General"
+            },
+            {
+              "entityId": 28682,
+              "name": "[Hardware] Printers/Scanner"
+            },
+            {
+              "entityId": 28684,
+              "name": "[Hardware] Server"
+            },
+            {
+              "entityId": 28683,
+              "name": "[Hardware] WiFi"
+            },
+            {
+              "entityId": 28688,
+              "name": "[Microsoft Office 365] Microsoft Sharepoint"
+            },
+            {
+              "entityId": 28689,
+              "name": "[Microsoft Office 365] Microsoft Teams"
+            },
+            {
+              "entityId": 28690,
+              "name": "[Microsoft Office 365] Multi-factor Authentication Setup"
+            },
+            {
+              "entityId": 28687,
+              "name": "[Microsoft Office 365] Outlook (Email)"
+            },
+            {
+              "entityId": 28686,
+              "name": "[Software] Request a new software install"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "actions": [
+    {
+      "entityId": "1058-A",
+      "name": "Dynamic Service Catalogue - General",
+      "type": "send_webhook",
+      "state": "enabled",
+      "source": "flow",
+      "webhook": {
+        "url": "https://prod-29.westus.logic.azure.com/workflows/abec3a90669447009a81d433c58ffb6d/triggers/When_a_workflow_is_triggered/versions/08585594724706269618/run?api-version=2016-06-01&sp=%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585594724706269618%2Frun%2C%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585594724706269618%2Fread&sv=1.0&sig=kq9YRltcua-EuRj4AMew5VIJlHCYmJ_SwR6TVUbg5AQ"
+      },
+      "info": {
+        "x-ms-workflow-name": "e1aa68bc-d4a6-3719-bc03-41151ccd9960",
+        "x-ms-workflow-operation-name": "When_a_workflow_is_triggered"
+      }
+    }
+  ],
+  "settings": {
+    "webhookSecret": "DM5o2DFxWNKTYUXxH10oYh6qnmRm9rpF"
+  },
+  "createdAt": "2022-01-14T04:24:34.5110599Z",
+  "lastModifiedAt": "2022-01-14T04:32:20.3461973Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "Power Automate"
+  }
+}
