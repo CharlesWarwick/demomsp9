@@ -1,0 +1,53 @@
+{
+  "entityId": "161-A",
+  "name": "IdleClose (After3 Day)",
+  "type": "tickets",
+  "state": "enabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.tags.updated"
+    ],
+    "conditions": [
+      {
+        "field": "ticket_tags",
+        "operator": "contains_any_of",
+        "options": {
+          "strings": [
+            "idleclose"
+          ]
+        }
+      }
+    ]
+  },
+  "actions": [
+    {
+      "entityId": "1219-A",
+      "name": "Close if Idle for 3 days",
+      "type": "send_webhook",
+      "state": "enabled",
+      "source": "flow",
+      "webhook": {
+        "url": "https://prod-84.westus.logic.azure.com/workflows/ad0156df52c441ccb07ab2f8a22ef125/triggers/When_a_workflow_is_triggered/versions/08585434078784868364/run?api-version=2016-06-01&sp=%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585434078784868364%2Frun%2C%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585434078784868364%2Fread&sv=1.0&sig=1zlobUB32z7gXOS9YHRLPQF1zuMvzpnWFVoaBUNMUVA"
+      },
+      "info": {
+        "x-ms-workflow-name": "289ce174-0716-4e03-b2eb-3d558dfb8b84",
+        "x-ms-workflow-operation-name": "When_a_workflow_is_triggered"
+      }
+    }
+  ],
+  "settings": {
+    "webhookSecret": "7TvzwhXBu3A0oM6AkafpIjEXJoMv9w26"
+  },
+  "tags": [
+    "test"
+  ],
+  "createdAt": "2021-10-03T10:06:31.9821006Z",
+  "lastModifiedAt": "2022-07-19T09:09:23.9731443Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
