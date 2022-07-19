@@ -1,0 +1,17 @@
+{
+  "entityId": "64",
+  "type": "extension",
+  "name": "Guest Instance",
+  "icon": "dashboard",
+  "tags": [],
+  "canReset": false,
+  "webContent": {
+    "url": "https://extension-guest-instance.deskdirector.com/?guest_host=https%3A%2F%2Fdemomsp19.deskdirector.com&guest_raven_name=demomsp19&host_ticket_title=DemoMSP9+Tickets&guest_ticket_title=DemoMSP14+Tickets",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": [
+      "access_token",
+      "raven_name"
+    ]
+  }
+}
