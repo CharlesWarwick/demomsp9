@@ -1,0 +1,14 @@
+{
+  "entityId": "347",
+  "type": "external-link",
+  "name": "SharePoint List Test",
+  "icon": "ac_unit",
+  "tags": [],
+  "canReset": false,
+  "webContent": {
+    "url": "https://ddportal.sharepoint.com/:li:/s/nzlancom/E81JqOoCXR9EqMiH9Wyu83sBs7pKzwcvNAdygHiFiZH-EA?email=Beatrix_DeedandViper%40ddportal.com&e=ecEGoi",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": []
+  }
+}
