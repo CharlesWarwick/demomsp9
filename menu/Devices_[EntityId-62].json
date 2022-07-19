@@ -1,0 +1,17 @@
+{
+  "entityId": "62",
+  "type": "extension",
+  "name": "Devices",
+  "icon": "devices",
+  "tags": [],
+  "canReset": false,
+  "webContent": {
+    "url": "https://extension-graph-dashboard.deskdirector.com/",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": [
+      "access_token",
+      "raven_name"
+    ]
+  }
+}
