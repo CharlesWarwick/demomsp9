@@ -1,0 +1,12 @@
+{
+  "entityId": "123",
+  "type": "notebook",
+  "name": "MasterCompany",
+  "icon": "broken_image",
+  "tags": [],
+  "canReset": false,
+  "notebook": {
+    "entityId": "1-ee1ac8d6-3b43-483e-924c-da62e20ba2f9",
+    "name": "Webinar"
+  }
+}
