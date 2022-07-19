@@ -1,0 +1,14 @@
+{
+  "entityId": "61",
+  "type": "extension",
+  "name": "Have I been pwned",
+  "icon": "lock_outline",
+  "tags": [],
+  "canReset": false,
+  "webContent": {
+    "url": "https://hibp.deskdirector.com/",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": []
+  }
+}
