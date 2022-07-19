@@ -1,0 +1,192 @@
+{
+  "entityId": "11",
+  "name": "Deed & Viper",
+  "canReset": false,
+  "items": [
+    {
+      "entityId": "create-ticket",
+      "type": "built-in",
+      "name": "Contact Support",
+      "icon": "message",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "6",
+      "type": "extension",
+      "name": "KB Articles",
+      "icon": "book",
+      "tags": [],
+      "canReset": false,
+      "webContent": {
+        "url": "https://help.deskdirector.com/",
+        "enableSandbox": false,
+        "sandboxAttributes": [],
+        "queryParameters": []
+      }
+    },
+    {
+      "entityId": "tickets",
+      "type": "built-in",
+      "name": "Tickets",
+      "icon": "inbox",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "91",
+      "type": "notebook",
+      "name": "Webinar",
+      "icon": "slideshow",
+      "tags": [],
+      "canReset": false,
+      "notebook": {
+        "entityId": "1-60f752a3-047e-4737-b4a2-9a8a14a75a77",
+        "name": "Webinar2021"
+      }
+    },
+    {
+      "entityId": "315",
+      "type": "external-link",
+      "name": "M365 Message Center",
+      "icon": "message",
+      "tags": [],
+      "canReset": false,
+      "webContent": {
+        "url": "https://admin.microsoft.com/?auth_upn=Beatrix_DeedandViper%40ddportal.com&source=applauncher#/MessageCenter",
+        "enableSandbox": false,
+        "sandboxAttributes": [],
+        "queryParameters": []
+      }
+    },
+    {
+      "entityId": "219",
+      "type": "external-link",
+      "name": "M365 Licenses",
+      "icon": "blur_linear",
+      "tags": [],
+      "canReset": false,
+      "webContent": {
+        "url": "https://admin.microsoft.com/Adminportal/Home?source=applauncher#/licenses",
+        "enableSandbox": false,
+        "sandboxAttributes": [],
+        "queryParameters": []
+      }
+    },
+    {
+      "entityId": "316",
+      "type": "external-link",
+      "name": "DeedandViper selection",
+      "icon": "call_received",
+      "tags": [],
+      "canReset": false,
+      "webContent": {
+        "url": "https://ddportal.sharepoint.com/:x:/s/demomsp9/ET-kNQY5qJJEiSHDK07_l70B-95_wfX610Kx9FFpm-INiA?e=q8tKxh",
+        "enableSandbox": false,
+        "sandboxAttributes": [],
+        "queryParameters": []
+      }
+    },
+    {
+      "entityId": "quotes",
+      "type": "built-in",
+      "name": "Quotes",
+      "icon": "receipt",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "invoices",
+      "type": "built-in",
+      "name": "Invoices",
+      "icon": "attach_money",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "notifications",
+      "type": "built-in",
+      "name": "Notifications",
+      "icon": "notifications",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "learning",
+      "type": "built-in",
+      "name": "Learning",
+      "icon": "school",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "59",
+      "type": "notebook",
+      "name": "Deed and Viper Playbook",
+      "icon": "play_for_work",
+      "tags": [],
+      "canReset": false,
+      "notebook": {
+        "entityId": "1-43b43cf1-0cbd-4978-bb77-c9c40a469c00",
+        "name": "Playbook Deed and Viper"
+      }
+    },
+    {
+      "entityId": "1",
+      "type": "extension",
+      "name": "Custom Page",
+      "icon": "account_balance",
+      "tags": [],
+      "canReset": false,
+      "webContent": {
+        "url": "https://extension-reference.deskdirector.com?priority_1_id=2&priority_2_id=3&priority_3_id=4&twitter_handle=deskdirector&show_configs=false&show_quotes=false&show_projects=false",
+        "enableSandbox": false,
+        "sandboxAttributes": [
+          "allow-same-origin",
+          "allow-scripts",
+          "allow-top-navigation",
+          "allow-top-navigation-by-user-activation"
+        ],
+        "queryParameters": [
+          "access_token",
+          "raven_name"
+        ]
+      }
+    },
+    {
+      "entityId": "64",
+      "type": "extension",
+      "name": "Guest Instance",
+      "icon": "dashboard",
+      "tags": [],
+      "canReset": false,
+      "webContent": {
+        "url": "https://extension-guest-instance.deskdirector.com/?guest_host=https%3A%2F%2Fdemomsp19.deskdirector.com&guest_raven_name=demomsp19&host_ticket_title=DemoMSP9+Tickets&guest_ticket_title=DemoMSP14+Tickets",
+        "enableSandbox": false,
+        "sandboxAttributes": [],
+        "queryParameters": [
+          "access_token",
+          "raven_name"
+        ]
+      }
+    },
+    {
+      "entityId": "347",
+      "type": "external-link",
+      "name": "SharePoint List Test",
+      "icon": "ac_unit",
+      "tags": [],
+      "canReset": false,
+      "webContent": {
+        "url": "https://ddportal.sharepoint.com/:li:/s/nzlancom/E81JqOoCXR9EqMiH9Wyu83sBs7pKzwcvNAdygHiFiZH-EA?email=Beatrix_DeedandViper%40ddportal.com&e=ecEGoi",
+        "enableSandbox": false,
+        "sandboxAttributes": [],
+        "queryParameters": []
+      }
+    }
+  ],
+  "meta": {
+    "companyCount": 1,
+    "contactCount": 0
+  }
+}
