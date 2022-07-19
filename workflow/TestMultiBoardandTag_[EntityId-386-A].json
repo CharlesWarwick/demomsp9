@@ -1,0 +1,28 @@
+{
+  "entityId": "386-A",
+  "name": "TestMultiBoardandTag",
+  "type": "tickets",
+  "state": "disabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.new"
+    ],
+    "conditions": []
+  },
+  "actions": [],
+  "settings": {
+    "webhookSecret": "f76vgjgs5FQGDuJB6q0uQY06fUo5ANuJ"
+  },
+  "tags": [
+    "new"
+  ],
+  "createdAt": "2022-06-08T09:58:48.2388049Z",
+  "lastModifiedAt": "2022-06-08T09:58:48.2388049Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
