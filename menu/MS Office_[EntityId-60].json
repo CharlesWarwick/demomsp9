@@ -1,0 +1,17 @@
+{
+  "entityId": "60",
+  "type": "extension",
+  "name": "MS Office",
+  "icon": "local_post_office",
+  "tags": [],
+  "canReset": false,
+  "webContent": {
+    "url": "https://ms-graph-dashboard.deskdirector.com/",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": [
+      "access_token",
+      "company_entity_id"
+    ]
+  }
+}
