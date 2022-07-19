@@ -1,0 +1,35 @@
+{
+  "entityId": "289-A",
+  "name": "Tag Updated",
+  "type": "tickets",
+  "state": "disabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.tags.updated"
+    ],
+    "conditions": [
+      {
+        "field": "ticket_contact_tags",
+        "operator": "contains_any_of",
+        "options": {
+          "strings": [
+            "newcontact"
+          ]
+        }
+      }
+    ]
+  },
+  "actions": [],
+  "settings": {
+    "webhookSecret": "ClPBtX2MGMReCBFfO0YGkaPyhqjjl5Tj"
+  },
+  "createdAt": "2022-01-10T20:02:15.8396285Z",
+  "lastModifiedAt": "2022-01-10T20:02:47.138796Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
