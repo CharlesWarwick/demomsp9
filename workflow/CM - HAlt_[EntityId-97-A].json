@@ -1,0 +1,25 @@
+{
+  "entityId": "97-A",
+  "name": "CM - HAlt",
+  "type": "tickets",
+  "state": "disabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.status.changed"
+    ],
+    "conditions": []
+  },
+  "actions": [],
+  "settings": {
+    "webhookSecret": "8nDRhVLYRfwk3RQcMGSfLQl9eSCwO7Hr"
+  },
+  "createdAt": "2021-08-19T20:51:28.3061692Z",
+  "lastModifiedAt": "2021-08-19T20:51:28.3061692Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
