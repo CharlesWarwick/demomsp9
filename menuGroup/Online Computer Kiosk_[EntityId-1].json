@@ -1,0 +1,81 @@
+{
+  "entityId": "1",
+  "name": "Online Computer Kiosk ",
+  "canReset": false,
+  "items": [
+    {
+      "entityId": "1",
+      "type": "extension",
+      "name": "Custom Page",
+      "icon": "account_balance",
+      "tags": [],
+      "canReset": false,
+      "webContent": {
+        "url": "https://extension-reference.deskdirector.com?priority_1_id=2&priority_2_id=3&priority_3_id=4&twitter_handle=deskdirector&show_configs=false&show_quotes=false&show_projects=false",
+        "enableSandbox": false,
+        "sandboxAttributes": [
+          "allow-same-origin",
+          "allow-scripts",
+          "allow-top-navigation",
+          "allow-top-navigation-by-user-activation"
+        ],
+        "queryParameters": [
+          "access_token",
+          "raven_name"
+        ]
+      }
+    },
+    {
+      "entityId": "tickets",
+      "type": "built-in",
+      "name": "Tickets",
+      "icon": "inbox",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "create-ticket",
+      "type": "built-in",
+      "name": "Contact Support",
+      "icon": "message",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "quotes",
+      "type": "built-in",
+      "name": "Quotes",
+      "icon": "receipt",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "invoices",
+      "type": "built-in",
+      "name": "Invoices",
+      "icon": "attach_money",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "notifications",
+      "type": "built-in",
+      "name": "Notifications",
+      "icon": "notifications",
+      "tags": [],
+      "canReset": false
+    },
+    {
+      "entityId": "learning",
+      "type": "built-in",
+      "name": "Learning",
+      "icon": "school",
+      "tags": [],
+      "canReset": false
+    }
+  ],
+  "meta": {
+    "companyCount": 0,
+    "contactCount": 0
+  }
+}
