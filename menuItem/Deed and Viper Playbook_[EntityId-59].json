@@ -1,0 +1,12 @@
+{
+  "entityId": "59",
+  "type": "notebook",
+  "name": "Deed and Viper Playbook",
+  "icon": "play_for_work",
+  "tags": [],
+  "canReset": false,
+  "notebook": {
+    "entityId": "1-43b43cf1-0cbd-4978-bb77-c9c40a469c00",
+    "name": "Playbook Deed and Viper"
+  }
+}
