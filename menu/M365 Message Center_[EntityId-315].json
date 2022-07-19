@@ -1,0 +1,14 @@
+{
+  "entityId": "315",
+  "type": "external-link",
+  "name": "M365 Message Center",
+  "icon": "message",
+  "tags": [],
+  "canReset": false,
+  "webContent": {
+    "url": "https://admin.microsoft.com/?auth_upn=Beatrix_DeedandViper%40ddportal.com&source=applauncher#/MessageCenter",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": []
+  }
+}
