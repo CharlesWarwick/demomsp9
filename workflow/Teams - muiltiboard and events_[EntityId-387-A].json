@@ -1,0 +1,52 @@
+{
+  "entityId": "387-A",
+  "name": "Teams - muiltiboard and events",
+  "type": "tickets",
+  "state": "disabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.new",
+      "ticket.updated"
+    ],
+    "conditions": [
+      {
+        "field": "ticket_board_id",
+        "operator": "equals_to_any_of",
+        "options": {
+          "integerEntities": [
+            {
+              "entityId": 104,
+              "name": "Business Continuity"
+            },
+            {
+              "entityId": 101,
+              "name": "Managed Services"
+            },
+            {
+              "entityId": 105,
+              "name": "Projects"
+            },
+            {
+              "entityId": 106,
+              "name": "Strategy"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "actions": [],
+  "settings": {
+    "webhookSecret": "lOLD7etxoHqssvVk6287q5CNQgjpUoCB"
+  },
+  "tags": [],
+  "createdAt": "2022-06-08T21:15:54.3566358Z",
+  "lastModifiedAt": "2022-06-08T21:16:30.444879Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
