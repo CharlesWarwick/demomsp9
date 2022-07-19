@@ -1,0 +1,19 @@
+{
+  "entityId": "187",
+  "type": "extension",
+  "name": "Aurelia Discourse",
+  "icon": "access_time",
+  "tags": [
+    "a2"
+  ],
+  "canReset": false,
+  "webContent": {
+    "url": "https://discourse.aurelia.io/",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": [
+      "access_token",
+      "raven_name"
+    ]
+  }
+}
