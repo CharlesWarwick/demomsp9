@@ -1,0 +1,55 @@
+{
+  "entityId": "129-A",
+  "name": "New Ticket 24x7 out of hours",
+  "type": "tickets",
+  "state": "disabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.new",
+      "ticket.updated"
+    ],
+    "conditions": [
+      {
+        "field": "ticket_company_tags",
+        "operator": "contains_any_of",
+        "options": {
+          "strings": [
+            "24x7"
+          ]
+        }
+      },
+      {
+        "field": "context_officeHours_isOpen",
+        "operator": "is_true"
+      }
+    ]
+  },
+  "actions": [
+    {
+      "entityId": "1218-A",
+      "name": "24x7 clients",
+      "type": "send_webhook",
+      "state": "enabled",
+      "source": "flow",
+      "webhook": {
+        "url": "https://prod-172.westus.logic.azure.com/workflows/1d9cc26a4817464bbd0d664d332d4713/triggers/When_a_workflow_is_triggered/versions/08585434098898616800/run?api-version=2016-06-01&sp=%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585434098898616800%2Frun%2C%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585434098898616800%2Fread&sv=1.0&sig=rStIlmFTWELrIhyDOkzNBsSaR17fKrWtWw41yndSC9c"
+      },
+      "info": {
+        "x-ms-workflow-name": "b0548aa1-9da8-4fd4-b85e-ca79c41092af",
+        "x-ms-workflow-operation-name": "When_a_workflow_is_triggered"
+      }
+    }
+  ],
+  "settings": {
+    "webhookSecret": "G8EGn7Zap5pxsAidjpgPPrLxWCa4j3yt"
+  },
+  "createdAt": "2021-09-03T08:45:49.3664497Z",
+  "lastModifiedAt": "2022-07-19T02:16:36.0593394Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "Power Automate"
+  }
+}
