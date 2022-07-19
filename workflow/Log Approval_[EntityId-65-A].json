@@ -1,0 +1,27 @@
+{
+  "entityId": "65-A",
+  "name": "Log Approval",
+  "type": "tickets",
+  "state": "disabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.approval.declined",
+      "ticket.approval.granted",
+      "ticket.approval.required"
+    ],
+    "conditions": []
+  },
+  "actions": [],
+  "settings": {
+    "webhookSecret": "f2ccCvHlvioLHr1GpIpdr5Y0kqdzPvdp"
+  },
+  "createdAt": "2021-08-16T04:31:55.8119003Z",
+  "lastModifiedAt": "2021-08-16T04:31:55.8119003Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
