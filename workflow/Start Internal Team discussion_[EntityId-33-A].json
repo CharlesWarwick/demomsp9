@@ -1,0 +1,36 @@
+{
+  "entityId": "33-A",
+  "name": "Start Internal Team discussion",
+  "type": "tickets",
+  "state": "disabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.new",
+      "ticket.flag"
+    ],
+    "conditions": [
+      {
+        "field": "ticket_tags",
+        "operator": "contains_any_of",
+        "options": {
+          "strings": [
+            "teams"
+          ]
+        }
+      }
+    ]
+  },
+  "actions": [],
+  "settings": {
+    "webhookSecret": "5rw7ngWUdRJjNHEQazi6idxQSNycUw6d"
+  },
+  "createdAt": "2021-07-29T04:05:08.4963281Z",
+  "lastModifiedAt": "2021-07-29T04:07:06.0208537Z",
+  "lastModifiedBy": {
+    "entityId": "ddadmin~-1",
+    "name": "warwick"
+  }
+}
