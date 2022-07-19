@@ -1,0 +1,54 @@
+{
+  "entityId": "257-A",
+  "name": "Tag Fliter",
+  "type": "tickets",
+  "state": "enabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.tags.updated"
+    ],
+    "conditions": []
+  },
+  "actions": [
+    {
+      "entityId": "770-A",
+      "name": "Tag Changed Event ",
+      "type": "send_webhook",
+      "state": "enabled",
+      "source": "flow",
+      "webhook": {
+        "url": "https://prod-62.westus.logic.azure.com/workflows/e8d95e91e709424e9eb05cfcb369ca41/triggers/When_a_workflow_is_triggered/versions/08585651081426699049/run?api-version=2016-06-01&sp=%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585651081426699049%2Frun%2C%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585651081426699049%2Fread&sv=1.0&sig=KsEUzpszw567sKoCXgl-uXB8kTVbn1lBubGChYk114s"
+      },
+      "info": {
+        "x-ms-workflow-name": "e6a56ef2-d858-4322-9100-5e9428112232",
+        "x-ms-workflow-operation-name": "When_a_workflow_is_triggered"
+      }
+    },
+    {
+      "entityId": "772-A",
+      "name": "New Tag Filter",
+      "type": "send_webhook",
+      "state": "enabled",
+      "source": "flow",
+      "webhook": {
+        "url": "https://prod-98.westus.logic.azure.com/workflows/c5d8bb13be5d462e9696ae04d13b6874/triggers/When_a_workflow_is_triggered/versions/08585651074616690056/run?api-version=2016-06-01&sp=%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585651074616690056%2Frun%2C%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585651074616690056%2Fread&sv=1.0&sig=Pxn-Ih1qhNO3PkAjTD2qWhiGSWynM2sA54WWqy3AONc"
+      },
+      "info": {
+        "x-ms-workflow-name": "9213d887-d6f7-44dc-abea-2458dcc4f264",
+        "x-ms-workflow-operation-name": "When_a_workflow_is_triggered"
+      }
+    }
+  ],
+  "settings": {
+    "webhookSecret": "dqO7rdUh9mLAMvfVcqmMIG5d7TTKjFeC"
+  },
+  "createdAt": "2021-11-09T22:57:39.2081473Z",
+  "lastModifiedAt": "2021-11-09T23:10:24.8951752Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "Power Automate"
+  }
+}
