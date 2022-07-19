@@ -1,0 +1,17 @@
+{
+  "entityId": "63",
+  "type": "extension",
+  "name": "Switch account",
+  "icon": "account_circle",
+  "tags": [],
+  "canReset": false,
+  "webContent": {
+    "url": "https://extension-account-selector.deskdirector.com",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": [
+      "access_token",
+      "raven_name"
+    ]
+  }
+}
