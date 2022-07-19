@@ -1,0 +1,16 @@
+{
+  "entityId": "253",
+  "type": "extension",
+  "name": "HSE Notifications",
+  "icon": "notifications_active",
+  "tags": [
+    "hse"
+  ],
+  "canReset": false,
+  "webContent": {
+    "url": "https://ddaccess.blob.core.windows.net/media-public/Branding/HSEConnect/HomePage/Notifications.png",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": []
+  }
+}
