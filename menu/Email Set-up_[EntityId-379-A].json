@@ -1,0 +1,14 @@
+{
+  "entityId": "379-A",
+  "type": "extension",
+  "name": "Email Set-up",
+  "icon": "email",
+  "tags": [],
+  "canReset": false,
+  "webContent": {
+    "url": "https://demomsp9.deskdirector.com/admin/v2/configs/emails/delivery-accounts",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": []
+  }
+}
