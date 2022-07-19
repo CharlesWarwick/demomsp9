@@ -1,0 +1,14 @@
+{
+  "entityId": "283",
+  "type": "extension",
+  "name": "SharePoint",
+  "icon": "share",
+  "tags": [],
+  "canReset": false,
+  "webContent": {
+    "url": "https://deskdirector.sharepoint.com/sites/automation",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": []
+  }
+}
