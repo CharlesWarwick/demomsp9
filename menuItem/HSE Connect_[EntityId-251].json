@@ -1,0 +1,16 @@
+{
+  "entityId": "251",
+  "type": "extension",
+  "name": "HSE Connect",
+  "icon": "settings_input_antenna",
+  "tags": [
+    "hse"
+  ],
+  "canReset": false,
+  "webContent": {
+    "url": "https://www.hseconnect.co.nz/Manager",
+    "enableSandbox": false,
+    "sandboxAttributes": [],
+    "queryParameters": []
+  }
+}
