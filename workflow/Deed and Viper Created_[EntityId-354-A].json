@@ -1,0 +1,53 @@
+{
+  "entityId": "354-A",
+  "name": "Deed and Viper Created",
+  "type": "tickets",
+  "state": "enabled",
+  "source": "custom",
+  "trigger": {
+    "name": "Tickets",
+    "type": "tickets",
+    "events": [
+      "ticket.new"
+    ],
+    "conditions": [
+      {
+        "field": "ticket_company_id",
+        "operator": "equals_to_any_of",
+        "options": {
+          "integerEntities": [
+            {
+              "entityId": 27,
+              "name": "Deed and Viper"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "actions": [
+    {
+      "entityId": "1091-A",
+      "name": "Keep an Xl Spreadsheet up-to-date",
+      "type": "send_webhook",
+      "state": "enabled",
+      "source": "flow",
+      "webhook": {
+        "url": "https://prod-16.australiasoutheast.logic.azure.com/workflows/91670ddd01704939b3999f88324de50c/triggers/When_a_workflow_is_triggered/versions/08585583255251898361/run?api-version=2016-06-01&sp=%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585583255251898361%2Frun%2C%2Ftriggers%2FWhen_a_workflow_is_triggered%2Fversions%2F08585583255251898361%2Fread&sv=1.0&sig=w14NgVifGhBHm98YoJxJLF_bIahcyynBUCjPgHWVEd8"
+      },
+      "info": {
+        "x-ms-workflow-name": "7d8c5379-c4aa-4067-a043-f04b12b61d51",
+        "x-ms-workflow-operation-name": "When_a_workflow_is_triggered"
+      }
+    }
+  ],
+  "settings": {
+    "webhookSecret": "nCg2TSNZ143m36bl6ydfFGmn62rEVGd1"
+  },
+  "createdAt": "2022-01-27T11:01:45.4695789Z",
+  "lastModifiedAt": "2022-01-27T11:02:40.9551975Z",
+  "lastModifiedBy": {
+    "entityId": "l_api_key.static",
+    "name": "Power Automate"
+  }
+}
